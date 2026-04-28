@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import MentorRequestButton from "@/components/mentorship/MentorRequestButton"
-import { ShieldCheck, User as UserIcon, Calendar, Github, MapPin, Link as LinkIcon } from "lucide-react"
+import { ShieldCheck, User as UserIcon, Calendar, MapPin, Link as LinkIcon } from "lucide-react"
 import PostCard from "@/components/feed/PostCard"
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
