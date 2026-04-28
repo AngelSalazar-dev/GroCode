@@ -3,16 +3,15 @@
 import { signIn } from "next-auth/react"
 import { Code2, Loader2 } from "lucide-react"
 import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { Suspense } from "react"
 
-export default function SignInPage() {
+function SignInForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
-  const searchParams = useSearchParams()
   const router = useRouter()
-  const registered = searchParams.get("registered")
 
   const handleGitHubSignIn = async () => {
     setIsLoading(true)
@@ -69,12 +68,6 @@ export default function SignInPage() {
         transition={{ delay: 0.3 }}
         className="w-full max-w-[340px] space-y-4"
       >
-        {registered && (
-          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-emerald-500 text-xs font-medium text-center">
-            Registration successful! Please sign in.
-          </div>
-        )}
-
         <div className="gh-box p-6 space-y-6 bg-card-github shadow-xl">
           <form onSubmit={handleCredentialsSignIn} className="space-y-4">
             <div>
@@ -130,5 +123,21 @@ export default function SignInPage() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center">
+      <div className="animate-spin w-8 h-8 border-2 border-accent-github border-t-transparent rounded-full" />
+    </div>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <SignInForm />
+    </Suspense>
   )
 }
