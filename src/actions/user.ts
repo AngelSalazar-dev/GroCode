@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
-import { Role } from "@prisma/client"
+import { Role } from "../generated/client"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 

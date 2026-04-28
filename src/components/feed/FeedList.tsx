@@ -1,6 +1,6 @@
 "use client"
 
-import { Post, User } from "@prisma/client"
+import { Post, User } from "../../generated/client"
 import PostCard from "@/components/feed/PostCard"
 import { motion, AnimatePresence } from "framer-motion"
 
