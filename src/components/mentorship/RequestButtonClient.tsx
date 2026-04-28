@@ -2,7 +2,7 @@
 
 import { useTransition } from "react"
 import { createMentorshipRequest } from "@/actions/mentorship"
-import { UserCheck, UserPlus } from "lucide-react"
+import { UserCheck, UserPlus, Loader2 } from "lucide-react"
 
 interface RequestButtonClientProps {
   seniorId: string
@@ -16,7 +16,6 @@ export default function RequestButtonClient({ seniorId, hasPendingRequest }: Req
     startTransition(async () => {
       try {
         await createMentorshipRequest(seniorId)
-        alert("Solicitud enviada con éxito")
       } catch (error: any) {
         alert(error.message)
       }
@@ -27,7 +26,7 @@ export default function RequestButtonClient({ seniorId, hasPendingRequest }: Req
     return (
       <button 
         disabled 
-        className="flex items-center gap-2 bg-gray-100 text-gray-500 px-4 py-2 rounded-full cursor-not-allowed font-medium border border-gray-200"
+        className="gro-btn !bg-muted/10 !text-muted !border-muted/20 !rounded-full opacity-80 cursor-not-allowed"
       >
         <UserCheck className="w-4 h-4" />
         Solicitud Pendiente
@@ -39,9 +38,13 @@ export default function RequestButtonClient({ seniorId, hasPendingRequest }: Req
     <button
       onClick={handleRequest}
       disabled={isPending}
-      className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full transition-colors font-medium shadow-sm disabled:opacity-50"
+      className="gro-btn gro-btn-primary !rounded-full !px-6 !py-2.5 shadow-xl shadow-accent-gro/10"
     >
-      <UserPlus className="w-4 h-4" />
+      {isPending ? (
+        <Loader2 className="w-4 h-4 animate-spin" />
+      ) : (
+        <UserPlus className="w-4 h-4" />
+      )}
       {isPending ? "Enviando..." : "Solicitar Mentoría"}
     </button>
   )

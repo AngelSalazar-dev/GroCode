@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  output        = "../src/generated/client"
+  output        = "../src/generated-v2/client"
   binaryTargets = ["native", "rhel-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
@@ -28,6 +28,9 @@ model User {
   image         String?
   password      String?
   role          Role      @default(JUNIOR)
+  bio           String?   @db.Text
+  location      String?
+  website       String?
   
   accounts      Account[]
   sessions      Session[]
@@ -37,6 +40,10 @@ model User {
   followers     Follow[]  @relation("following")
   following     Follow[]  @relation("follower")
   
+  likes       Like[]
+  bookmarks   Bookmark[]
+  comments    Comment[]
+
   // Mentorships
   sentRequests     MentorshipRequest[] @relation("junior")
   receivedRequests MentorshipRequest[] @relation("senior")
@@ -86,7 +93,42 @@ model Post {
   resourceUrl String?
   authorId    String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  likes       Like[]
+  bookmarks   Bookmark[]
+  comments    Comment[]
   createdAt   DateTime @default(now())
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 model Follow {

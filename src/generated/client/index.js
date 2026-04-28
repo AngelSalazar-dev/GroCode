@@ -260,6 +260,14 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "linux-musl-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -267,7 +275,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
@@ -286,8 +294,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/client\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  JUNIOR\n  SENIOR\n}\n\nenum RequestStatus {\n  PENDING\n  ACCEPTED\n  REJECTED\n}\n\nmodel User {\n  id            String    @id @default(cuid())\n  name          String?\n  email         String?   @unique\n  emailVerified DateTime?\n  image         String?\n  password      String?\n  role          Role      @default(JUNIOR)\n\n  accounts Account[]\n  sessions Session[]\n  posts    Post[]\n\n  // Follows\n  followers Follow[] @relation(\"following\")\n  following Follow[] @relation(\"follower\")\n\n  // Mentorships\n  sentRequests     MentorshipRequest[] @relation(\"junior\")\n  receivedRequests MentorshipRequest[] @relation(\"senior\")\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Account {\n  id                String  @id @default(cuid())\n  userId            String\n  type              String\n  provider          String\n  providerAccountId String\n  refresh_token     String? @db.Text\n  access_token      String? @db.Text\n  expires_at        Int?\n  token_type        String?\n  scope             String?\n  id_token          String? @db.Text\n  session_state     String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel Post {\n  id          String   @id @default(cuid())\n  content     String   @db.Text\n  resourceUrl String?\n  authorId    String\n  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)\n  createdAt   DateTime @default(now())\n}\n\nmodel Follow {\n  followerId  String\n  followingId String\n  follower    User   @relation(\"follower\", fields: [followerId], references: [id], onDelete: Cascade)\n  following   User   @relation(\"following\", fields: [followingId], references: [id], onDelete: Cascade)\n\n  @@id([followerId, followingId])\n}\n\nmodel MentorshipRequest {\n  id        String        @id @default(cuid())\n  message   String?       @db.Text\n  status    RequestStatus @default(PENDING)\n  juniorId  String\n  seniorId  String\n  junior    User          @relation(\"junior\", fields: [juniorId], references: [id], onDelete: Cascade)\n  senior    User          @relation(\"senior\", fields: [seniorId], references: [id], onDelete: Cascade)\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n\n  @@unique([juniorId, seniorId])\n}\n",
-  "inlineSchemaHash": "f97380b922e2f5fc4b76712f07316d00b920faee3c4a43cf3f827d504864e4c9",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\", \"linux-musl-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  JUNIOR\n  SENIOR\n}\n\nenum RequestStatus {\n  PENDING\n  ACCEPTED\n  REJECTED\n}\n\nmodel User {\n  id            String    @id @default(cuid())\n  name          String?\n  email         String?   @unique\n  emailVerified DateTime?\n  image         String?\n  password      String?\n  role          Role      @default(JUNIOR)\n\n  accounts Account[]\n  sessions Session[]\n  posts    Post[]\n\n  // Follows\n  followers Follow[] @relation(\"following\")\n  following Follow[] @relation(\"follower\")\n\n  // Mentorships\n  sentRequests     MentorshipRequest[] @relation(\"junior\")\n  receivedRequests MentorshipRequest[] @relation(\"senior\")\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Account {\n  id                String  @id @default(cuid())\n  userId            String\n  type              String\n  provider          String\n  providerAccountId String\n  refresh_token     String? @db.Text\n  access_token      String? @db.Text\n  expires_at        Int?\n  token_type        String?\n  scope             String?\n  id_token          String? @db.Text\n  session_state     String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel Post {\n  id          String   @id @default(cuid())\n  content     String   @db.Text\n  resourceUrl String?\n  authorId    String\n  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)\n  createdAt   DateTime @default(now())\n}\n\nmodel Follow {\n  followerId  String\n  followingId String\n  follower    User   @relation(\"follower\", fields: [followerId], references: [id], onDelete: Cascade)\n  following   User   @relation(\"following\", fields: [followingId], references: [id], onDelete: Cascade)\n\n  @@id([followerId, followingId])\n}\n\nmodel MentorshipRequest {\n  id        String        @id @default(cuid())\n  message   String?       @db.Text\n  status    RequestStatus @default(PENDING)\n  juniorId  String\n  seniorId  String\n  junior    User          @relation(\"junior\", fields: [juniorId], references: [id], onDelete: Cascade)\n  senior    User          @relation(\"senior\", fields: [seniorId], references: [id], onDelete: Cascade)\n  createdAt DateTime      @default(now())\n  updatedAt DateTime      @updatedAt\n\n  @@unique([juniorId, seniorId])\n}\n",
+  "inlineSchemaHash": "6838ef11290ccab8ae09e1aca5bde61380fbd035dd18d742794cb8b46c4b0a1c",
   "copyEngine": true
 }
 
@@ -328,6 +336,14 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "src/generated/client/query_engine-windows.dll.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-linux-musl-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/client/libquery_engine-linux-musl-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/client/schema.prisma")

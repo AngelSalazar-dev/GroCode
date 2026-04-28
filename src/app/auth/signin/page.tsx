@@ -1,21 +1,22 @@
 "use client"
 
 import { signIn } from "next-auth/react"
-import { Code2, Loader2 } from "lucide-react"
+import { Code2, Loader2, ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
-import { Suspense } from "react"
 
-function SignInForm() {
+export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const searchParams = useSearchParams()
   const router = useRouter()
+  const registered = searchParams.get("registered")
 
   const handleGitHubSignIn = async () => {
     setIsLoading(true)
-    await signIn("github", { callbackUrl: "/onboarding" })
+    await signIn("github", { callbackUrl: "/feed" })
   }
 
   const handleCredentialsSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,110 +35,100 @@ function SignInForm() {
     })
 
     if (result?.error) {
-      setError("Email or password incorrect")
+      setError("Email o contraseña incorrectos")
       setIsLoading(false)
     } else {
-      router.push("/onboarding")
+      router.push("/feed")
     }
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex flex-col items-center pt-20 px-4 bg-background relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-accent-github/5 to-transparent -z-10" />
+    <div className="min-h-screen flex items-center justify-center bg-background px-6 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_20%,_var(--color-accent-gro)_0%,transparent_40%)] opacity-[0.05] -z-10" />
+      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,_var(--color-accent-gro)_0%,transparent_40%)] opacity-[0.05] -z-10" />
 
       <motion.div 
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="w-full max-w-[420px] space-y-10"
       >
-        <img src="/isotype.png" alt="GroCode Logo" className="w-16 h-16 object-contain dark:brightness-110 brightness-0 transition-all" />
-      </motion.div>
-      
-      <motion.h1 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="text-2xl font-light tracking-tight mb-8 text-foreground"
-      >
-        Sign in to GroCode
-      </motion.h1>
+        <div className="text-center space-y-6">
+          <Link href="/" className="inline-block group">
+            <img src="/Black Isotype.png" className="w-16 h-16 object-contain dark:hidden group-hover:scale-110 transition-transform" />
+            <img src="/White Isotype.png" className="w-16 h-16 object-contain hidden dark:block group-hover:scale-110 transition-transform" />
+          </Link>
+          <div className="space-y-2">
+            <h1 className="text-3xl font-black tracking-tight">Bienvenido de nuevo</h1>
+            <p className="text-muted font-medium">Ingresa tus credenciales para acceder</p>
+          </div>
+        </div>
 
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3 }}
-        className="w-full max-w-[340px] space-y-4"
-      >
-        <div className="gh-box p-6 space-y-6 bg-card-github shadow-xl">
-          <form onSubmit={handleCredentialsSignIn} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold mb-1.5">Username or email address</label>
+        <div className="gro-card p-10 space-y-8 shadow-2xl">
+          {registered && (
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-500 text-xs font-bold text-center">
+              ¡Registro exitoso! Por favor inicia sesión.
+            </div>
+          )}
+
+          <form onSubmit={handleCredentialsSignIn} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-muted">Email</label>
               <input 
                 name="email"
-                type="text" 
+                type="email" 
                 required
-                className="w-full bg-background border border-border-github rounded-md py-1.5 px-3 text-sm focus:ring-2 focus:ring-accent-github/20 focus:border-accent-github outline-none"
+                placeholder="tu@email.com"
+                className="w-full bg-muted/5 border border-border-gro rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent-gro/10 focus:border-accent-gro outline-none transition-all"
               />
             </div>
-            <div>
-              <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-semibold">Password</label>
-                <Link href="#" className="text-[11px] text-accent-github hover:underline">Forgot password?</Link>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-bold uppercase tracking-wider text-muted">Contraseña</label>
+                <Link href="#" className="text-[10px] font-bold text-accent-gro hover:underline">¿Olvidaste tu contraseña?</Link>
               </div>
               <input 
                 name="password"
                 type="password" 
                 required
-                className="w-full bg-background border border-border-github rounded-md py-1.5 px-3 text-sm focus:ring-2 focus:ring-accent-github/20 focus:border-accent-github outline-none"
+                placeholder="••••••••"
+                className="w-full bg-muted/5 border border-border-gro rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent-gro/10 focus:border-accent-gro outline-none transition-all"
               />
             </div>
 
-            {error && <p className="text-rose-500 text-xs font-medium">{error}</p>}
+            {error && <p className="text-rose-500 text-xs font-bold text-center">{error}</p>}
 
             <button 
               disabled={isLoading}
-              className="w-full gh-button gh-button-primary !py-2 !text-sm disabled:opacity-70"
+              className="w-full gro-btn gro-btn-primary !py-3.5 !rounded-xl"
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Iniciar Sesión"}
             </button>
           </form>
 
           <div className="relative">
-            <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border-github"></span></div>
-            <div className="relative flex justify-center text-[10px] uppercase"><span className="bg-card-github px-2 text-muted font-bold">OR</span></div>
+            <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border-gro"></span></div>
+            <div className="relative flex justify-center text-[10px] uppercase font-black tracking-widest"><span className="bg-card-gro px-3 text-muted">O continuar con</span></div>
           </div>
 
           <button 
             onClick={handleGitHubSignIn}
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-3 gh-button !py-2 !text-sm disabled:opacity-70"
+            className="w-full gro-btn !py-3.5 !rounded-xl flex items-center justify-center gap-3"
           >
-            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Code2 className="w-4 h-4" />}
-            Continue with GitHub
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Code2 className="w-5 h-5" />}
+            GitHub
           </button>
         </div>
 
-        <div className="gh-box p-4 text-center text-sm">
-          <span className="text-muted">New to GroCode? </span>
-          <Link href="/auth/register" className="text-accent-github font-semibold hover:underline">Create an account.</Link>
-        </div>
+        <p className="text-center text-sm font-medium text-muted">
+          ¿No tienes una cuenta? <Link href="/auth/register" className="text-accent-gro font-bold hover:underline">Regístrate gratis</Link>
+        </p>
+
+        <Link href="/" className="flex items-center justify-center gap-2 text-xs font-bold text-muted hover:text-foreground transition-colors">
+          <ArrowLeft className="w-3 h-3" /> Volver al inicio
+        </Link>
       </motion.div>
     </div>
-  )
-}
-
-function LoadingFallback() {
-  return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center">
-      <div className="animate-spin w-8 h-8 border-2 border-accent-github border-t-transparent rounded-full" />
-    </div>
-  )
-}
-
-export default function SignInPage() {
-  return (
-    <Suspense fallback={<LoadingFallback />}>
-      <SignInForm />
-    </Suspense>
   )
 }
