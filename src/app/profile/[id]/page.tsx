@@ -6,6 +6,25 @@ import ProfileClientSection from "@/components/profile/ProfileClientSection"
 import PostCard from "@/components/feed/PostCard"
 import { ShieldCheck, User as UserIcon, Calendar, MapPin, Link as LinkIcon, MessageSquare, Briefcase, BookOpen, Users, Star } from "lucide-react"
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const user = await prisma.user.findUnique({ where: { id } })
+
+  if (!user) {
+    return {
+      title: "Perfil no encontrado",
+      description: "El perfil solicitado no existe.",
+    }
+  }
+
+  return {
+    title: `${user.name || "Usuario"} - Perfil de ${user.role}`,
+    description: user.bio || `Perfil de ${user.role} en GroCode`,
+    keywords: ["perfil", user.role?.toLowerCase() || "user", "grocode"],
+    authors: [{ name: user.name || "Usuario" }],
+  }
+}
+
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const session = await auth()
@@ -16,6 +35,15 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       posts: {
         include: { author: true },
         orderBy: { createdAt: "desc" }
+      },
+      _count: {
+        select: {
+          followers: true,
+          following: true,
+          sentRequests: true,
+          receivedRequests: true,
+          posts: true
+        }
       }
     }
   })
@@ -94,10 +122,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         <div className="flex-1 space-y-10">
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard label="Recursos" value={user.posts.length} icon={<BookOpen className="w-4 h-4" />} />
-            <StatCard label="Seguidores" value={245} icon={<Users className="w-4 h-4" />} />
-            <StatCard label="Mentorías" value={12} icon={<MessageSquare className="w-4 h-4" />} />
-            <StatCard label="Reputación" value="4.9" icon={<Star className="w-4 h-4 fill-amber-500 text-amber-500" />} />
+            <StatCard label="Recursos" value={user._count.posts} icon={<BookOpen className="w-4 h-4" />} />
+            <StatCard label="Seguidores" value={user._count.followers} icon={<Users className="w-4 h-4" />} />
+            <StatCard label="Siguiendo" value={user._count.following} icon={<Users className="w-4 h-4" />} />
+            <StatCard label="Mentorías" value={user._count.sentRequests} icon={<MessageSquare className="w-4 h-4" />} />
           </div>
 
           {/* Tabs + Posts */}

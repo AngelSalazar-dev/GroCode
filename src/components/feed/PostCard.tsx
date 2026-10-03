@@ -1,18 +1,19 @@
 "use client"
 
 import { Post, User, Like, Bookmark, Comment } from "@/generated-v2/client"
-import { ExternalLink, MessageSquare, Star, GitBranch, MoreHorizontal, Bookmark as BookmarkIcon, Share2, Loader2, Check } from "lucide-react"
+import { ExternalLink, MessageSquare, Star, GitBranch, MoreHorizontal, Bookmark as BookmarkIcon, Share2, Loader2, Check, ChevronDown, ChevronUp } from "lucide-react"
 import { getYouTubeId } from "@/lib/utils"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { toggleLike, toggleBookmark } from "@/actions/interactions"
 import { useState, useTransition } from "react"
+import CommentForm from "./CommentForm"
 
 interface PostCardProps {
   post: Post & { 
     author: User, 
     likes?: Like[], 
     bookmarks?: Bookmark[], 
-    comments?: Comment[] 
+    comments?: (Comment & { user: User })[]
   }
   currentUserId?: string
 }
@@ -21,6 +22,8 @@ export default function PostCard({ post, currentUserId }: PostCardProps) {
   const [isPendingLike, startLikeTransition] = useTransition()
   const [isPendingBookmark, startBookmarkTransition] = useTransition()
   const [copied, setCopied] = useState(false)
+  const [showComments, setShowComments] = useState(false)
+  const [comments, setComments] = useState(post.comments || [])
 
   const youtubeId = post.resourceUrl ? getYouTubeId(post.resourceUrl) : null
   
@@ -140,10 +143,14 @@ export default function PostCard({ post, currentUserId }: PostCardProps) {
                 {isPendingLike ? <Loader2 className="w-4 h-4 animate-spin" /> : <Star className={`w-4 h-4 ${hasLiked ? "fill-amber-500" : "group-hover/btn:fill-amber-500"}`} />}
                 <span className="text-xs font-bold">{likesCount}</span>
              </button>
-             <button className="flex items-center gap-2 text-muted hover:text-foreground transition-colors group/btn">
+<button 
+                onClick={() => setShowComments(!showComments)}
+                className="flex items-center gap-2 text-muted hover:text-foreground transition-colors group/btn"
+              >
                 <MessageSquare className="w-4 h-4" />
-                <span className="text-xs font-bold">{commentsCount}</span>
-             </button>
+                <span className="text-xs font-bold">{comments.length}</span>
+                {showComments ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+              </button>
           </div>
           <div className="flex items-center gap-2 mt-4">
              <button 
@@ -163,6 +170,59 @@ export default function PostCard({ post, currentUserId }: PostCardProps) {
           </div>
         </div>
       </div>
+
+      {/* Comments Section */}
+      <AnimatePresence>
+        {showComments && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="border-t border-border-gro/50 overflow-hidden"
+          >
+            <div className="p-4 space-y-4">
+              {currentUserId && (
+                <CommentForm 
+                  postId={post.id} 
+                  onCommentAdded={() => {
+                    // Refresh comments - in real app would refetch
+                    setShowComments(false)
+                  }}
+                />
+              )}
+              
+              {comments.length > 0 ? (
+                <div className="space-y-3">
+                  {comments.map((comment) => (
+                    <div key={comment.id} className="flex items-start gap-3">
+                      <div className="w-7 h-7 rounded-full bg-muted/10 border border-border-gro overflow-hidden shrink-0">
+                        {comment.user.image ? (
+                          <img src={comment.user.image} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-muted text-[10px] font-bold">
+                            {comment.user.name?.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold">{comment.user.name}</span>
+                          <span className="text-[10px] text-muted">
+                            {new Date(comment.createdAt).toLocaleDateString("es-ES", { month: 'short', day: 'numeric' })}
+                          </span>
+                        </div>
+                        <p className="text-sm text-foreground/80 mt-0.5">{comment.content}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-muted text-center py-2">No hay comentarios aún</p>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

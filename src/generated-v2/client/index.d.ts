@@ -63,6 +63,21 @@ export type Follow = $Result.DefaultSelection<Prisma.$FollowPayload>
  * 
  */
 export type MentorshipRequest = $Result.DefaultSelection<Prisma.$MentorshipRequestPayload>
+/**
+ * Model SeniorApplication
+ * 
+ */
+export type SeniorApplication = $Result.DefaultSelection<Prisma.$SeniorApplicationPayload>
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
+/**
+ * Model RoadmapStep
+ * 
+ */
+export type RoadmapStep = $Result.DefaultSelection<Prisma.$RoadmapStepPayload>
 
 /**
  * Enums
@@ -311,6 +326,36 @@ export class PrismaClient<
     * ```
     */
   get mentorshipRequest(): Prisma.MentorshipRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.seniorApplication`: Exposes CRUD operations for the **SeniorApplication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SeniorApplications
+    * const seniorApplications = await prisma.seniorApplication.findMany()
+    * ```
+    */
+  get seniorApplication(): Prisma.SeniorApplicationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
+    * ```
+    */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.roadmapStep`: Exposes CRUD operations for the **RoadmapStep** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RoadmapSteps
+    * const roadmapSteps = await prisma.roadmapStep.findMany()
+    * ```
+    */
+  get roadmapStep(): Prisma.RoadmapStepDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -761,7 +806,10 @@ export namespace Prisma {
     Bookmark: 'Bookmark',
     Comment: 'Comment',
     Follow: 'Follow',
-    MentorshipRequest: 'MentorshipRequest'
+    MentorshipRequest: 'MentorshipRequest',
+    SeniorApplication: 'SeniorApplication',
+    Notification: 'Notification',
+    RoadmapStep: 'RoadmapStep'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -780,7 +828,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verificationToken" | "post" | "like" | "bookmark" | "comment" | "follow" | "mentorshipRequest"
+      modelProps: "user" | "account" | "session" | "verificationToken" | "post" | "like" | "bookmark" | "comment" | "follow" | "mentorshipRequest" | "seniorApplication" | "notification" | "roadmapStep"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1444,6 +1492,204 @@ export namespace Prisma {
           }
         }
       }
+      SeniorApplication: {
+        payload: Prisma.$SeniorApplicationPayload<ExtArgs>
+        fields: Prisma.SeniorApplicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SeniorApplicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SeniorApplicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload>
+          }
+          findFirst: {
+            args: Prisma.SeniorApplicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SeniorApplicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload>
+          }
+          findMany: {
+            args: Prisma.SeniorApplicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload>[]
+          }
+          create: {
+            args: Prisma.SeniorApplicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload>
+          }
+          createMany: {
+            args: Prisma.SeniorApplicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.SeniorApplicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload>
+          }
+          update: {
+            args: Prisma.SeniorApplicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.SeniorApplicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SeniorApplicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SeniorApplicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeniorApplicationPayload>
+          }
+          aggregate: {
+            args: Prisma.SeniorApplicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSeniorApplication>
+          }
+          groupBy: {
+            args: Prisma.SeniorApplicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SeniorApplicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SeniorApplicationCountArgs<ExtArgs>
+            result: $Utils.Optional<SeniorApplicationCountAggregateOutputType> | number
+          }
+        }
+      }
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
+          }
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
+      RoadmapStep: {
+        payload: Prisma.$RoadmapStepPayload<ExtArgs>
+        fields: Prisma.RoadmapStepFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoadmapStepFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoadmapStepFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload>
+          }
+          findFirst: {
+            args: Prisma.RoadmapStepFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoadmapStepFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload>
+          }
+          findMany: {
+            args: Prisma.RoadmapStepFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload>[]
+          }
+          create: {
+            args: Prisma.RoadmapStepCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload>
+          }
+          createMany: {
+            args: Prisma.RoadmapStepCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.RoadmapStepDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload>
+          }
+          update: {
+            args: Prisma.RoadmapStepUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload>
+          }
+          deleteMany: {
+            args: Prisma.RoadmapStepDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoadmapStepUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RoadmapStepUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoadmapStepPayload>
+          }
+          aggregate: {
+            args: Prisma.RoadmapStepAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRoadmapStep>
+          }
+          groupBy: {
+            args: Prisma.RoadmapStepGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoadmapStepGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoadmapStepCountArgs<ExtArgs>
+            result: $Utils.Optional<RoadmapStepCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1550,6 +1796,9 @@ export namespace Prisma {
     comment?: CommentOmit
     follow?: FollowOmit
     mentorshipRequest?: MentorshipRequestOmit
+    seniorApplication?: SeniorApplicationOmit
+    notification?: NotificationOmit
+    roadmapStep?: RoadmapStepOmit
   }
 
   /* Types for Logging */
@@ -1640,6 +1889,9 @@ export namespace Prisma {
     comments: number
     sentRequests: number
     receivedRequests: number
+    seniorApplications: number
+    notifications: number
+    sentNotifications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1653,6 +1905,9 @@ export namespace Prisma {
     comments?: boolean | UserCountOutputTypeCountCommentsArgs
     sentRequests?: boolean | UserCountOutputTypeCountSentRequestsArgs
     receivedRequests?: boolean | UserCountOutputTypeCountReceivedRequestsArgs
+    seniorApplications?: boolean | UserCountOutputTypeCountSeniorApplicationsArgs
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    sentNotifications?: boolean | UserCountOutputTypeCountSentNotificationsArgs
   }
 
   // Custom InputTypes
@@ -1736,6 +1991,27 @@ export namespace Prisma {
     where?: MentorshipRequestWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSeniorApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeniorApplicationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSentNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+  }
+
 
   /**
    * Count Type PostCountOutputType
@@ -1745,12 +2021,14 @@ export namespace Prisma {
     likes: number
     bookmarks: number
     comments: number
+    notifications: number
   }
 
   export type PostCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     likes?: boolean | PostCountOutputTypeCountLikesArgs
     bookmarks?: boolean | PostCountOutputTypeCountBookmarksArgs
     comments?: boolean | PostCountOutputTypeCountCommentsArgs
+    notifications?: boolean | PostCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -1783,6 +2061,13 @@ export namespace Prisma {
    */
   export type PostCountOutputTypeCountCommentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CommentWhereInput
+  }
+
+  /**
+   * PostCountOutputType without action
+   */
+  export type PostCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
   }
 
 
@@ -2020,6 +2305,9 @@ export namespace Prisma {
     comments?: boolean | User$commentsArgs<ExtArgs>
     sentRequests?: boolean | User$sentRequestsArgs<ExtArgs>
     receivedRequests?: boolean | User$receivedRequestsArgs<ExtArgs>
+    seniorApplications?: boolean | User$seniorApplicationsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
+    sentNotifications?: boolean | User$sentNotificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2052,6 +2340,9 @@ export namespace Prisma {
     comments?: boolean | User$commentsArgs<ExtArgs>
     sentRequests?: boolean | User$sentRequestsArgs<ExtArgs>
     receivedRequests?: boolean | User$receivedRequestsArgs<ExtArgs>
+    seniorApplications?: boolean | User$seniorApplicationsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
+    sentNotifications?: boolean | User$sentNotificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2068,6 +2359,9 @@ export namespace Prisma {
       comments: Prisma.$CommentPayload<ExtArgs>[]
       sentRequests: Prisma.$MentorshipRequestPayload<ExtArgs>[]
       receivedRequests: Prisma.$MentorshipRequestPayload<ExtArgs>[]
+      seniorApplications: Prisma.$SeniorApplicationPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      sentNotifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2432,6 +2726,9 @@ export namespace Prisma {
     comments<T extends User$commentsArgs<ExtArgs> = {}>(args?: Subset<T, User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sentRequests<T extends User$sentRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$sentRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MentorshipRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     receivedRequests<T extends User$receivedRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MentorshipRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    seniorApplications<T extends User$seniorApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, User$seniorApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sentNotifications<T extends User$sentNotificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$sentNotificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3053,6 +3350,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MentorshipRequestScalarFieldEnum | MentorshipRequestScalarFieldEnum[]
+  }
+
+  /**
+   * User.seniorApplications
+   */
+  export type User$seniorApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    where?: SeniorApplicationWhereInput
+    orderBy?: SeniorApplicationOrderByWithRelationInput | SeniorApplicationOrderByWithRelationInput[]
+    cursor?: SeniorApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SeniorApplicationScalarFieldEnum | SeniorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * User.notifications
+   */
+  export type User$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * User.sentNotifications
+   */
+  export type User$sentNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -5906,6 +6275,7 @@ export namespace Prisma {
     id: string | null
     content: string | null
     resourceUrl: string | null
+    channel: string | null
     authorId: string | null
     createdAt: Date | null
   }
@@ -5914,6 +6284,7 @@ export namespace Prisma {
     id: string | null
     content: string | null
     resourceUrl: string | null
+    channel: string | null
     authorId: string | null
     createdAt: Date | null
   }
@@ -5922,6 +6293,7 @@ export namespace Prisma {
     id: number
     content: number
     resourceUrl: number
+    channel: number
     authorId: number
     createdAt: number
     _all: number
@@ -5932,6 +6304,7 @@ export namespace Prisma {
     id?: true
     content?: true
     resourceUrl?: true
+    channel?: true
     authorId?: true
     createdAt?: true
   }
@@ -5940,6 +6313,7 @@ export namespace Prisma {
     id?: true
     content?: true
     resourceUrl?: true
+    channel?: true
     authorId?: true
     createdAt?: true
   }
@@ -5948,6 +6322,7 @@ export namespace Prisma {
     id?: true
     content?: true
     resourceUrl?: true
+    channel?: true
     authorId?: true
     createdAt?: true
     _all?: true
@@ -6029,6 +6404,7 @@ export namespace Prisma {
     id: string
     content: string
     resourceUrl: string | null
+    channel: string
     authorId: string
     createdAt: Date
     _count: PostCountAggregateOutputType | null
@@ -6054,12 +6430,14 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     resourceUrl?: boolean
+    channel?: boolean
     authorId?: boolean
     createdAt?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     bookmarks?: boolean | Post$bookmarksArgs<ExtArgs>
     comments?: boolean | Post$commentsArgs<ExtArgs>
+    notifications?: boolean | Post$notificationsArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -6069,16 +6447,18 @@ export namespace Prisma {
     id?: boolean
     content?: boolean
     resourceUrl?: boolean
+    channel?: boolean
     authorId?: boolean
     createdAt?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "resourceUrl" | "authorId" | "createdAt", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "resourceUrl" | "channel" | "authorId" | "createdAt", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     bookmarks?: boolean | Post$bookmarksArgs<ExtArgs>
     comments?: boolean | Post$commentsArgs<ExtArgs>
+    notifications?: boolean | Post$notificationsArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6089,11 +6469,13 @@ export namespace Prisma {
       likes: Prisma.$LikePayload<ExtArgs>[]
       bookmarks: Prisma.$BookmarkPayload<ExtArgs>[]
       comments: Prisma.$CommentPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       content: string
       resourceUrl: string | null
+      channel: string
       authorId: string
       createdAt: Date
     }, ExtArgs["result"]["post"]>
@@ -6440,6 +6822,7 @@ export namespace Prisma {
     likes<T extends Post$likesArgs<ExtArgs> = {}>(args?: Subset<T, Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bookmarks<T extends Post$bookmarksArgs<ExtArgs> = {}>(args?: Subset<T, Post$bookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     comments<T extends Post$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends Post$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Post$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6472,6 +6855,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Post", 'String'>
     readonly content: FieldRef<"Post", 'String'>
     readonly resourceUrl: FieldRef<"Post", 'String'>
+    readonly channel: FieldRef<"Post", 'String'>
     readonly authorId: FieldRef<"Post", 'String'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
   }
@@ -6886,6 +7270,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CommentScalarFieldEnum | CommentScalarFieldEnum[]
+  }
+
+  /**
+   * Post.notifications
+   */
+  export type Post$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -11540,6 +11948,2962 @@ export namespace Prisma {
 
 
   /**
+   * Model SeniorApplication
+   */
+
+  export type AggregateSeniorApplication = {
+    _count: SeniorApplicationCountAggregateOutputType | null
+    _min: SeniorApplicationMinAggregateOutputType | null
+    _max: SeniorApplicationMaxAggregateOutputType | null
+  }
+
+  export type SeniorApplicationMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    yearsOfExperience: string | null
+    technologies: string | null
+    githubProfile: string | null
+    linkedinProfile: string | null
+    motivation: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SeniorApplicationMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    yearsOfExperience: string | null
+    technologies: string | null
+    githubProfile: string | null
+    linkedinProfile: string | null
+    motivation: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SeniorApplicationCountAggregateOutputType = {
+    id: number
+    userId: number
+    yearsOfExperience: number
+    technologies: number
+    githubProfile: number
+    linkedinProfile: number
+    motivation: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SeniorApplicationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    yearsOfExperience?: true
+    technologies?: true
+    githubProfile?: true
+    linkedinProfile?: true
+    motivation?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SeniorApplicationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    yearsOfExperience?: true
+    technologies?: true
+    githubProfile?: true
+    linkedinProfile?: true
+    motivation?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SeniorApplicationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    yearsOfExperience?: true
+    technologies?: true
+    githubProfile?: true
+    linkedinProfile?: true
+    motivation?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SeniorApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeniorApplication to aggregate.
+     */
+    where?: SeniorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeniorApplications to fetch.
+     */
+    orderBy?: SeniorApplicationOrderByWithRelationInput | SeniorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SeniorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeniorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeniorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SeniorApplications
+    **/
+    _count?: true | SeniorApplicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SeniorApplicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SeniorApplicationMaxAggregateInputType
+  }
+
+  export type GetSeniorApplicationAggregateType<T extends SeniorApplicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateSeniorApplication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSeniorApplication[P]>
+      : GetScalarType<T[P], AggregateSeniorApplication[P]>
+  }
+
+
+
+
+  export type SeniorApplicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeniorApplicationWhereInput
+    orderBy?: SeniorApplicationOrderByWithAggregationInput | SeniorApplicationOrderByWithAggregationInput[]
+    by: SeniorApplicationScalarFieldEnum[] | SeniorApplicationScalarFieldEnum
+    having?: SeniorApplicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SeniorApplicationCountAggregateInputType | true
+    _min?: SeniorApplicationMinAggregateInputType
+    _max?: SeniorApplicationMaxAggregateInputType
+  }
+
+  export type SeniorApplicationGroupByOutputType = {
+    id: string
+    userId: string
+    yearsOfExperience: string | null
+    technologies: string | null
+    githubProfile: string | null
+    linkedinProfile: string | null
+    motivation: string | null
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: SeniorApplicationCountAggregateOutputType | null
+    _min: SeniorApplicationMinAggregateOutputType | null
+    _max: SeniorApplicationMaxAggregateOutputType | null
+  }
+
+  type GetSeniorApplicationGroupByPayload<T extends SeniorApplicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SeniorApplicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SeniorApplicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SeniorApplicationGroupByOutputType[P]>
+            : GetScalarType<T[P], SeniorApplicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SeniorApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    yearsOfExperience?: boolean
+    technologies?: boolean
+    githubProfile?: boolean
+    linkedinProfile?: boolean
+    motivation?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["seniorApplication"]>
+
+
+
+  export type SeniorApplicationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    yearsOfExperience?: boolean
+    technologies?: boolean
+    githubProfile?: boolean
+    linkedinProfile?: boolean
+    motivation?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SeniorApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "yearsOfExperience" | "technologies" | "githubProfile" | "linkedinProfile" | "motivation" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["seniorApplication"]>
+  export type SeniorApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SeniorApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SeniorApplication"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      yearsOfExperience: string | null
+      technologies: string | null
+      githubProfile: string | null
+      linkedinProfile: string | null
+      motivation: string | null
+      status: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["seniorApplication"]>
+    composites: {}
+  }
+
+  type SeniorApplicationGetPayload<S extends boolean | null | undefined | SeniorApplicationDefaultArgs> = $Result.GetResult<Prisma.$SeniorApplicationPayload, S>
+
+  type SeniorApplicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SeniorApplicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SeniorApplicationCountAggregateInputType | true
+    }
+
+  export interface SeniorApplicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SeniorApplication'], meta: { name: 'SeniorApplication' } }
+    /**
+     * Find zero or one SeniorApplication that matches the filter.
+     * @param {SeniorApplicationFindUniqueArgs} args - Arguments to find a SeniorApplication
+     * @example
+     * // Get one SeniorApplication
+     * const seniorApplication = await prisma.seniorApplication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SeniorApplicationFindUniqueArgs>(args: SelectSubset<T, SeniorApplicationFindUniqueArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SeniorApplication that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SeniorApplicationFindUniqueOrThrowArgs} args - Arguments to find a SeniorApplication
+     * @example
+     * // Get one SeniorApplication
+     * const seniorApplication = await prisma.seniorApplication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SeniorApplicationFindUniqueOrThrowArgs>(args: SelectSubset<T, SeniorApplicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SeniorApplication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeniorApplicationFindFirstArgs} args - Arguments to find a SeniorApplication
+     * @example
+     * // Get one SeniorApplication
+     * const seniorApplication = await prisma.seniorApplication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SeniorApplicationFindFirstArgs>(args?: SelectSubset<T, SeniorApplicationFindFirstArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SeniorApplication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeniorApplicationFindFirstOrThrowArgs} args - Arguments to find a SeniorApplication
+     * @example
+     * // Get one SeniorApplication
+     * const seniorApplication = await prisma.seniorApplication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SeniorApplicationFindFirstOrThrowArgs>(args?: SelectSubset<T, SeniorApplicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SeniorApplications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeniorApplicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SeniorApplications
+     * const seniorApplications = await prisma.seniorApplication.findMany()
+     * 
+     * // Get first 10 SeniorApplications
+     * const seniorApplications = await prisma.seniorApplication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const seniorApplicationWithIdOnly = await prisma.seniorApplication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SeniorApplicationFindManyArgs>(args?: SelectSubset<T, SeniorApplicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SeniorApplication.
+     * @param {SeniorApplicationCreateArgs} args - Arguments to create a SeniorApplication.
+     * @example
+     * // Create one SeniorApplication
+     * const SeniorApplication = await prisma.seniorApplication.create({
+     *   data: {
+     *     // ... data to create a SeniorApplication
+     *   }
+     * })
+     * 
+     */
+    create<T extends SeniorApplicationCreateArgs>(args: SelectSubset<T, SeniorApplicationCreateArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SeniorApplications.
+     * @param {SeniorApplicationCreateManyArgs} args - Arguments to create many SeniorApplications.
+     * @example
+     * // Create many SeniorApplications
+     * const seniorApplication = await prisma.seniorApplication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SeniorApplicationCreateManyArgs>(args?: SelectSubset<T, SeniorApplicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a SeniorApplication.
+     * @param {SeniorApplicationDeleteArgs} args - Arguments to delete one SeniorApplication.
+     * @example
+     * // Delete one SeniorApplication
+     * const SeniorApplication = await prisma.seniorApplication.delete({
+     *   where: {
+     *     // ... filter to delete one SeniorApplication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SeniorApplicationDeleteArgs>(args: SelectSubset<T, SeniorApplicationDeleteArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SeniorApplication.
+     * @param {SeniorApplicationUpdateArgs} args - Arguments to update one SeniorApplication.
+     * @example
+     * // Update one SeniorApplication
+     * const seniorApplication = await prisma.seniorApplication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SeniorApplicationUpdateArgs>(args: SelectSubset<T, SeniorApplicationUpdateArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SeniorApplications.
+     * @param {SeniorApplicationDeleteManyArgs} args - Arguments to filter SeniorApplications to delete.
+     * @example
+     * // Delete a few SeniorApplications
+     * const { count } = await prisma.seniorApplication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SeniorApplicationDeleteManyArgs>(args?: SelectSubset<T, SeniorApplicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SeniorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeniorApplicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SeniorApplications
+     * const seniorApplication = await prisma.seniorApplication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SeniorApplicationUpdateManyArgs>(args: SelectSubset<T, SeniorApplicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SeniorApplication.
+     * @param {SeniorApplicationUpsertArgs} args - Arguments to update or create a SeniorApplication.
+     * @example
+     * // Update or create a SeniorApplication
+     * const seniorApplication = await prisma.seniorApplication.upsert({
+     *   create: {
+     *     // ... data to create a SeniorApplication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SeniorApplication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SeniorApplicationUpsertArgs>(args: SelectSubset<T, SeniorApplicationUpsertArgs<ExtArgs>>): Prisma__SeniorApplicationClient<$Result.GetResult<Prisma.$SeniorApplicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SeniorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeniorApplicationCountArgs} args - Arguments to filter SeniorApplications to count.
+     * @example
+     * // Count the number of SeniorApplications
+     * const count = await prisma.seniorApplication.count({
+     *   where: {
+     *     // ... the filter for the SeniorApplications we want to count
+     *   }
+     * })
+    **/
+    count<T extends SeniorApplicationCountArgs>(
+      args?: Subset<T, SeniorApplicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SeniorApplicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SeniorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeniorApplicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SeniorApplicationAggregateArgs>(args: Subset<T, SeniorApplicationAggregateArgs>): Prisma.PrismaPromise<GetSeniorApplicationAggregateType<T>>
+
+    /**
+     * Group by SeniorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeniorApplicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SeniorApplicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SeniorApplicationGroupByArgs['orderBy'] }
+        : { orderBy?: SeniorApplicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SeniorApplicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSeniorApplicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SeniorApplication model
+   */
+  readonly fields: SeniorApplicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SeniorApplication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SeniorApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SeniorApplication model
+   */
+  interface SeniorApplicationFieldRefs {
+    readonly id: FieldRef<"SeniorApplication", 'String'>
+    readonly userId: FieldRef<"SeniorApplication", 'String'>
+    readonly yearsOfExperience: FieldRef<"SeniorApplication", 'String'>
+    readonly technologies: FieldRef<"SeniorApplication", 'String'>
+    readonly githubProfile: FieldRef<"SeniorApplication", 'String'>
+    readonly linkedinProfile: FieldRef<"SeniorApplication", 'String'>
+    readonly motivation: FieldRef<"SeniorApplication", 'String'>
+    readonly status: FieldRef<"SeniorApplication", 'String'>
+    readonly createdAt: FieldRef<"SeniorApplication", 'DateTime'>
+    readonly updatedAt: FieldRef<"SeniorApplication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SeniorApplication findUnique
+   */
+  export type SeniorApplicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SeniorApplication to fetch.
+     */
+    where: SeniorApplicationWhereUniqueInput
+  }
+
+  /**
+   * SeniorApplication findUniqueOrThrow
+   */
+  export type SeniorApplicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SeniorApplication to fetch.
+     */
+    where: SeniorApplicationWhereUniqueInput
+  }
+
+  /**
+   * SeniorApplication findFirst
+   */
+  export type SeniorApplicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SeniorApplication to fetch.
+     */
+    where?: SeniorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeniorApplications to fetch.
+     */
+    orderBy?: SeniorApplicationOrderByWithRelationInput | SeniorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeniorApplications.
+     */
+    cursor?: SeniorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeniorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeniorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeniorApplications.
+     */
+    distinct?: SeniorApplicationScalarFieldEnum | SeniorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * SeniorApplication findFirstOrThrow
+   */
+  export type SeniorApplicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SeniorApplication to fetch.
+     */
+    where?: SeniorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeniorApplications to fetch.
+     */
+    orderBy?: SeniorApplicationOrderByWithRelationInput | SeniorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeniorApplications.
+     */
+    cursor?: SeniorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeniorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeniorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeniorApplications.
+     */
+    distinct?: SeniorApplicationScalarFieldEnum | SeniorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * SeniorApplication findMany
+   */
+  export type SeniorApplicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter, which SeniorApplications to fetch.
+     */
+    where?: SeniorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeniorApplications to fetch.
+     */
+    orderBy?: SeniorApplicationOrderByWithRelationInput | SeniorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SeniorApplications.
+     */
+    cursor?: SeniorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeniorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeniorApplications.
+     */
+    skip?: number
+    distinct?: SeniorApplicationScalarFieldEnum | SeniorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * SeniorApplication create
+   */
+  export type SeniorApplicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SeniorApplication.
+     */
+    data: XOR<SeniorApplicationCreateInput, SeniorApplicationUncheckedCreateInput>
+  }
+
+  /**
+   * SeniorApplication createMany
+   */
+  export type SeniorApplicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SeniorApplications.
+     */
+    data: SeniorApplicationCreateManyInput | SeniorApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SeniorApplication update
+   */
+  export type SeniorApplicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SeniorApplication.
+     */
+    data: XOR<SeniorApplicationUpdateInput, SeniorApplicationUncheckedUpdateInput>
+    /**
+     * Choose, which SeniorApplication to update.
+     */
+    where: SeniorApplicationWhereUniqueInput
+  }
+
+  /**
+   * SeniorApplication updateMany
+   */
+  export type SeniorApplicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SeniorApplications.
+     */
+    data: XOR<SeniorApplicationUpdateManyMutationInput, SeniorApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which SeniorApplications to update
+     */
+    where?: SeniorApplicationWhereInput
+    /**
+     * Limit how many SeniorApplications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SeniorApplication upsert
+   */
+  export type SeniorApplicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SeniorApplication to update in case it exists.
+     */
+    where: SeniorApplicationWhereUniqueInput
+    /**
+     * In case the SeniorApplication found by the `where` argument doesn't exist, create a new SeniorApplication with this data.
+     */
+    create: XOR<SeniorApplicationCreateInput, SeniorApplicationUncheckedCreateInput>
+    /**
+     * In case the SeniorApplication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SeniorApplicationUpdateInput, SeniorApplicationUncheckedUpdateInput>
+  }
+
+  /**
+   * SeniorApplication delete
+   */
+  export type SeniorApplicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+    /**
+     * Filter which SeniorApplication to delete.
+     */
+    where: SeniorApplicationWhereUniqueInput
+  }
+
+  /**
+   * SeniorApplication deleteMany
+   */
+  export type SeniorApplicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeniorApplications to delete
+     */
+    where?: SeniorApplicationWhereInput
+    /**
+     * Limit how many SeniorApplications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SeniorApplication without action
+   */
+  export type SeniorApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeniorApplication
+     */
+    select?: SeniorApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeniorApplication
+     */
+    omit?: SeniorApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeniorApplicationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null
+    type: string | null
+    content: string | null
+    link: string | null
+    read: boolean | null
+    userId: string | null
+    fromUserId: string | null
+    postId: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null
+    type: string | null
+    content: string | null
+    link: string | null
+    read: boolean | null
+    userId: string | null
+    fromUserId: string | null
+    postId: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
+    id: number
+    type: number
+    content: number
+    link: number
+    read: number
+    userId: number
+    fromUserId: number
+    postId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NotificationMinAggregateInputType = {
+    id?: true
+    type?: true
+    content?: true
+    link?: true
+    read?: true
+    userId?: true
+    fromUserId?: true
+    postId?: true
+    createdAt?: true
+  }
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true
+    type?: true
+    content?: true
+    link?: true
+    read?: true
+    userId?: true
+    fromUserId?: true
+    postId?: true
+    createdAt?: true
+  }
+
+  export type NotificationCountAggregateInputType = {
+    id?: true
+    type?: true
+    content?: true
+    link?: true
+    read?: true
+    userId?: true
+    fromUserId?: true
+    postId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifications
+    **/
+    _count?: true | NotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
+  }
+
+
+
+
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationCountAggregateInputType | true
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type NotificationGroupByOutputType = {
+    id: string
+    type: string
+    content: string
+    link: string | null
+    read: boolean
+    userId: string
+    fromUserId: string | null
+    postId: string | null
+    createdAt: Date
+    _count: NotificationCountAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    content?: boolean
+    link?: boolean
+    read?: boolean
+    userId?: boolean
+    fromUserId?: boolean
+    postId?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    fromUser?: boolean | Notification$fromUserArgs<ExtArgs>
+    post?: boolean | Notification$postArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+
+
+  export type NotificationSelectScalar = {
+    id?: boolean
+    type?: boolean
+    content?: boolean
+    link?: boolean
+    read?: boolean
+    userId?: boolean
+    fromUserId?: boolean
+    postId?: boolean
+    createdAt?: boolean
+  }
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "content" | "link" | "read" | "userId" | "fromUserId" | "postId" | "createdAt", ExtArgs["result"]["notification"]>
+  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    fromUser?: boolean | Notification$fromUserArgs<ExtArgs>
+    post?: boolean | Notification$postArgs<ExtArgs>
+  }
+
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      fromUser: Prisma.$UserPayload<ExtArgs> | null
+      post: Prisma.$PostPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      type: string
+      content: string
+      link: string | null
+      read: boolean
+      userId: string
+      fromUserId: string | null
+      postId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["notification"]>
+    composites: {}
+  }
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
+    }
+
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     * 
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notification model
+   */
+  readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fromUser<T extends Notification$fromUserArgs<ExtArgs> = {}>(args?: Subset<T, Notification$fromUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    post<T extends Notification$postArgs<ExtArgs> = {}>(args?: Subset<T, Notification$postArgs<ExtArgs>>): Prisma__PostClient<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'String'>
+    readonly type: FieldRef<"Notification", 'String'>
+    readonly content: FieldRef<"Notification", 'String'>
+    readonly link: FieldRef<"Notification", 'String'>
+    readonly read: FieldRef<"Notification", 'Boolean'>
+    readonly userId: FieldRef<"Notification", 'String'>
+    readonly fromUserId: FieldRef<"Notification", 'String'>
+    readonly postId: FieldRef<"Notification", 'String'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+  }
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification.fromUser
+   */
+  export type Notification$fromUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Notification.post
+   */
+  export type Notification$postArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+  }
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RoadmapStep
+   */
+
+  export type AggregateRoadmapStep = {
+    _count: RoadmapStepCountAggregateOutputType | null
+    _avg: RoadmapStepAvgAggregateOutputType | null
+    _sum: RoadmapStepSumAggregateOutputType | null
+    _min: RoadmapStepMinAggregateOutputType | null
+    _max: RoadmapStepMaxAggregateOutputType | null
+  }
+
+  export type RoadmapStepAvgAggregateOutputType = {
+    order: number | null
+    resources: number | null
+  }
+
+  export type RoadmapStepSumAggregateOutputType = {
+    order: number | null
+    resources: number | null
+  }
+
+  export type RoadmapStepMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    color: string | null
+    order: number | null
+    resources: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoadmapStepMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    color: string | null
+    order: number | null
+    resources: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RoadmapStepCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    color: number
+    order: number
+    resources: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RoadmapStepAvgAggregateInputType = {
+    order?: true
+    resources?: true
+  }
+
+  export type RoadmapStepSumAggregateInputType = {
+    order?: true
+    resources?: true
+  }
+
+  export type RoadmapStepMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    color?: true
+    order?: true
+    resources?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoadmapStepMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    color?: true
+    order?: true
+    resources?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RoadmapStepCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    color?: true
+    order?: true
+    resources?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RoadmapStepAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoadmapStep to aggregate.
+     */
+    where?: RoadmapStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoadmapSteps to fetch.
+     */
+    orderBy?: RoadmapStepOrderByWithRelationInput | RoadmapStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoadmapStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoadmapSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoadmapSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RoadmapSteps
+    **/
+    _count?: true | RoadmapStepCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RoadmapStepAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoadmapStepSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoadmapStepMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoadmapStepMaxAggregateInputType
+  }
+
+  export type GetRoadmapStepAggregateType<T extends RoadmapStepAggregateArgs> = {
+        [P in keyof T & keyof AggregateRoadmapStep]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRoadmapStep[P]>
+      : GetScalarType<T[P], AggregateRoadmapStep[P]>
+  }
+
+
+
+
+  export type RoadmapStepGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoadmapStepWhereInput
+    orderBy?: RoadmapStepOrderByWithAggregationInput | RoadmapStepOrderByWithAggregationInput[]
+    by: RoadmapStepScalarFieldEnum[] | RoadmapStepScalarFieldEnum
+    having?: RoadmapStepScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoadmapStepCountAggregateInputType | true
+    _avg?: RoadmapStepAvgAggregateInputType
+    _sum?: RoadmapStepSumAggregateInputType
+    _min?: RoadmapStepMinAggregateInputType
+    _max?: RoadmapStepMaxAggregateInputType
+  }
+
+  export type RoadmapStepGroupByOutputType = {
+    id: string
+    title: string
+    description: string
+    color: string
+    order: number
+    resources: number
+    createdAt: Date
+    updatedAt: Date
+    _count: RoadmapStepCountAggregateOutputType | null
+    _avg: RoadmapStepAvgAggregateOutputType | null
+    _sum: RoadmapStepSumAggregateOutputType | null
+    _min: RoadmapStepMinAggregateOutputType | null
+    _max: RoadmapStepMaxAggregateOutputType | null
+  }
+
+  type GetRoadmapStepGroupByPayload<T extends RoadmapStepGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoadmapStepGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoadmapStepGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoadmapStepGroupByOutputType[P]>
+            : GetScalarType<T[P], RoadmapStepGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoadmapStepSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    color?: boolean
+    order?: boolean
+    resources?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["roadmapStep"]>
+
+
+
+  export type RoadmapStepSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    color?: boolean
+    order?: boolean
+    resources?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RoadmapStepOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "color" | "order" | "resources" | "createdAt" | "updatedAt", ExtArgs["result"]["roadmapStep"]>
+
+  export type $RoadmapStepPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RoadmapStep"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string
+      color: string
+      order: number
+      resources: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["roadmapStep"]>
+    composites: {}
+  }
+
+  type RoadmapStepGetPayload<S extends boolean | null | undefined | RoadmapStepDefaultArgs> = $Result.GetResult<Prisma.$RoadmapStepPayload, S>
+
+  type RoadmapStepCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RoadmapStepFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RoadmapStepCountAggregateInputType | true
+    }
+
+  export interface RoadmapStepDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RoadmapStep'], meta: { name: 'RoadmapStep' } }
+    /**
+     * Find zero or one RoadmapStep that matches the filter.
+     * @param {RoadmapStepFindUniqueArgs} args - Arguments to find a RoadmapStep
+     * @example
+     * // Get one RoadmapStep
+     * const roadmapStep = await prisma.roadmapStep.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoadmapStepFindUniqueArgs>(args: SelectSubset<T, RoadmapStepFindUniqueArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one RoadmapStep that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RoadmapStepFindUniqueOrThrowArgs} args - Arguments to find a RoadmapStep
+     * @example
+     * // Get one RoadmapStep
+     * const roadmapStep = await prisma.roadmapStep.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoadmapStepFindUniqueOrThrowArgs>(args: SelectSubset<T, RoadmapStepFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoadmapStep that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoadmapStepFindFirstArgs} args - Arguments to find a RoadmapStep
+     * @example
+     * // Get one RoadmapStep
+     * const roadmapStep = await prisma.roadmapStep.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoadmapStepFindFirstArgs>(args?: SelectSubset<T, RoadmapStepFindFirstArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first RoadmapStep that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoadmapStepFindFirstOrThrowArgs} args - Arguments to find a RoadmapStep
+     * @example
+     * // Get one RoadmapStep
+     * const roadmapStep = await prisma.roadmapStep.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoadmapStepFindFirstOrThrowArgs>(args?: SelectSubset<T, RoadmapStepFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more RoadmapSteps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoadmapStepFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RoadmapSteps
+     * const roadmapSteps = await prisma.roadmapStep.findMany()
+     * 
+     * // Get first 10 RoadmapSteps
+     * const roadmapSteps = await prisma.roadmapStep.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const roadmapStepWithIdOnly = await prisma.roadmapStep.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoadmapStepFindManyArgs>(args?: SelectSubset<T, RoadmapStepFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a RoadmapStep.
+     * @param {RoadmapStepCreateArgs} args - Arguments to create a RoadmapStep.
+     * @example
+     * // Create one RoadmapStep
+     * const RoadmapStep = await prisma.roadmapStep.create({
+     *   data: {
+     *     // ... data to create a RoadmapStep
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoadmapStepCreateArgs>(args: SelectSubset<T, RoadmapStepCreateArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many RoadmapSteps.
+     * @param {RoadmapStepCreateManyArgs} args - Arguments to create many RoadmapSteps.
+     * @example
+     * // Create many RoadmapSteps
+     * const roadmapStep = await prisma.roadmapStep.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoadmapStepCreateManyArgs>(args?: SelectSubset<T, RoadmapStepCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a RoadmapStep.
+     * @param {RoadmapStepDeleteArgs} args - Arguments to delete one RoadmapStep.
+     * @example
+     * // Delete one RoadmapStep
+     * const RoadmapStep = await prisma.roadmapStep.delete({
+     *   where: {
+     *     // ... filter to delete one RoadmapStep
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoadmapStepDeleteArgs>(args: SelectSubset<T, RoadmapStepDeleteArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one RoadmapStep.
+     * @param {RoadmapStepUpdateArgs} args - Arguments to update one RoadmapStep.
+     * @example
+     * // Update one RoadmapStep
+     * const roadmapStep = await prisma.roadmapStep.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoadmapStepUpdateArgs>(args: SelectSubset<T, RoadmapStepUpdateArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more RoadmapSteps.
+     * @param {RoadmapStepDeleteManyArgs} args - Arguments to filter RoadmapSteps to delete.
+     * @example
+     * // Delete a few RoadmapSteps
+     * const { count } = await prisma.roadmapStep.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoadmapStepDeleteManyArgs>(args?: SelectSubset<T, RoadmapStepDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoadmapSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoadmapStepUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RoadmapSteps
+     * const roadmapStep = await prisma.roadmapStep.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoadmapStepUpdateManyArgs>(args: SelectSubset<T, RoadmapStepUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one RoadmapStep.
+     * @param {RoadmapStepUpsertArgs} args - Arguments to update or create a RoadmapStep.
+     * @example
+     * // Update or create a RoadmapStep
+     * const roadmapStep = await prisma.roadmapStep.upsert({
+     *   create: {
+     *     // ... data to create a RoadmapStep
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RoadmapStep we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoadmapStepUpsertArgs>(args: SelectSubset<T, RoadmapStepUpsertArgs<ExtArgs>>): Prisma__RoadmapStepClient<$Result.GetResult<Prisma.$RoadmapStepPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of RoadmapSteps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoadmapStepCountArgs} args - Arguments to filter RoadmapSteps to count.
+     * @example
+     * // Count the number of RoadmapSteps
+     * const count = await prisma.roadmapStep.count({
+     *   where: {
+     *     // ... the filter for the RoadmapSteps we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoadmapStepCountArgs>(
+      args?: Subset<T, RoadmapStepCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoadmapStepCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RoadmapStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoadmapStepAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoadmapStepAggregateArgs>(args: Subset<T, RoadmapStepAggregateArgs>): Prisma.PrismaPromise<GetRoadmapStepAggregateType<T>>
+
+    /**
+     * Group by RoadmapStep.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoadmapStepGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoadmapStepGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoadmapStepGroupByArgs['orderBy'] }
+        : { orderBy?: RoadmapStepGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoadmapStepGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoadmapStepGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RoadmapStep model
+   */
+  readonly fields: RoadmapStepFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RoadmapStep.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoadmapStepClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RoadmapStep model
+   */
+  interface RoadmapStepFieldRefs {
+    readonly id: FieldRef<"RoadmapStep", 'String'>
+    readonly title: FieldRef<"RoadmapStep", 'String'>
+    readonly description: FieldRef<"RoadmapStep", 'String'>
+    readonly color: FieldRef<"RoadmapStep", 'String'>
+    readonly order: FieldRef<"RoadmapStep", 'Int'>
+    readonly resources: FieldRef<"RoadmapStep", 'Int'>
+    readonly createdAt: FieldRef<"RoadmapStep", 'DateTime'>
+    readonly updatedAt: FieldRef<"RoadmapStep", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RoadmapStep findUnique
+   */
+  export type RoadmapStepFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * Filter, which RoadmapStep to fetch.
+     */
+    where: RoadmapStepWhereUniqueInput
+  }
+
+  /**
+   * RoadmapStep findUniqueOrThrow
+   */
+  export type RoadmapStepFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * Filter, which RoadmapStep to fetch.
+     */
+    where: RoadmapStepWhereUniqueInput
+  }
+
+  /**
+   * RoadmapStep findFirst
+   */
+  export type RoadmapStepFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * Filter, which RoadmapStep to fetch.
+     */
+    where?: RoadmapStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoadmapSteps to fetch.
+     */
+    orderBy?: RoadmapStepOrderByWithRelationInput | RoadmapStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoadmapSteps.
+     */
+    cursor?: RoadmapStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoadmapSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoadmapSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoadmapSteps.
+     */
+    distinct?: RoadmapStepScalarFieldEnum | RoadmapStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoadmapStep findFirstOrThrow
+   */
+  export type RoadmapStepFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * Filter, which RoadmapStep to fetch.
+     */
+    where?: RoadmapStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoadmapSteps to fetch.
+     */
+    orderBy?: RoadmapStepOrderByWithRelationInput | RoadmapStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoadmapSteps.
+     */
+    cursor?: RoadmapStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoadmapSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoadmapSteps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoadmapSteps.
+     */
+    distinct?: RoadmapStepScalarFieldEnum | RoadmapStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoadmapStep findMany
+   */
+  export type RoadmapStepFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * Filter, which RoadmapSteps to fetch.
+     */
+    where?: RoadmapStepWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoadmapSteps to fetch.
+     */
+    orderBy?: RoadmapStepOrderByWithRelationInput | RoadmapStepOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RoadmapSteps.
+     */
+    cursor?: RoadmapStepWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoadmapSteps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoadmapSteps.
+     */
+    skip?: number
+    distinct?: RoadmapStepScalarFieldEnum | RoadmapStepScalarFieldEnum[]
+  }
+
+  /**
+   * RoadmapStep create
+   */
+  export type RoadmapStepCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * The data needed to create a RoadmapStep.
+     */
+    data: XOR<RoadmapStepCreateInput, RoadmapStepUncheckedCreateInput>
+  }
+
+  /**
+   * RoadmapStep createMany
+   */
+  export type RoadmapStepCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RoadmapSteps.
+     */
+    data: RoadmapStepCreateManyInput | RoadmapStepCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RoadmapStep update
+   */
+  export type RoadmapStepUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * The data needed to update a RoadmapStep.
+     */
+    data: XOR<RoadmapStepUpdateInput, RoadmapStepUncheckedUpdateInput>
+    /**
+     * Choose, which RoadmapStep to update.
+     */
+    where: RoadmapStepWhereUniqueInput
+  }
+
+  /**
+   * RoadmapStep updateMany
+   */
+  export type RoadmapStepUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RoadmapSteps.
+     */
+    data: XOR<RoadmapStepUpdateManyMutationInput, RoadmapStepUncheckedUpdateManyInput>
+    /**
+     * Filter which RoadmapSteps to update
+     */
+    where?: RoadmapStepWhereInput
+    /**
+     * Limit how many RoadmapSteps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoadmapStep upsert
+   */
+  export type RoadmapStepUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * The filter to search for the RoadmapStep to update in case it exists.
+     */
+    where: RoadmapStepWhereUniqueInput
+    /**
+     * In case the RoadmapStep found by the `where` argument doesn't exist, create a new RoadmapStep with this data.
+     */
+    create: XOR<RoadmapStepCreateInput, RoadmapStepUncheckedCreateInput>
+    /**
+     * In case the RoadmapStep was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoadmapStepUpdateInput, RoadmapStepUncheckedUpdateInput>
+  }
+
+  /**
+   * RoadmapStep delete
+   */
+  export type RoadmapStepDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+    /**
+     * Filter which RoadmapStep to delete.
+     */
+    where: RoadmapStepWhereUniqueInput
+  }
+
+  /**
+   * RoadmapStep deleteMany
+   */
+  export type RoadmapStepDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoadmapSteps to delete
+     */
+    where?: RoadmapStepWhereInput
+    /**
+     * Limit how many RoadmapSteps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * RoadmapStep without action
+   */
+  export type RoadmapStepDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadmapStep
+     */
+    select?: RoadmapStepSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadmapStep
+     */
+    omit?: RoadmapStepOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -11612,6 +14976,7 @@ export namespace Prisma {
     id: 'id',
     content: 'content',
     resourceUrl: 'resourceUrl',
+    channel: 'channel',
     authorId: 'authorId',
     createdAt: 'createdAt'
   };
@@ -11669,6 +15034,51 @@ export namespace Prisma {
   };
 
   export type MentorshipRequestScalarFieldEnum = (typeof MentorshipRequestScalarFieldEnum)[keyof typeof MentorshipRequestScalarFieldEnum]
+
+
+  export const SeniorApplicationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    yearsOfExperience: 'yearsOfExperience',
+    technologies: 'technologies',
+    githubProfile: 'githubProfile',
+    linkedinProfile: 'linkedinProfile',
+    motivation: 'motivation',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SeniorApplicationScalarFieldEnum = (typeof SeniorApplicationScalarFieldEnum)[keyof typeof SeniorApplicationScalarFieldEnum]
+
+
+  export const NotificationScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    content: 'content',
+    link: 'link',
+    read: 'read',
+    userId: 'userId',
+    fromUserId: 'fromUserId',
+    postId: 'postId',
+    createdAt: 'createdAt'
+  };
+
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+  export const RoadmapStepScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    color: 'color',
+    order: 'order',
+    resources: 'resources',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RoadmapStepScalarFieldEnum = (typeof RoadmapStepScalarFieldEnum)[keyof typeof RoadmapStepScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -11739,6 +15149,7 @@ export namespace Prisma {
     id: 'id',
     content: 'content',
     resourceUrl: 'resourceUrl',
+    channel: 'channel',
     authorId: 'authorId'
   };
 
@@ -11791,6 +15202,43 @@ export namespace Prisma {
   export type MentorshipRequestOrderByRelevanceFieldEnum = (typeof MentorshipRequestOrderByRelevanceFieldEnum)[keyof typeof MentorshipRequestOrderByRelevanceFieldEnum]
 
 
+  export const SeniorApplicationOrderByRelevanceFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    yearsOfExperience: 'yearsOfExperience',
+    technologies: 'technologies',
+    githubProfile: 'githubProfile',
+    linkedinProfile: 'linkedinProfile',
+    motivation: 'motivation',
+    status: 'status'
+  };
+
+  export type SeniorApplicationOrderByRelevanceFieldEnum = (typeof SeniorApplicationOrderByRelevanceFieldEnum)[keyof typeof SeniorApplicationOrderByRelevanceFieldEnum]
+
+
+  export const NotificationOrderByRelevanceFieldEnum: {
+    id: 'id',
+    type: 'type',
+    content: 'content',
+    link: 'link',
+    userId: 'userId',
+    fromUserId: 'fromUserId',
+    postId: 'postId'
+  };
+
+  export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
+
+
+  export const RoadmapStepOrderByRelevanceFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    color: 'color'
+  };
+
+  export type RoadmapStepOrderByRelevanceFieldEnum = (typeof RoadmapStepOrderByRelevanceFieldEnum)[keyof typeof RoadmapStepOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
@@ -11832,6 +15280,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -11867,6 +15322,9 @@ export namespace Prisma {
     comments?: CommentListRelationFilter
     sentRequests?: MentorshipRequestListRelationFilter
     receivedRequests?: MentorshipRequestListRelationFilter
+    seniorApplications?: SeniorApplicationListRelationFilter
+    notifications?: NotificationListRelationFilter
+    sentNotifications?: NotificationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11892,6 +15350,9 @@ export namespace Prisma {
     comments?: CommentOrderByRelationAggregateInput
     sentRequests?: MentorshipRequestOrderByRelationAggregateInput
     receivedRequests?: MentorshipRequestOrderByRelationAggregateInput
+    seniorApplications?: SeniorApplicationOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
+    sentNotifications?: NotificationOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -11921,6 +15382,9 @@ export namespace Prisma {
     comments?: CommentListRelationFilter
     sentRequests?: MentorshipRequestListRelationFilter
     receivedRequests?: MentorshipRequestListRelationFilter
+    seniorApplications?: SeniorApplicationListRelationFilter
+    notifications?: NotificationListRelationFilter
+    sentNotifications?: NotificationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -12155,24 +15619,28 @@ export namespace Prisma {
     id?: StringFilter<"Post"> | string
     content?: StringFilter<"Post"> | string
     resourceUrl?: StringNullableFilter<"Post"> | string | null
+    channel?: StringFilter<"Post"> | string
     authorId?: StringFilter<"Post"> | string
     createdAt?: DateTimeFilter<"Post"> | Date | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     likes?: LikeListRelationFilter
     bookmarks?: BookmarkListRelationFilter
     comments?: CommentListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type PostOrderByWithRelationInput = {
     id?: SortOrder
     content?: SortOrder
     resourceUrl?: SortOrderInput | SortOrder
+    channel?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
     author?: UserOrderByWithRelationInput
     likes?: LikeOrderByRelationAggregateInput
     bookmarks?: BookmarkOrderByRelationAggregateInput
     comments?: CommentOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
     _relevance?: PostOrderByRelevanceInput
   }
 
@@ -12183,18 +15651,21 @@ export namespace Prisma {
     NOT?: PostWhereInput | PostWhereInput[]
     content?: StringFilter<"Post"> | string
     resourceUrl?: StringNullableFilter<"Post"> | string | null
+    channel?: StringFilter<"Post"> | string
     authorId?: StringFilter<"Post"> | string
     createdAt?: DateTimeFilter<"Post"> | Date | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     likes?: LikeListRelationFilter
     bookmarks?: BookmarkListRelationFilter
     comments?: CommentListRelationFilter
+    notifications?: NotificationListRelationFilter
   }, "id">
 
   export type PostOrderByWithAggregationInput = {
     id?: SortOrder
     content?: SortOrder
     resourceUrl?: SortOrderInput | SortOrder
+    channel?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
     _count?: PostCountOrderByAggregateInput
@@ -12209,6 +15680,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Post"> | string
     content?: StringWithAggregatesFilter<"Post"> | string
     resourceUrl?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    channel?: StringWithAggregatesFilter<"Post"> | string
     authorId?: StringWithAggregatesFilter<"Post"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
   }
@@ -12497,6 +15969,239 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"MentorshipRequest"> | Date | string
   }
 
+  export type SeniorApplicationWhereInput = {
+    AND?: SeniorApplicationWhereInput | SeniorApplicationWhereInput[]
+    OR?: SeniorApplicationWhereInput[]
+    NOT?: SeniorApplicationWhereInput | SeniorApplicationWhereInput[]
+    id?: StringFilter<"SeniorApplication"> | string
+    userId?: StringFilter<"SeniorApplication"> | string
+    yearsOfExperience?: StringNullableFilter<"SeniorApplication"> | string | null
+    technologies?: StringNullableFilter<"SeniorApplication"> | string | null
+    githubProfile?: StringNullableFilter<"SeniorApplication"> | string | null
+    linkedinProfile?: StringNullableFilter<"SeniorApplication"> | string | null
+    motivation?: StringNullableFilter<"SeniorApplication"> | string | null
+    status?: StringFilter<"SeniorApplication"> | string
+    createdAt?: DateTimeFilter<"SeniorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"SeniorApplication"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type SeniorApplicationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    yearsOfExperience?: SortOrderInput | SortOrder
+    technologies?: SortOrderInput | SortOrder
+    githubProfile?: SortOrderInput | SortOrder
+    linkedinProfile?: SortOrderInput | SortOrder
+    motivation?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    _relevance?: SeniorApplicationOrderByRelevanceInput
+  }
+
+  export type SeniorApplicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SeniorApplicationWhereInput | SeniorApplicationWhereInput[]
+    OR?: SeniorApplicationWhereInput[]
+    NOT?: SeniorApplicationWhereInput | SeniorApplicationWhereInput[]
+    userId?: StringFilter<"SeniorApplication"> | string
+    yearsOfExperience?: StringNullableFilter<"SeniorApplication"> | string | null
+    technologies?: StringNullableFilter<"SeniorApplication"> | string | null
+    githubProfile?: StringNullableFilter<"SeniorApplication"> | string | null
+    linkedinProfile?: StringNullableFilter<"SeniorApplication"> | string | null
+    motivation?: StringNullableFilter<"SeniorApplication"> | string | null
+    status?: StringFilter<"SeniorApplication"> | string
+    createdAt?: DateTimeFilter<"SeniorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"SeniorApplication"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type SeniorApplicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    yearsOfExperience?: SortOrderInput | SortOrder
+    technologies?: SortOrderInput | SortOrder
+    githubProfile?: SortOrderInput | SortOrder
+    linkedinProfile?: SortOrderInput | SortOrder
+    motivation?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SeniorApplicationCountOrderByAggregateInput
+    _max?: SeniorApplicationMaxOrderByAggregateInput
+    _min?: SeniorApplicationMinOrderByAggregateInput
+  }
+
+  export type SeniorApplicationScalarWhereWithAggregatesInput = {
+    AND?: SeniorApplicationScalarWhereWithAggregatesInput | SeniorApplicationScalarWhereWithAggregatesInput[]
+    OR?: SeniorApplicationScalarWhereWithAggregatesInput[]
+    NOT?: SeniorApplicationScalarWhereWithAggregatesInput | SeniorApplicationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SeniorApplication"> | string
+    userId?: StringWithAggregatesFilter<"SeniorApplication"> | string
+    yearsOfExperience?: StringNullableWithAggregatesFilter<"SeniorApplication"> | string | null
+    technologies?: StringNullableWithAggregatesFilter<"SeniorApplication"> | string | null
+    githubProfile?: StringNullableWithAggregatesFilter<"SeniorApplication"> | string | null
+    linkedinProfile?: StringNullableWithAggregatesFilter<"SeniorApplication"> | string | null
+    motivation?: StringNullableWithAggregatesFilter<"SeniorApplication"> | string | null
+    status?: StringWithAggregatesFilter<"SeniorApplication"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SeniorApplication"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SeniorApplication"> | Date | string
+  }
+
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    type?: StringFilter<"Notification"> | string
+    content?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    userId?: StringFilter<"Notification"> | string
+    fromUserId?: StringNullableFilter<"Notification"> | string | null
+    postId?: StringNullableFilter<"Notification"> | string | null
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    fromUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    post?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
+  }
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    link?: SortOrderInput | SortOrder
+    read?: SortOrder
+    userId?: SortOrder
+    fromUserId?: SortOrderInput | SortOrder
+    postId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    fromUser?: UserOrderByWithRelationInput
+    post?: PostOrderByWithRelationInput
+    _relevance?: NotificationOrderByRelevanceInput
+  }
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    type?: StringFilter<"Notification"> | string
+    content?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    userId?: StringFilter<"Notification"> | string
+    fromUserId?: StringNullableFilter<"Notification"> | string | null
+    postId?: StringNullableFilter<"Notification"> | string | null
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    fromUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    post?: XOR<PostNullableScalarRelationFilter, PostWhereInput> | null
+  }, "id">
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    link?: SortOrderInput | SortOrder
+    read?: SortOrder
+    userId?: SortOrder
+    fromUserId?: SortOrderInput | SortOrder
+    postId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+  }
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notification"> | string
+    type?: StringWithAggregatesFilter<"Notification"> | string
+    content?: StringWithAggregatesFilter<"Notification"> | string
+    link?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    read?: BoolWithAggregatesFilter<"Notification"> | boolean
+    userId?: StringWithAggregatesFilter<"Notification"> | string
+    fromUserId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    postId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+  }
+
+  export type RoadmapStepWhereInput = {
+    AND?: RoadmapStepWhereInput | RoadmapStepWhereInput[]
+    OR?: RoadmapStepWhereInput[]
+    NOT?: RoadmapStepWhereInput | RoadmapStepWhereInput[]
+    id?: StringFilter<"RoadmapStep"> | string
+    title?: StringFilter<"RoadmapStep"> | string
+    description?: StringFilter<"RoadmapStep"> | string
+    color?: StringFilter<"RoadmapStep"> | string
+    order?: IntFilter<"RoadmapStep"> | number
+    resources?: IntFilter<"RoadmapStep"> | number
+    createdAt?: DateTimeFilter<"RoadmapStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoadmapStep"> | Date | string
+  }
+
+  export type RoadmapStepOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    color?: SortOrder
+    order?: SortOrder
+    resources?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: RoadmapStepOrderByRelevanceInput
+  }
+
+  export type RoadmapStepWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RoadmapStepWhereInput | RoadmapStepWhereInput[]
+    OR?: RoadmapStepWhereInput[]
+    NOT?: RoadmapStepWhereInput | RoadmapStepWhereInput[]
+    title?: StringFilter<"RoadmapStep"> | string
+    description?: StringFilter<"RoadmapStep"> | string
+    color?: StringFilter<"RoadmapStep"> | string
+    order?: IntFilter<"RoadmapStep"> | number
+    resources?: IntFilter<"RoadmapStep"> | number
+    createdAt?: DateTimeFilter<"RoadmapStep"> | Date | string
+    updatedAt?: DateTimeFilter<"RoadmapStep"> | Date | string
+  }, "id">
+
+  export type RoadmapStepOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    color?: SortOrder
+    order?: SortOrder
+    resources?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RoadmapStepCountOrderByAggregateInput
+    _avg?: RoadmapStepAvgOrderByAggregateInput
+    _max?: RoadmapStepMaxOrderByAggregateInput
+    _min?: RoadmapStepMinOrderByAggregateInput
+    _sum?: RoadmapStepSumOrderByAggregateInput
+  }
+
+  export type RoadmapStepScalarWhereWithAggregatesInput = {
+    AND?: RoadmapStepScalarWhereWithAggregatesInput | RoadmapStepScalarWhereWithAggregatesInput[]
+    OR?: RoadmapStepScalarWhereWithAggregatesInput[]
+    NOT?: RoadmapStepScalarWhereWithAggregatesInput | RoadmapStepScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"RoadmapStep"> | string
+    title?: StringWithAggregatesFilter<"RoadmapStep"> | string
+    description?: StringWithAggregatesFilter<"RoadmapStep"> | string
+    color?: StringWithAggregatesFilter<"RoadmapStep"> | string
+    order?: IntWithAggregatesFilter<"RoadmapStep"> | number
+    resources?: IntWithAggregatesFilter<"RoadmapStep"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"RoadmapStep"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"RoadmapStep"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -12520,6 +16225,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12545,6 +16253,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUpdateInput = {
@@ -12570,6 +16281,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12595,6 +16309,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12840,50 +16557,59 @@ export namespace Prisma {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     createdAt?: Date | string
     author: UserCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     bookmarks?: BookmarkCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    notifications?: NotificationCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateInput = {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     authorId: string
     createdAt?: Date | string
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     bookmarks?: BookmarkUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     bookmarks?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostCreateManyInput = {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     authorId: string
     createdAt?: Date | string
   }
@@ -12892,6 +16618,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -12899,6 +16626,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13153,6 +16881,254 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SeniorApplicationCreateInput = {
+    id?: string
+    yearsOfExperience?: string | null
+    technologies?: string | null
+    githubProfile?: string | null
+    linkedinProfile?: string | null
+    motivation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutSeniorApplicationsInput
+  }
+
+  export type SeniorApplicationUncheckedCreateInput = {
+    id?: string
+    userId: string
+    yearsOfExperience?: string | null
+    technologies?: string | null
+    githubProfile?: string | null
+    linkedinProfile?: string | null
+    motivation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeniorApplicationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    yearsOfExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    githubProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    motivation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSeniorApplicationsNestedInput
+  }
+
+  export type SeniorApplicationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    yearsOfExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    githubProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    motivation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeniorApplicationCreateManyInput = {
+    id?: string
+    userId: string
+    yearsOfExperience?: string | null
+    technologies?: string | null
+    githubProfile?: string | null
+    linkedinProfile?: string | null
+    motivation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeniorApplicationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    yearsOfExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    githubProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    motivation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeniorApplicationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    yearsOfExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    githubProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    motivation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+    fromUser?: UserCreateNestedOneWithoutSentNotificationsInput
+    post?: PostCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    userId: string
+    fromUserId?: string | null
+    postId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+    fromUser?: UserUpdateOneWithoutSentNotificationsNestedInput
+    post?: PostUpdateOneWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+    fromUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateManyInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    userId: string
+    fromUserId?: string | null
+    postId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+    fromUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoadmapStepCreateInput = {
+    id?: string
+    title: string
+    description: string
+    color?: string
+    order: number
+    resources?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoadmapStepUncheckedCreateInput = {
+    id?: string
+    title: string
+    description: string
+    color?: string
+    order: number
+    resources?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoadmapStepUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    resources?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoadmapStepUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    resources?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoadmapStepCreateManyInput = {
+    id?: string
+    title: string
+    description: string
+    color?: string
+    order: number
+    resources?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoadmapStepUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    resources?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoadmapStepUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    resources?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -13260,6 +17236,18 @@ export namespace Prisma {
     none?: MentorshipRequestWhereInput
   }
 
+  export type SeniorApplicationListRelationFilter = {
+    every?: SeniorApplicationWhereInput
+    some?: SeniorApplicationWhereInput
+    none?: SeniorApplicationWhereInput
+  }
+
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -13294,6 +17282,14 @@ export namespace Prisma {
   }
 
   export type MentorshipRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SeniorApplicationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13584,6 +17580,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     resourceUrl?: SortOrder
+    channel?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
   }
@@ -13592,6 +17589,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     resourceUrl?: SortOrder
+    channel?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
   }
@@ -13600,6 +17598,7 @@ export namespace Prisma {
     id?: SortOrder
     content?: SortOrder
     resourceUrl?: SortOrder
+    channel?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
   }
@@ -13787,6 +17786,192 @@ export namespace Prisma {
     _max?: NestedEnumRequestStatusFilter<$PrismaModel>
   }
 
+  export type SeniorApplicationOrderByRelevanceInput = {
+    fields: SeniorApplicationOrderByRelevanceFieldEnum | SeniorApplicationOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type SeniorApplicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    yearsOfExperience?: SortOrder
+    technologies?: SortOrder
+    githubProfile?: SortOrder
+    linkedinProfile?: SortOrder
+    motivation?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SeniorApplicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    yearsOfExperience?: SortOrder
+    technologies?: SortOrder
+    githubProfile?: SortOrder
+    linkedinProfile?: SortOrder
+    motivation?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SeniorApplicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    yearsOfExperience?: SortOrder
+    technologies?: SortOrder
+    githubProfile?: SortOrder
+    linkedinProfile?: SortOrder
+    motivation?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type PostNullableScalarRelationFilter = {
+    is?: PostWhereInput | null
+    isNot?: PostWhereInput | null
+  }
+
+  export type NotificationOrderByRelevanceInput = {
+    fields: NotificationOrderByRelevanceFieldEnum | NotificationOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    link?: SortOrder
+    read?: SortOrder
+    userId?: SortOrder
+    fromUserId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    link?: SortOrder
+    read?: SortOrder
+    userId?: SortOrder
+    fromUserId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    content?: SortOrder
+    link?: SortOrder
+    read?: SortOrder
+    userId?: SortOrder
+    fromUserId?: SortOrder
+    postId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type RoadmapStepOrderByRelevanceInput = {
+    fields: RoadmapStepOrderByRelevanceFieldEnum | RoadmapStepOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type RoadmapStepCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    color?: SortOrder
+    order?: SortOrder
+    resources?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoadmapStepAvgOrderByAggregateInput = {
+    order?: SortOrder
+    resources?: SortOrder
+  }
+
+  export type RoadmapStepMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    color?: SortOrder
+    order?: SortOrder
+    resources?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoadmapStepMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    color?: SortOrder
+    order?: SortOrder
+    resources?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RoadmapStepSumOrderByAggregateInput = {
+    order?: SortOrder
+    resources?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -13857,6 +18042,27 @@ export namespace Prisma {
     connect?: MentorshipRequestWhereUniqueInput | MentorshipRequestWhereUniqueInput[]
   }
 
+  export type SeniorApplicationCreateNestedManyWithoutUserInput = {
+    create?: XOR<SeniorApplicationCreateWithoutUserInput, SeniorApplicationUncheckedCreateWithoutUserInput> | SeniorApplicationCreateWithoutUserInput[] | SeniorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SeniorApplicationCreateOrConnectWithoutUserInput | SeniorApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: SeniorApplicationCreateManyUserInputEnvelope
+    connect?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+  }
+
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type NotificationCreateNestedManyWithoutFromUserInput = {
+    create?: XOR<NotificationCreateWithoutFromUserInput, NotificationUncheckedCreateWithoutFromUserInput> | NotificationCreateWithoutFromUserInput[] | NotificationUncheckedCreateWithoutFromUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutFromUserInput | NotificationCreateOrConnectWithoutFromUserInput[]
+    createMany?: NotificationCreateManyFromUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -13925,6 +18131,27 @@ export namespace Prisma {
     connectOrCreate?: MentorshipRequestCreateOrConnectWithoutSeniorInput | MentorshipRequestCreateOrConnectWithoutSeniorInput[]
     createMany?: MentorshipRequestCreateManySeniorInputEnvelope
     connect?: MentorshipRequestWhereUniqueInput | MentorshipRequestWhereUniqueInput[]
+  }
+
+  export type SeniorApplicationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SeniorApplicationCreateWithoutUserInput, SeniorApplicationUncheckedCreateWithoutUserInput> | SeniorApplicationCreateWithoutUserInput[] | SeniorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SeniorApplicationCreateOrConnectWithoutUserInput | SeniorApplicationCreateOrConnectWithoutUserInput[]
+    createMany?: SeniorApplicationCreateManyUserInputEnvelope
+    connect?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutFromUserInput = {
+    create?: XOR<NotificationCreateWithoutFromUserInput, NotificationUncheckedCreateWithoutFromUserInput> | NotificationCreateWithoutFromUserInput[] | NotificationUncheckedCreateWithoutFromUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutFromUserInput | NotificationCreateOrConnectWithoutFromUserInput[]
+    createMany?: NotificationCreateManyFromUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -14087,6 +18314,48 @@ export namespace Prisma {
     deleteMany?: MentorshipRequestScalarWhereInput | MentorshipRequestScalarWhereInput[]
   }
 
+  export type SeniorApplicationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SeniorApplicationCreateWithoutUserInput, SeniorApplicationUncheckedCreateWithoutUserInput> | SeniorApplicationCreateWithoutUserInput[] | SeniorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SeniorApplicationCreateOrConnectWithoutUserInput | SeniorApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: SeniorApplicationUpsertWithWhereUniqueWithoutUserInput | SeniorApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SeniorApplicationCreateManyUserInputEnvelope
+    set?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    disconnect?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    delete?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    connect?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    update?: SeniorApplicationUpdateWithWhereUniqueWithoutUserInput | SeniorApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SeniorApplicationUpdateManyWithWhereWithoutUserInput | SeniorApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SeniorApplicationScalarWhereInput | SeniorApplicationScalarWhereInput[]
+  }
+
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type NotificationUpdateManyWithoutFromUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutFromUserInput, NotificationUncheckedCreateWithoutFromUserInput> | NotificationCreateWithoutFromUserInput[] | NotificationUncheckedCreateWithoutFromUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutFromUserInput | NotificationCreateOrConnectWithoutFromUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutFromUserInput | NotificationUpsertWithWhereUniqueWithoutFromUserInput[]
+    createMany?: NotificationCreateManyFromUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutFromUserInput | NotificationUpdateWithWhereUniqueWithoutFromUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutFromUserInput | NotificationUpdateManyWithWhereWithoutFromUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -14227,6 +18496,48 @@ export namespace Prisma {
     deleteMany?: MentorshipRequestScalarWhereInput | MentorshipRequestScalarWhereInput[]
   }
 
+  export type SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SeniorApplicationCreateWithoutUserInput, SeniorApplicationUncheckedCreateWithoutUserInput> | SeniorApplicationCreateWithoutUserInput[] | SeniorApplicationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SeniorApplicationCreateOrConnectWithoutUserInput | SeniorApplicationCreateOrConnectWithoutUserInput[]
+    upsert?: SeniorApplicationUpsertWithWhereUniqueWithoutUserInput | SeniorApplicationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SeniorApplicationCreateManyUserInputEnvelope
+    set?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    disconnect?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    delete?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    connect?: SeniorApplicationWhereUniqueInput | SeniorApplicationWhereUniqueInput[]
+    update?: SeniorApplicationUpdateWithWhereUniqueWithoutUserInput | SeniorApplicationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SeniorApplicationUpdateManyWithWhereWithoutUserInput | SeniorApplicationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SeniorApplicationScalarWhereInput | SeniorApplicationScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutFromUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutFromUserInput, NotificationUncheckedCreateWithoutFromUserInput> | NotificationCreateWithoutFromUserInput[] | NotificationUncheckedCreateWithoutFromUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutFromUserInput | NotificationCreateOrConnectWithoutFromUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutFromUserInput | NotificationUpsertWithWhereUniqueWithoutFromUserInput[]
+    createMany?: NotificationCreateManyFromUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutFromUserInput | NotificationUpdateWithWhereUniqueWithoutFromUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutFromUserInput | NotificationUpdateManyWithWhereWithoutFromUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -14290,6 +18601,13 @@ export namespace Prisma {
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutPostInput = {
+    create?: XOR<NotificationCreateWithoutPostInput, NotificationUncheckedCreateWithoutPostInput> | NotificationCreateWithoutPostInput[] | NotificationUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutPostInput | NotificationCreateOrConnectWithoutPostInput[]
+    createMany?: NotificationCreateManyPostInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type LikeUncheckedCreateNestedManyWithoutPostInput = {
     create?: XOR<LikeCreateWithoutPostInput, LikeUncheckedCreateWithoutPostInput> | LikeCreateWithoutPostInput[] | LikeUncheckedCreateWithoutPostInput[]
     connectOrCreate?: LikeCreateOrConnectWithoutPostInput | LikeCreateOrConnectWithoutPostInput[]
@@ -14309,6 +18627,13 @@ export namespace Prisma {
     connectOrCreate?: CommentCreateOrConnectWithoutPostInput | CommentCreateOrConnectWithoutPostInput[]
     createMany?: CommentCreateManyPostInputEnvelope
     connect?: CommentWhereUniqueInput | CommentWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutPostInput = {
+    create?: XOR<NotificationCreateWithoutPostInput, NotificationUncheckedCreateWithoutPostInput> | NotificationCreateWithoutPostInput[] | NotificationUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutPostInput | NotificationCreateOrConnectWithoutPostInput[]
+    createMany?: NotificationCreateManyPostInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutPostsNestedInput = {
@@ -14361,6 +18686,20 @@ export namespace Prisma {
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
   }
 
+  export type NotificationUpdateManyWithoutPostNestedInput = {
+    create?: XOR<NotificationCreateWithoutPostInput, NotificationUncheckedCreateWithoutPostInput> | NotificationCreateWithoutPostInput[] | NotificationUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutPostInput | NotificationCreateOrConnectWithoutPostInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutPostInput | NotificationUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: NotificationCreateManyPostInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutPostInput | NotificationUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutPostInput | NotificationUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type LikeUncheckedUpdateManyWithoutPostNestedInput = {
     create?: XOR<LikeCreateWithoutPostInput, LikeUncheckedCreateWithoutPostInput> | LikeCreateWithoutPostInput[] | LikeUncheckedCreateWithoutPostInput[]
     connectOrCreate?: LikeCreateOrConnectWithoutPostInput | LikeCreateOrConnectWithoutPostInput[]
@@ -14401,6 +18740,20 @@ export namespace Prisma {
     update?: CommentUpdateWithWhereUniqueWithoutPostInput | CommentUpdateWithWhereUniqueWithoutPostInput[]
     updateMany?: CommentUpdateManyWithWhereWithoutPostInput | CommentUpdateManyWithWhereWithoutPostInput[]
     deleteMany?: CommentScalarWhereInput | CommentScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutPostNestedInput = {
+    create?: XOR<NotificationCreateWithoutPostInput, NotificationUncheckedCreateWithoutPostInput> | NotificationCreateWithoutPostInput[] | NotificationUncheckedCreateWithoutPostInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutPostInput | NotificationCreateOrConnectWithoutPostInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutPostInput | NotificationUpsertWithWhereUniqueWithoutPostInput[]
+    createMany?: NotificationCreateManyPostInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutPostInput | NotificationUpdateWithWhereUniqueWithoutPostInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutPostInput | NotificationUpdateManyWithWhereWithoutPostInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutLikesInput = {
@@ -14545,6 +18898,78 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutReceivedRequestsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedRequestsInput, UserUpdateWithoutReceivedRequestsInput>, UserUncheckedUpdateWithoutReceivedRequestsInput>
+  }
+
+  export type UserCreateNestedOneWithoutSeniorApplicationsInput = {
+    create?: XOR<UserCreateWithoutSeniorApplicationsInput, UserUncheckedCreateWithoutSeniorApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSeniorApplicationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutSeniorApplicationsNestedInput = {
+    create?: XOR<UserCreateWithoutSeniorApplicationsInput, UserUncheckedCreateWithoutSeniorApplicationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSeniorApplicationsInput
+    upsert?: UserUpsertWithoutSeniorApplicationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSeniorApplicationsInput, UserUpdateWithoutSeniorApplicationsInput>, UserUncheckedUpdateWithoutSeniorApplicationsInput>
+  }
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutSentNotificationsInput = {
+    create?: XOR<UserCreateWithoutSentNotificationsInput, UserUncheckedCreateWithoutSentNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PostCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<PostCreateWithoutNotificationsInput, PostUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: PostCreateOrConnectWithoutNotificationsInput
+    connect?: PostWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    upsert?: UserUpsertWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateOneWithoutSentNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutSentNotificationsInput, UserUncheckedCreateWithoutSentNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentNotificationsInput
+    upsert?: UserUpsertWithoutSentNotificationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSentNotificationsInput, UserUpdateWithoutSentNotificationsInput>, UserUncheckedUpdateWithoutSentNotificationsInput>
+  }
+
+  export type PostUpdateOneWithoutNotificationsNestedInput = {
+    create?: XOR<PostCreateWithoutNotificationsInput, PostUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: PostCreateOrConnectWithoutNotificationsInput
+    upsert?: PostUpsertWithoutNotificationsInput
+    disconnect?: PostWhereInput | boolean
+    delete?: PostWhereInput | boolean
+    connect?: PostWhereUniqueInput
+    update?: XOR<XOR<PostUpdateToOneWithWhereWithoutNotificationsInput, PostUpdateWithoutNotificationsInput>, PostUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -14746,6 +19171,46 @@ export namespace Prisma {
     _max?: NestedEnumRequestStatusFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type AccountCreateWithoutUserInput = {
     id?: string
     type: string
@@ -14810,20 +19275,24 @@ export namespace Prisma {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     createdAt?: Date | string
     likes?: LikeCreateNestedManyWithoutPostInput
     bookmarks?: BookmarkCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    notifications?: NotificationCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutAuthorInput = {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     createdAt?: Date | string
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutAuthorInput = {
@@ -14996,6 +19465,104 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SeniorApplicationCreateWithoutUserInput = {
+    id?: string
+    yearsOfExperience?: string | null
+    technologies?: string | null
+    githubProfile?: string | null
+    linkedinProfile?: string | null
+    motivation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeniorApplicationUncheckedCreateWithoutUserInput = {
+    id?: string
+    yearsOfExperience?: string | null
+    technologies?: string | null
+    githubProfile?: string | null
+    linkedinProfile?: string | null
+    motivation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SeniorApplicationCreateOrConnectWithoutUserInput = {
+    where: SeniorApplicationWhereUniqueInput
+    create: XOR<SeniorApplicationCreateWithoutUserInput, SeniorApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type SeniorApplicationCreateManyUserInputEnvelope = {
+    data: SeniorApplicationCreateManyUserInput | SeniorApplicationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NotificationCreateWithoutUserInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    fromUser?: UserCreateNestedOneWithoutSentNotificationsInput
+    post?: PostCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    fromUserId?: string | null
+    postId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NotificationCreateWithoutFromUserInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+    post?: PostCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateWithoutFromUserInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    userId: string
+    postId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutFromUserInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutFromUserInput, NotificationUncheckedCreateWithoutFromUserInput>
+  }
+
+  export type NotificationCreateManyFromUserInputEnvelope = {
+    data: NotificationCreateManyFromUserInput | NotificationCreateManyFromUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -15079,6 +19646,7 @@ export namespace Prisma {
     id?: StringFilter<"Post"> | string
     content?: StringFilter<"Post"> | string
     resourceUrl?: StringNullableFilter<"Post"> | string | null
+    channel?: StringFilter<"Post"> | string
     authorId?: StringFilter<"Post"> | string
     createdAt?: DateTimeFilter<"Post"> | Date | string
   }
@@ -15247,6 +19815,85 @@ export namespace Prisma {
     data: XOR<MentorshipRequestUpdateManyMutationInput, MentorshipRequestUncheckedUpdateManyWithoutSeniorInput>
   }
 
+  export type SeniorApplicationUpsertWithWhereUniqueWithoutUserInput = {
+    where: SeniorApplicationWhereUniqueInput
+    update: XOR<SeniorApplicationUpdateWithoutUserInput, SeniorApplicationUncheckedUpdateWithoutUserInput>
+    create: XOR<SeniorApplicationCreateWithoutUserInput, SeniorApplicationUncheckedCreateWithoutUserInput>
+  }
+
+  export type SeniorApplicationUpdateWithWhereUniqueWithoutUserInput = {
+    where: SeniorApplicationWhereUniqueInput
+    data: XOR<SeniorApplicationUpdateWithoutUserInput, SeniorApplicationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SeniorApplicationUpdateManyWithWhereWithoutUserInput = {
+    where: SeniorApplicationScalarWhereInput
+    data: XOR<SeniorApplicationUpdateManyMutationInput, SeniorApplicationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SeniorApplicationScalarWhereInput = {
+    AND?: SeniorApplicationScalarWhereInput | SeniorApplicationScalarWhereInput[]
+    OR?: SeniorApplicationScalarWhereInput[]
+    NOT?: SeniorApplicationScalarWhereInput | SeniorApplicationScalarWhereInput[]
+    id?: StringFilter<"SeniorApplication"> | string
+    userId?: StringFilter<"SeniorApplication"> | string
+    yearsOfExperience?: StringNullableFilter<"SeniorApplication"> | string | null
+    technologies?: StringNullableFilter<"SeniorApplication"> | string | null
+    githubProfile?: StringNullableFilter<"SeniorApplication"> | string | null
+    linkedinProfile?: StringNullableFilter<"SeniorApplication"> | string | null
+    motivation?: StringNullableFilter<"SeniorApplication"> | string | null
+    status?: StringFilter<"SeniorApplication"> | string
+    createdAt?: DateTimeFilter<"SeniorApplication"> | Date | string
+    updatedAt?: DateTimeFilter<"SeniorApplication"> | Date | string
+  }
+
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    type?: StringFilter<"Notification"> | string
+    content?: StringFilter<"Notification"> | string
+    link?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    userId?: StringFilter<"Notification"> | string
+    fromUserId?: StringNullableFilter<"Notification"> | string | null
+    postId?: StringNullableFilter<"Notification"> | string | null
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+  }
+
+  export type NotificationUpsertWithWhereUniqueWithoutFromUserInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutFromUserInput, NotificationUncheckedUpdateWithoutFromUserInput>
+    create: XOR<NotificationCreateWithoutFromUserInput, NotificationUncheckedCreateWithoutFromUserInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutFromUserInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutFromUserInput, NotificationUncheckedUpdateWithoutFromUserInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutFromUserInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutFromUserInput>
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     name?: string | null
@@ -15269,6 +19916,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -15293,6 +19943,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -15333,6 +19986,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -15357,6 +20013,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -15381,6 +20040,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -15405,6 +20067,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -15445,6 +20110,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -15469,6 +20137,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserCreateWithoutPostsInput = {
@@ -15493,6 +20164,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -15517,6 +20191,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -15592,6 +20269,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificationCreateWithoutPostInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+    fromUser?: UserCreateNestedOneWithoutSentNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateWithoutPostInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    userId: string
+    fromUserId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutPostInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutPostInput, NotificationUncheckedCreateWithoutPostInput>
+  }
+
+  export type NotificationCreateManyPostInputEnvelope = {
+    data: NotificationCreateManyPostInput | NotificationCreateManyPostInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutPostsInput = {
     update: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
     create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
@@ -15625,6 +20334,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -15649,6 +20361,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type LikeUpsertWithWhereUniqueWithoutPostInput = {
@@ -15699,6 +20414,22 @@ export namespace Prisma {
     data: XOR<CommentUpdateManyMutationInput, CommentUncheckedUpdateManyWithoutPostInput>
   }
 
+  export type NotificationUpsertWithWhereUniqueWithoutPostInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutPostInput, NotificationUncheckedUpdateWithoutPostInput>
+    create: XOR<NotificationCreateWithoutPostInput, NotificationUncheckedCreateWithoutPostInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutPostInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutPostInput, NotificationUncheckedUpdateWithoutPostInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutPostInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutPostInput>
+  }
+
   export type UserCreateWithoutLikesInput = {
     id?: string
     name?: string | null
@@ -15721,6 +20452,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutLikesInput = {
@@ -15745,6 +20479,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutLikesInput = {
@@ -15756,20 +20493,24 @@ export namespace Prisma {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     createdAt?: Date | string
     author: UserCreateNestedOneWithoutPostsInput
     bookmarks?: BookmarkCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    notifications?: NotificationCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutLikesInput = {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     authorId: string
     createdAt?: Date | string
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutLikesInput = {
@@ -15810,6 +20551,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLikesInput = {
@@ -15834,6 +20578,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type PostUpsertWithoutLikesInput = {
@@ -15851,20 +20598,24 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     bookmarks?: BookmarkUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutLikesInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     bookmarks?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type UserCreateWithoutBookmarksInput = {
@@ -15889,6 +20640,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutBookmarksInput = {
@@ -15913,6 +20667,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutBookmarksInput = {
@@ -15924,20 +20681,24 @@ export namespace Prisma {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     createdAt?: Date | string
     author: UserCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     comments?: CommentCreateNestedManyWithoutPostInput
+    notifications?: NotificationCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutBookmarksInput = {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     authorId: string
     createdAt?: Date | string
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutBookmarksInput = {
@@ -15978,6 +20739,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBookmarksInput = {
@@ -16002,6 +20766,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type PostUpsertWithoutBookmarksInput = {
@@ -16019,20 +20786,24 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutBookmarksInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type UserCreateWithoutCommentsInput = {
@@ -16057,6 +20828,9 @@ export namespace Prisma {
     bookmarks?: BookmarkCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
@@ -16081,6 +20855,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutCommentsInput = {
@@ -16092,20 +20869,24 @@ export namespace Prisma {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     createdAt?: Date | string
     author: UserCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     bookmarks?: BookmarkCreateNestedManyWithoutPostInput
+    notifications?: NotificationCreateNestedManyWithoutPostInput
   }
 
   export type PostUncheckedCreateWithoutCommentsInput = {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     authorId: string
     createdAt?: Date | string
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutPostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
   }
 
   export type PostCreateOrConnectWithoutCommentsInput = {
@@ -16146,6 +20927,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -16170,6 +20954,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type PostUpsertWithoutCommentsInput = {
@@ -16187,20 +20974,24 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     bookmarks?: BookmarkUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCommentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     bookmarks?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type UserCreateWithoutFollowingInput = {
@@ -16225,6 +21016,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowingInput = {
@@ -16249,6 +21043,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowingInput = {
@@ -16278,6 +21075,9 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowersInput = {
@@ -16302,6 +21102,9 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowersInput = {
@@ -16342,6 +21145,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -16366,6 +21172,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUpsertWithoutFollowersInput = {
@@ -16401,6 +21210,9 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -16425,6 +21237,9 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserCreateWithoutSentRequestsInput = {
@@ -16449,6 +21264,9 @@ export namespace Prisma {
     bookmarks?: BookmarkCreateNestedManyWithoutUserInput
     comments?: CommentCreateNestedManyWithoutUserInput
     receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutSentRequestsInput = {
@@ -16473,6 +21291,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutSentRequestsInput = {
@@ -16502,6 +21323,9 @@ export namespace Prisma {
     bookmarks?: BookmarkCreateNestedManyWithoutUserInput
     comments?: CommentCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
   }
 
   export type UserUncheckedCreateWithoutReceivedRequestsInput = {
@@ -16526,6 +21350,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
     comments?: CommentUncheckedCreateNestedManyWithoutUserInput
     sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
   }
 
   export type UserCreateOrConnectWithoutReceivedRequestsInput = {
@@ -16566,6 +21393,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSentRequestsInput = {
@@ -16590,6 +21420,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUpsertWithoutReceivedRequestsInput = {
@@ -16625,6 +21458,9 @@ export namespace Prisma {
     bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
     comments?: CommentUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceivedRequestsInput = {
@@ -16649,6 +21485,445 @@ export namespace Prisma {
     bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
     comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
     sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
+  }
+
+  export type UserCreateWithoutSeniorApplicationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    bio?: string | null
+    location?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutUserInput
+    sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
+    receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSeniorApplicationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    bio?: string | null
+    location?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
+    receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSeniorApplicationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSeniorApplicationsInput, UserUncheckedCreateWithoutSeniorApplicationsInput>
+  }
+
+  export type UserUpsertWithoutSeniorApplicationsInput = {
+    update: XOR<UserUpdateWithoutSeniorApplicationsInput, UserUncheckedUpdateWithoutSeniorApplicationsInput>
+    create: XOR<UserCreateWithoutSeniorApplicationsInput, UserUncheckedCreateWithoutSeniorApplicationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSeniorApplicationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSeniorApplicationsInput, UserUncheckedUpdateWithoutSeniorApplicationsInput>
+  }
+
+  export type UserUpdateWithoutSeniorApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutUserNestedInput
+    sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
+    receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSeniorApplicationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
+    receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    bio?: string | null
+    location?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutUserInput
+    sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
+    receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationCreateNestedManyWithoutFromUserInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    bio?: string | null
+    location?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
+    receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    sentNotifications?: NotificationUncheckedCreateNestedManyWithoutFromUserInput
+  }
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserCreateWithoutSentNotificationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    bio?: string | null
+    location?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    followers?: FollowCreateNestedManyWithoutFollowingInput
+    following?: FollowCreateNestedManyWithoutFollowerInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutUserInput
+    sentRequests?: MentorshipRequestCreateNestedManyWithoutJuniorInput
+    receivedRequests?: MentorshipRequestCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSentNotificationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    bio?: string | null
+    location?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    followers?: FollowUncheckedCreateNestedManyWithoutFollowingInput
+    following?: FollowUncheckedCreateNestedManyWithoutFollowerInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    sentRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutJuniorInput
+    receivedRequests?: MentorshipRequestUncheckedCreateNestedManyWithoutSeniorInput
+    seniorApplications?: SeniorApplicationUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSentNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSentNotificationsInput, UserUncheckedCreateWithoutSentNotificationsInput>
+  }
+
+  export type PostCreateWithoutNotificationsInput = {
+    id?: string
+    content: string
+    resourceUrl?: string | null
+    channel?: string
+    createdAt?: Date | string
+    author: UserCreateNestedOneWithoutPostsInput
+    likes?: LikeCreateNestedManyWithoutPostInput
+    bookmarks?: BookmarkCreateNestedManyWithoutPostInput
+    comments?: CommentCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    content: string
+    resourceUrl?: string | null
+    channel?: string
+    authorId: string
+    createdAt?: Date | string
+    likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    bookmarks?: BookmarkUncheckedCreateNestedManyWithoutPostInput
+    comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutNotificationsInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutNotificationsInput, PostUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutUserNestedInput
+    sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
+    receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUpdateManyWithoutFromUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
+    receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    sentNotifications?: NotificationUncheckedUpdateManyWithoutFromUserNestedInput
+  }
+
+  export type UserUpsertWithoutSentNotificationsInput = {
+    update: XOR<UserUpdateWithoutSentNotificationsInput, UserUncheckedUpdateWithoutSentNotificationsInput>
+    create: XOR<UserCreateWithoutSentNotificationsInput, UserUncheckedCreateWithoutSentNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSentNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSentNotificationsInput, UserUncheckedUpdateWithoutSentNotificationsInput>
+  }
+
+  export type UserUpdateWithoutSentNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    followers?: FollowUpdateManyWithoutFollowingNestedInput
+    following?: FollowUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutUserNestedInput
+    sentRequests?: MentorshipRequestUpdateManyWithoutJuniorNestedInput
+    receivedRequests?: MentorshipRequestUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSentNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    followers?: FollowUncheckedUpdateManyWithoutFollowingNestedInput
+    following?: FollowUncheckedUpdateManyWithoutFollowerNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    sentRequests?: MentorshipRequestUncheckedUpdateManyWithoutJuniorNestedInput
+    receivedRequests?: MentorshipRequestUncheckedUpdateManyWithoutSeniorNestedInput
+    seniorApplications?: SeniorApplicationUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PostUpsertWithoutNotificationsInput = {
+    update: XOR<PostUpdateWithoutNotificationsInput, PostUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<PostCreateWithoutNotificationsInput, PostUncheckedCreateWithoutNotificationsInput>
+    where?: PostWhereInput
+  }
+
+  export type PostUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: PostWhereInput
+    data: XOR<PostUpdateWithoutNotificationsInput, PostUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type PostUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    likes?: LikeUpdateManyWithoutPostNestedInput
+    bookmarks?: BookmarkUpdateManyWithoutPostNestedInput
+    comments?: CommentUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    bookmarks?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -16675,6 +21950,7 @@ export namespace Prisma {
     id?: string
     content: string
     resourceUrl?: string | null
+    channel?: string
     createdAt?: Date | string
   }
 
@@ -16721,6 +21997,40 @@ export namespace Prisma {
     juniorId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SeniorApplicationCreateManyUserInput = {
+    id?: string
+    yearsOfExperience?: string | null
+    technologies?: string | null
+    githubProfile?: string | null
+    linkedinProfile?: string | null
+    motivation?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationCreateManyUserInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    fromUserId?: string | null
+    postId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationCreateManyFromUserInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    userId: string
+    postId?: string | null
+    createdAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -16787,26 +22097,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     likes?: LikeUpdateManyWithoutPostNestedInput
     bookmarks?: BookmarkUpdateManyWithoutPostNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateWithoutAuthorInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     bookmarks?: BookmarkUncheckedUpdateManyWithoutPostNestedInput
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutAuthorInput = {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     resourceUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -16945,6 +22260,108 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SeniorApplicationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    yearsOfExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    githubProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    motivation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeniorApplicationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    yearsOfExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    githubProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    motivation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeniorApplicationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    yearsOfExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    technologies?: NullableStringFieldUpdateOperationsInput | string | null
+    githubProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedinProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    motivation?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromUser?: UserUpdateOneWithoutSentNotificationsNestedInput
+    post?: PostUpdateOneWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    fromUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    fromUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutFromUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+    post?: PostUpdateOneWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutFromUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutFromUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+    postId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LikeCreateManyPostInput = {
     id?: string
     userId: string
@@ -16961,6 +22378,17 @@ export namespace Prisma {
     id?: string
     content: string
     userId: string
+    createdAt?: Date | string
+  }
+
+  export type NotificationCreateManyPostInput = {
+    id?: string
+    type: string
+    content: string
+    link?: string | null
+    read?: boolean
+    userId: string
+    fromUserId?: string | null
     createdAt?: Date | string
   }
 
@@ -17018,6 +22446,39 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+    fromUser?: UserUpdateOneWithoutSentNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+    fromUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutPostInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    link?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    userId?: StringFieldUpdateOperationsInput | string
+    fromUserId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

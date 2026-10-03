@@ -168,6 +168,7 @@ exports.Prisma.PostScalarFieldEnum = {
   id: 'id',
   content: 'content',
   resourceUrl: 'resourceUrl',
+  channel: 'channel',
   authorId: 'authorId',
   createdAt: 'createdAt'
 };
@@ -205,6 +206,42 @@ exports.Prisma.MentorshipRequestScalarFieldEnum = {
   status: 'status',
   juniorId: 'juniorId',
   seniorId: 'seniorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SeniorApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  yearsOfExperience: 'yearsOfExperience',
+  technologies: 'technologies',
+  githubProfile: 'githubProfile',
+  linkedinProfile: 'linkedinProfile',
+  motivation: 'motivation',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  content: 'content',
+  link: 'link',
+  read: 'read',
+  userId: 'userId',
+  fromUserId: 'fromUserId',
+  postId: 'postId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RoadmapStepScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  color: 'color',
+  order: 'order',
+  resources: 'resources',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -259,6 +296,7 @@ exports.Prisma.PostOrderByRelevanceFieldEnum = {
   id: 'id',
   content: 'content',
   resourceUrl: 'resourceUrl',
+  channel: 'channel',
   authorId: 'authorId'
 };
 
@@ -292,6 +330,34 @@ exports.Prisma.MentorshipRequestOrderByRelevanceFieldEnum = {
   juniorId: 'juniorId',
   seniorId: 'seniorId'
 };
+
+exports.Prisma.SeniorApplicationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  yearsOfExperience: 'yearsOfExperience',
+  technologies: 'technologies',
+  githubProfile: 'githubProfile',
+  linkedinProfile: 'linkedinProfile',
+  motivation: 'motivation',
+  status: 'status'
+};
+
+exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  type: 'type',
+  content: 'content',
+  link: 'link',
+  userId: 'userId',
+  fromUserId: 'fromUserId',
+  postId: 'postId'
+};
+
+exports.Prisma.RoadmapStepOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  color: 'color'
+};
 exports.Role = exports.$Enums.Role = {
   JUNIOR: 'JUNIOR',
   SENIOR: 'SENIOR'
@@ -313,7 +379,10 @@ exports.Prisma.ModelName = {
   Bookmark: 'Bookmark',
   Comment: 'Comment',
   Follow: 'Follow',
-  MentorshipRequest: 'MentorshipRequest'
+  MentorshipRequest: 'MentorshipRequest',
+  SeniorApplication: 'SeniorApplication',
+  Notification: 'Notification',
+  RoadmapStep: 'RoadmapStep'
 };
 
 /**

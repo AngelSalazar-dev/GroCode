@@ -30,15 +30,25 @@ const CATEGORIES = [
 interface FeedClientProps {
   posts: any[]
   currentUserId?: string
+  totalPosts: number
+  currentPage: number
+  take: number
+  activeChannel?: string
+  onPageChange?: (page: number) => void
 }
 
-export default function FeedClient({ posts, currentUserId }: FeedClientProps) {
-  const [activeChannel, setActiveChannel] = useState("general")
+export default function FeedClient({ posts, currentUserId, totalPosts, currentPage, take, activeChannel = "general", onPageChange }: FeedClientProps) {
   const [activeCategory, setActiveCategory] = useState("trending")
   const [channelsOpen, setChannelsOpen] = useState(true)
   const router = useRouter()
 
-  const filteredPosts = posts // In the future, filter by channel tag
+  const handleChannelChange = (channelId: string) => {
+    router.push(`/feed?channel=${channelId}&page=1`)
+  }
+
+  const handlePageChange = (newPage: number) => {
+    router.push(`/feed?channel=${activeChannel}&page=${newPage}`)
+  }
 
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden">
@@ -87,7 +97,7 @@ export default function FeedClient({ posts, currentUserId }: FeedClientProps) {
                 {CHANNELS.map(({ id, label, icon }) => (
                   <button
                     key={id}
-                    onClick={() => setActiveChannel(id)}
+                    onClick={() => handleChannelChange(id)}
                     className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all group ${
                       activeChannel === id
                         ? "bg-accent-gro/10 text-accent-gro font-bold"
@@ -96,28 +106,11 @@ export default function FeedClient({ posts, currentUserId }: FeedClientProps) {
                   >
                     <Hash className={`w-3.5 h-3.5 shrink-0 ${activeChannel === id ? "text-accent-gro" : "text-muted/50"}`} />
                     <span className="text-[13px]">{label}</span>
-                    {activeChannel === id && (
-                      <span className="ml-auto text-[10px] bg-accent-gro text-background px-1.5 py-0.5 rounded-full font-black">
-                        {posts.length}
-                      </span>
-                    )}
                   </button>
                 ))}
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
-
-        {/* Apply as Senior CTA */}
-        <div className="p-3 border-t border-border-gro">
-          <Link
-            href="/apply-senior"
-            className="flex flex-col gap-2 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 hover:bg-amber-500/10 transition-all group"
-          >
-            <span className="text-xs font-black text-amber-500 uppercase tracking-wider">¿Eres Senior?</span>
-            <span className="text-[11px] text-muted font-medium leading-tight">Solicita tu verificación y accede a funciones exclusivas.</span>
-            <span className="text-[11px] font-bold text-amber-500 group-hover:underline">Postularme →</span>
-          </Link>
         </div>
       </aside>
 
@@ -155,8 +148,8 @@ export default function FeedClient({ posts, currentUserId }: FeedClientProps) {
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-6"
               >
-                {filteredPosts.length > 0 ? (
-                  filteredPosts.map((post) => <PostCard key={post.id} post={post} currentUserId={currentUserId} />)
+                {posts.length > 0 ? (
+                  posts.map((post) => <PostCard key={post.id} post={post} currentUserId={currentUserId} />)
                 ) : (
                   <div className="py-32 text-center space-y-4">
                     <p className="text-5xl">{CHANNELS.find(c => c.id === activeChannel)?.icon}</p>
@@ -194,7 +187,7 @@ export default function FeedClient({ posts, currentUserId }: FeedClientProps) {
               {CHANNELS.slice(0, 5).map(ch => (
                 <button
                   key={ch.id}
-                  onClick={() => setActiveChannel(ch.id)}
+                  onClick={() => handleChannelChange(ch.id)}
                   className="w-full flex items-center gap-2 text-xs text-muted hover:text-foreground transition-colors text-left"
                 >
                   <Hash className="w-3 h-3 shrink-0" />
@@ -214,6 +207,29 @@ export default function FeedClient({ posts, currentUserId }: FeedClientProps) {
           <p className="text-[10px] font-medium text-muted/30 mt-2">GroCode Platform © 2026</p>
         </div>
       </aside>
+
+      {/* Pagination Controls */}
+      {totalPosts > take && (
+        <div className="mt-8 flex justify-center items-center gap-4">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={`gro-btn ${currentPage <= 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={currentPage <= 1}
+          >
+            Anterior
+          </button>
+          <span className="text-muted text-sm">
+            Página {currentPage} de {Math.ceil(totalPosts / take)}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="gro-btn"
+            disabled={currentPage * take >= totalPosts}
+          >
+            Siguiente
+          </button>
+        </div>
+      )}
     </div>
   )
 }

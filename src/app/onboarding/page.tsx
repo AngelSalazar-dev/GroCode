@@ -6,12 +6,13 @@ import { GraduationCap, Briefcase, ArrowRight, CheckCircle2 } from "lucide-react
 
 export default async function OnboardingPage() {
   const session = await auth()
-  if (!session) redirect("/auth/signin")
 
-  // Skip onboarding if user already has a role (not a fresh signup)
-  // We detect this by checking if they came from registration vs login
-  // For now, we simply show the onboarding always but block re-selection 
-  // by making /onboarding only reachable manually
+  // Si ya tiene rol asignado, redirigir al feed (no mostrar onboarding de nuevo)
+  if (session?.user?.role) {
+    redirect("/feed")
+  }
+
+  if (!session) redirect("/auth/signin")
 
   return (
     <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-6 relative overflow-hidden">
@@ -32,6 +33,7 @@ export default async function OnboardingPage() {
           <form action={async () => {
             "use server"
             await updateUserRole(Role.JUNIOR)
+            redirect("/feed")
           }}>
             <button type="submit" className="w-full text-left group">
               <div className="gro-card p-10 h-full space-y-8 group-hover:border-indigo-500 group-hover:-translate-y-2 transition-all cursor-pointer">
@@ -56,6 +58,7 @@ export default async function OnboardingPage() {
           <form action={async () => {
             "use server"
             await updateUserRole(Role.SENIOR)
+            redirect("/feed")
           }}>
             <button type="submit" className="w-full text-left group">
               <div className="gro-card p-10 h-full space-y-8 group-hover:border-amber-500 group-hover:-translate-y-2 transition-all cursor-pointer">

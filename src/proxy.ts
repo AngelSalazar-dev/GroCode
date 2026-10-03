@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server"
-import NextAuth from "next-auth"
-import authConfig from "@/auth/auth.config"
+import type { NextRequest } from "next/server"
 
-const { auth } = NextAuth(authConfig)
-
-export default auth((req) => {
-  const isLoggedIn = !!req.auth
-  const { nextUrl } = req
+export function proxy(request: NextRequest) {
+  const { nextUrl } = request
+  const isLoggedIn = request.cookies.has("next-auth.session-token") || request.cookies.has("__Secure-next-auth.session-token")
 
   const isApiAuthRoute = nextUrl.pathname.startsWith("/api/auth")
   const isPublicRoute = ["/", "/auth/signin", "/auth/register"].includes(nextUrl.pathname)
@@ -26,7 +23,7 @@ export default auth((req) => {
   }
 
   return NextResponse.next()
-})
+}
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.svg$|.*\\.mp4$|.*\\.webp$).*)"],

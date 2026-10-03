@@ -4,14 +4,25 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { ShieldCheck, Link as LinkIcon, Loader2, ArrowLeft, CheckCircle2, Zap, Users, Trophy, Star, Crown, Sparkles, BadgeCheck, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { applySenior } from "@/actions/senior-application"
+
+// Map color strings to static Tailwind classes
+const colorMap: Record<string, { bg: string; text: string; border: string }> = {
+  "text-amber-500": { bg: "bg-amber-500/10", text: "text-amber-500", border: "border-amber-500/20" },
+  "text-indigo-500": { bg: "bg-indigo-500/10", text: "text-indigo-500", border: "border-indigo-500/20" },
+  "text-emerald-500": { bg: "bg-emerald-500/10", text: "text-emerald-500", border: "border-emerald-500/20" },
+  "text-sky-500": { bg: "bg-sky-500/10", text: "text-sky-500", border: "border-sky-500/20" },
+  "text-violet-500": { bg: "bg-violet-500/10", text: "text-violet-500", border: "border-violet-500/20" },
+  "text-rose-500": { bg: "bg-rose-500/10", text: "text-rose-500", border: "border-rose-500/20" },
+}
 
 const BENEFITS = [
-  { icon: Crown, title: "Insignia Verificada", desc: "Tu perfil muestra la insignia de Senior Verificado con prioridad en búsquedas.", color: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/20" },
-  { icon: Users, title: "Solicitudes de Mentoría", desc: "Recibe solicitudes directas de Juniors que quieren aprender de ti.", color: "text-indigo-500", bg: "bg-indigo-500/10", border: "border-indigo-500/20" },
-  { icon: Trophy, title: "Ranking de Mentores", desc: "Apareces en el Top Mentores del mes basado en tu actividad y reviews.", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-  { icon: TrendingUp, title: "Analíticas de Impacto", desc: "Métricas exclusivas sobre cuántos devs has ayudado y tu alcance.", color: "text-sky-500", bg: "bg-sky-500/10", border: "border-sky-500/20" },
-  { icon: Sparkles, title: "Contenido Destacado", desc: "Tus publicaciones tienen mayor visibilidad en el feed de la comunidad.", color: "text-violet-500", bg: "bg-violet-500/10", border: "border-violet-500/20" },
-  { icon: Zap, title: "Acceso Anticipado", desc: "Prueba nuevas features de GroCode antes que nadie como beta tester VIP.", color: "text-rose-500", bg: "bg-rose-500/10", border: "border-rose-500/20" },
+  { icon: Crown, title: "Insignia Verificada", desc: "Tu perfil muestra la insignia de Senior Verificado con prioridad en búsquedas.", color: "text-amber-500" },
+  { icon: Users, title: "Solicitudes de Mentoría", desc: "Recibe solicitudes directas de Juniors que quieren aprender de ti.", color: "text-indigo-500" },
+  { icon: Trophy, title: "Ranking de Mentores", desc: "Apareces en el Top Mentores del mes basado en tu actividad y reviews.", color: "text-emerald-500" },
+  { icon: TrendingUp, title: "Analíticas de Impacto", desc: "Métricas exclusivas sobre cuántos devs has ayudado y tu alcance.", color: "text-sky-500" },
+  { icon: Sparkles, title: "Contenido Destacado", desc: "Tus publicaciones tienen mayor visibilidad en el feed de la comunidad.", color: "text-violet-500" },
+  { icon: Zap, title: "Acceso Anticipado", desc: "Prueba nuevas features de GroCode antes que nadie como beta tester VIP.", color: "text-rose-500" },
 ]
 
 const REQUIREMENTS = [
@@ -49,9 +60,13 @@ export default function ApplySeniorPage() {
     e.preventDefault()
     if (!validate()) return
     setIsLoading(true)
-    await new Promise(r => setTimeout(r, 2000))
-    setSubmitted(true)
+    const result = await applySenior(form)
     setIsLoading(false)
+    if (result.success) {
+      setSubmitted(true)
+    } else {
+      setErrors({ ...errors, general: (result as { error: string }).error })
+    }
   }
 
   if (submitted) {
@@ -113,6 +128,7 @@ export default function ApplySeniorPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {BENEFITS.map((b, i) => {
               const Icon = b.icon
+              const colorInfo = colorMap[b.color] || { bg: "bg-gray-500/10", text: "text-gray-500", border: "border-gray-500/20" }
               return (
                 <motion.div
                   key={i}
@@ -120,9 +136,9 @@ export default function ApplySeniorPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className={`gro-card p-6 space-y-4 hover:border-${b.color.replace("text-","")}/30 transition-all`}
+                  className="gro-card p-6 space-y-4 border-b-2 border-border-gro hover:border-accent-gro/30 transition-all"
                 >
-                  <div className={`w-12 h-12 ${b.bg} ${b.color} rounded-2xl flex items-center justify-center border ${b.border}`}>
+                  <div className="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center border border-amber-500/20">
                     <Icon className="w-6 h-6" />
                   </div>
                   <h3 className="font-bold text-lg">{b.title}</h3>
@@ -146,7 +162,7 @@ export default function ApplySeniorPage() {
                 transition={{ delay: i * 0.15 }}
                 className="gro-card p-6 space-y-3 relative"
               >
-                <span className="text-4xl font-black text-accent-gro/10">{s.step}</span>
+                <span className="text-4xl font-black text-amber-500/10">{s.step}</span>
                 <h3 className="font-bold">{s.title}</h3>
                 <p className="text-xs text-muted leading-relaxed">{s.desc}</p>
               </motion.div>

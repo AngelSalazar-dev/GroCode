@@ -7,6 +7,8 @@ import { redirect } from "next/navigation"
 
 import { Role } from "@/generated-v2/client"
 
+const validRoles: Role[] = [Role.JUNIOR, Role.SENIOR]
+
 export async function updateUserRole(role: Role) {
   const session = await auth()
 
@@ -14,11 +16,20 @@ export async function updateUserRole(role: Role) {
     throw new Error("No autorizado")
   }
 
-  await prisma.user.update({
-    where: { id: session.user.id },
-    data: { role }
-  })
+  if (!validRoles.includes(role)) {
+    throw new Error("Rol inválido. Debe ser 'JUNIOR' o 'SENIOR'")
+  }
 
-  revalidatePath("/")
-  redirect("/feed")
+  try {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { role }
+    })
+
+    revalidatePath("/")
+    redirect("/feed")
+  } catch (error) {
+    console.error("Error en updateUserRole:", error)
+    throw new Error("Error al actualizar el rol, por favor intente nuevamente")
+  }
 }

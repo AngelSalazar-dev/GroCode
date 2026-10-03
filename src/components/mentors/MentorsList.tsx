@@ -251,7 +251,7 @@ export default function MentorsPage({ mentors }: { mentors: any[] }) {
                       )}
                       <div className="flex items-center gap-1.5 text-amber-500">
                         <Star className="w-3 h-3 fill-amber-500 shrink-0" />
-                        {(4 + Math.random()).toFixed(1)} ({Math.floor(Math.random() * 80 + 10)})
+                        <span className="text-xs font-bold">Senior</span>
                       </div>
                     </div>
                   </div>

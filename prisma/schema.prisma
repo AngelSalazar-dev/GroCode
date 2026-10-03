@@ -48,6 +48,13 @@ model User {
   sentRequests     MentorshipRequest[] @relation("junior")
   receivedRequests MentorshipRequest[] @relation("senior")
 
+  // Senior Applications
+  seniorApplications SeniorApplication[]
+
+  // Notifications
+  notifications      Notification[]
+  sentNotifications  Notification[] @relation("NotificationFromUser")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -91,11 +98,13 @@ model Post {
   id          String   @id @default(cuid())
   content     String   @db.Text
   resourceUrl String?
+  channel     String   @default("general")
   authorId    String
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   likes       Like[]
   bookmarks   Bookmark[]
   comments    Comment[]
+  notifications Notification[]
   createdAt   DateTime @default(now())
 }
 
@@ -152,4 +161,51 @@ model MentorshipRequest {
   updatedAt DateTime      @updatedAt
 
   @@unique([juniorId, seniorId])
+}
+
+model SeniorApplication {
+  id              String   @id @default(cuid())
+  userId          String
+  yearsOfExperience  String?
+  technologies      String?
+  githubProfile     String?
+  linkedinProfile   String?
+  motivation        String?
+  status            String   @default("PENDING")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String
+  content   String   @db.Text
+  link      String?
+  read      Boolean  @default(false)
+  userId    String
+  fromUserId String?
+  postId    String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromUser  User?    @relation("NotificationFromUser", fields: [fromUserId], references: [id], onDelete: SetNull)
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([createdAt(sort: Desc)])
+}
+
+model RoadmapStep {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  color       String   @default("text-accent-gro")
+  order       Int
+  resources   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
 }
