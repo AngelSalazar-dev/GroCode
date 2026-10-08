@@ -1,3 +1,5 @@
+import RouteLoading from "@/components/RouteLoading"
+
 export default function Loading() {
-  return <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">Cargando...</div>
+  return <RouteLoading label="Cargando configuración" />
 }

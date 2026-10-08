@@ -4,49 +4,64 @@ import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { DEFAULT_CHANNEL, isValidChannel } from "@/lib/channels"
+import { validateHttpUrl } from "@/lib/validation"
 
-const validateURL = (url: string) => {
-  try {
-    new URL(url)
-    return true
-  } catch {
-    return false
-  }
+const MAX_CONTENT = 5000
+const MAX_URL = 500
+
+export type PostResult = { error: string } | { success: true }
+
+function validateURL(url: string) {
+  // Shared with updateProfile: a bare `new URL()` accepts `javascript:`.
+  return validateHttpUrl(url, { maxLength: MAX_URL })
 }
 
-export async function createPost(formData: FormData) {
+export async function createPost(formData: FormData): Promise<PostResult> {
   const session = await auth()
 
   if (!session?.user?.id) {
-    throw new Error("No autorizado")
+    return { error: "No autorizado" }
   }
 
-  const content = formData.get("content") as string
-  const resourceUrl = formData.get("resourceUrl") as string
-  const channel = (formData.get("channel") as string) || "general"
+  const rawContent = formData.get("content")
+  const rawUrl = formData.get("resourceUrl")
+  const rawChannel = formData.get("channel")
 
-  if (!content || content.trim().length < 10) {
-    throw new Error("El contenido debe tener al menos 10 caracteres")
+  const content = typeof rawContent === "string" ? rawContent.trim() : ""
+  const resourceUrl = typeof rawUrl === "string" ? rawUrl.trim() : ""
+  const channel = typeof rawChannel === "string" ? rawChannel : DEFAULT_CHANNEL
+
+  if (content.length < 10) {
+    return { error: "El contenido debe tener al menos 10 caracteres" }
   }
-
-  if (resourceUrl && !validateURL(resourceUrl)) {
-    throw new Error("URL de recurso inválida")
+  if (content.length > MAX_CONTENT) {
+    return { error: `El contenido no puede superar los ${MAX_CONTENT} caracteres` }
+  }
+  if (resourceUrl) {
+    const check = validateURL(resourceUrl)
+    if (!check.ok) return { error: `URL de recurso inválida: ${check.error}` }
+  }
+  if (!isValidChannel(channel)) {
+    return { error: "Canal inválido" }
   }
 
   try {
     await prisma.post.create({
       data: {
-        content: content.trim(),
-        resourceUrl: resourceUrl ? resourceUrl.trim() : null,
+        content,
+        resourceUrl: resourceUrl || null,
         channel,
-        authorId: session.user.id
-      }
+        authorId: session.user.id,
+      },
     })
-
-    revalidatePath("/feed")
-    redirect("/feed")
   } catch (error) {
     console.error("Error en createPost:", error)
-    throw new Error("Error al crear el post, por favor intente nuevamente")
+    return { error: "Error al crear el post, por favor intente nuevamente" }
   }
+
+  // redirect() must stay OUTSIDE the try block: it throws NEXT_REDIRECT,
+  // which the catch above would swallow and turn into a generic error.
+  revalidatePath("/feed")
+  redirect("/feed")
 }

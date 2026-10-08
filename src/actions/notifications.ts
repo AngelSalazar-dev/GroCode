@@ -4,38 +4,13 @@ import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
-export async function createNotification({
-  type,
-  content,
-  link,
-  userId,
-  fromUserId,
-  postId,
-}: {
-  type: string
-  content: string
-  link?: string
-  userId: string
-  fromUserId?: string
-  postId?: string
-}) {
-  try {
-    const notification = await prisma.notification.create({
-      data: {
-        type,
-        content,
-        link,
-        userId,
-        fromUserId,
-        postId,
-      },
-    })
-    return { notification }
-  } catch (error) {
-    console.error("Error creating notification:", error)
-    return { error: "Error al crear notificación" }
-  }
-}
+/**
+ * Read/mutate helpers exposed to the client.
+ *
+ * NOTE: `notify()` is intentionally NOT re-exported here — see
+ * `src/lib/notifications.ts`. Anything exported from a `"use server"` module
+ * is a public HTTP endpoint.
+ */
 
 export async function getNotifications(limit = 20) {
   const session = await auth()
@@ -43,13 +18,19 @@ export async function getNotifications(limit = 20) {
 
   const notifications = await prisma.notification.findMany({
     where: { userId: session.user.id },
-    include: {
+    select: {
+      id: true,
+      type: true,
+      content: true,
+      link: true,
+      read: true,
+      createdAt: true,
       fromUser: {
         select: { id: true, name: true, image: true },
       },
     },
     orderBy: { createdAt: "desc" },
-    take: limit,
+    take: Math.min(Math.max(limit, 1), 100),
   })
 
   return { notifications }
@@ -73,60 +54,45 @@ export async function markAsRead(notificationId: string) {
   const session = await auth()
   if (!session?.user?.id) return { error: "No autorizado" }
 
-  try {
-    await prisma.notification.update({
-      where: {
-        id: notificationId,
-        userId: session.user.id,
-      },
-      data: { read: true },
-    })
+  // Scope the update to the caller's own rows so a guessed id cannot be used
+  // to flip someone else's notification.
+  const { count } = await prisma.notification.updateMany({
+    where: { id: notificationId, userId: session.user.id },
+    data: { read: true },
+  })
 
-    revalidatePath("/notifications")
-    return { success: true }
-  } catch (error) {
-    console.error("Error marking notification as read:", error)
-    return { error: "Error al marcar notificación" }
-  }
+  if (count === 0) return { error: "Notificación no encontrada" }
+
+  revalidatePath("/notifications")
+  return { success: true }
 }
 
 export async function markAllAsRead() {
   const session = await auth()
   if (!session?.user?.id) return { error: "No autorizado" }
 
-  try {
-    await prisma.notification.updateMany({
-      where: {
-        userId: session.user.id,
-        read: false,
-      },
-      data: { read: true },
-    })
+  await prisma.notification.updateMany({
+    where: {
+      userId: session.user.id,
+      read: false,
+    },
+    data: { read: true },
+  })
 
-    revalidatePath("/notifications")
-    return { success: true }
-  } catch (error) {
-    console.error("Error marking all notifications as read:", error)
-    return { error: "Error al marcar notificaciones" }
-  }
+  revalidatePath("/notifications")
+  return { success: true }
 }
 
 export async function deleteNotification(notificationId: string) {
   const session = await auth()
   if (!session?.user?.id) return { error: "No autorizado" }
 
-  try {
-    await prisma.notification.delete({
-      where: {
-        id: notificationId,
-        userId: session.user.id,
-      },
-    })
+  const { count } = await prisma.notification.deleteMany({
+    where: { id: notificationId, userId: session.user.id },
+  })
 
-    revalidatePath("/notifications")
-    return { success: true }
-  } catch (error) {
-    console.error("Error deleting notification:", error)
-    return { error: "Error al eliminar notificación" }
-  }
+  if (count === 0) return { error: "Notificación no encontrada" }
+
+  revalidatePath("/notifications")
+  return { success: true }
 }

@@ -3,22 +3,16 @@
 import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { validateHttpUrl } from "@/lib/validation"
 
-const maxLengths = {
+const MAX_LENGTHS = {
   name: 100,
   bio: 2000,
   location: 200,
   website: 200,
-}
+} as const
 
-const validateWebsite = (url: string) => {
-  try {
-    new URL(url)
-    return true
-  } catch {
-    return false
-  }
-}
+export type UpdateProfileResult = { success: true } | { error: string }
 
 export async function updateProfile(data: {
   name: string
@@ -26,43 +20,65 @@ export async function updateProfile(data: {
   location: string
   website: string
   image?: string
-}) {
+}): Promise<UpdateProfileResult> {
   const session = await auth()
-  if (!session?.user?.id) throw new Error("No autorizado")
+  if (!session?.user?.id) return { error: "No autorizado" }
 
-  if (data.name.trim().length === 0 || data.name.trim().length > maxLengths.name) {
-    throw new Error(`Nombre debe tener entre 1 y ${maxLengths.name} caracteres`)
+  // Everything below is client-supplied: coerce before measuring, otherwise
+  // `undefined.length` throws a 500 instead of returning a validation error.
+  const name = typeof data.name === "string" ? data.name.trim() : ""
+  const bio = typeof data.bio === "string" ? data.bio.trim() : ""
+  const location = typeof data.location === "string" ? data.location.trim() : ""
+  const website = typeof data.website === "string" ? data.website.trim() : ""
+
+  if (name.length === 0) return { error: "El nombre es obligatorio" }
+  if (name.length > MAX_LENGTHS.name) {
+    return { error: `El nombre no puede superar los ${MAX_LENGTHS.name} caracteres` }
+  }
+  if (bio.length > MAX_LENGTHS.bio) {
+    return { error: `La bio no puede superar los ${MAX_LENGTHS.bio} caracteres` }
+  }
+  if (location.length > MAX_LENGTHS.location) {
+    return { error: `La ubicación no puede superar los ${MAX_LENGTHS.location} caracteres` }
   }
 
-  if (data.bio.length > maxLengths.bio) {
-    throw new Error(`Bio muy larga. Máximo ${maxLengths.bio} caracteres`)
+  let cleanWebsite: string | null = null
+  if (website) {
+    // `new URL()` alone accepted "javascript:...", which is then served as an
+    // href to every visitor of this profile.
+    const check = validateHttpUrl(website, { maxLength: MAX_LENGTHS.website })
+    if (!check.ok) return { error: `Sitio web inválido: ${check.error}` }
+    cleanWebsite = check.url
   }
 
-  if (data.website && !validateWebsite(data.website)) {
-    throw new Error("URL de sitio web inválida")
-  }
-
-  if (data.location.length > maxLengths.location) {
-    throw new Error(`Ubicación muy larga. Máximo ${maxLengths.location} caracteres`)
+  // `image` points at a DiceBear SVG chosen in the UI, but it is still client
+  // input; anything that is not http(s) is refused rather than stored.
+  let cleanImage: string | undefined
+  if (data.image) {
+    const check = validateHttpUrl(data.image, { maxLength: MAX_LENGTHS.website * 5 })
+    if (!check.ok) return { error: "Avatar inválido" }
+    cleanImage = check.url
   }
 
   try {
     await prisma.user.update({
       where: { id: session.user.id },
       data: {
-        name: data.name.trim(),
-        bio: data.bio,
-        location: data.location,
-        website: data.website || null,
-        image: data.image || undefined,
+        name,
+        bio,
+        location,
+        website: cleanWebsite,
+        ...(cleanImage !== undefined ? { image: cleanImage } : {}),
       },
     })
 
     revalidatePath(`/profile/${session.user.id}`)
     revalidatePath("/feed")
     revalidatePath("/mentors")
+
+    return { success: true }
   } catch (error) {
     console.error("Error en updateProfile:", error)
-    throw new Error("Error al actualizar el perfil, por favor intente nuevamente")
+    return { error: "Error al actualizar el perfil, por favor intente nuevamente" }
   }
 }

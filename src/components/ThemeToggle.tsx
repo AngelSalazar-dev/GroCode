@@ -2,26 +2,36 @@
 
 import { useTheme } from "next-themes"
 import { Sun, Moon } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
+
+// Canonical "is hydrated" check: the client snapshot is true and the server
+// snapshot is false, so the first client render matches the server HTML.
+const emptySubscribe = () => () => {}
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  )
 
-  useEffect(() => setMounted(true), [])
+  if (!mounted) {
+    return <div className="w-9 h-9" aria-hidden="true" />
+  }
 
-  if (!mounted) return <div className="w-9 h-9" />
+  const isDark = theme === "dark"
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="w-9 h-9 flex items-center justify-center rounded-full bg-muted/5 border border-border-gro hover:border-accent-gro hover:bg-muted/10 transition-all active:scale-90"
-      aria-label="Toggle theme"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="w-9 h-9 min-h-11 min-w-11 flex items-center justify-center rounded-full bg-muted/5 border border-border-gro hover:border-accent-gro hover:bg-muted/10 transition-all active:scale-90"
+      aria-label={isDark ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
     >
-      {theme === "dark" ? (
-        <Sun className="w-4 h-4 text-amber-500 animate-in spin-in-180 duration-500" />
+      {isDark ? (
+        <Sun className="w-4 h-4 text-amber-700 dark:text-amber-500" />
       ) : (
-        <Moon className="w-4 h-4 text-accent-gro animate-in spin-in-90 duration-500" />
+        <Moon className="w-4 h-4 text-accent-gro" />
       )}
     </button>
   )

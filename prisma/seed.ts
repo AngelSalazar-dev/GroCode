@@ -1,7 +1,42 @@
-import { PrismaClient } from "../src/generated-v2/client"
+import { PrismaClient, ApplicationStatus } from "../src/generated-v2/client"
 import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
+
+// Mirrors src/lib/channels.ts. Duplicated because the seed runs outside the
+// TypeScript path aliases; keep both in sync.
+const CHANNEL_IDS = [
+  "general",
+  "javascript",
+  "typescript",
+  "python",
+  "react",
+  "nextjs",
+  "backend",
+  "devops",
+  "ai-ml",
+  "career",
+  "showoff",
+]
+
+const COMMENTS = [
+  "Gracias por compartir esto, justo lo que necesitaba.",
+  "¿En qué versión de React lo probaste?",
+  "Muy buen explicación, muy claro todo el proceso.",
+  "Lo probé y me funcionó, muchas gracias.",
+  "¿Tienes algún enlace a documentación más a fondo?",
+  "Este enfoque me ahorró horas de trabajo, gracias.",
+  "Interesante, no lo había pensado así.",
+  "Funciona perfecto en producción, lo confirmo.",
+]
+
+const MOTIVATIONS = [
+  "Llevo más de cinco años en el frontend y me gustaría acompañar a juniors que están dando sus primeros pasos. Me gusta explicar los porqués detrás de cada decisión, no solo el cómo.",
+  "Quiero compartir lo que aprendí cometiendo errores en proyectos reales. Empezar de cero fue duro y me gustaría que nadie tenga que pasar por lo mismo.",
+  "Me apasiona la mentoría. Ver a alguien entender un concepto por primera vez es una de las cosas que más satisfacción me dan en el trabajo.",
+  "En mi equipo cuesta encontrar a quien pueda dedicar tiempo real al mentoring, así que quiero devolver parte de lo que aprendí.",
+  "Creo que el mentoring es la forma más rápida de crecer: obligarse a explicar en voz alta ordena el propio pensamiento. Me gustaría acompañar a otros en eso.",
+]
 
 // ======= Data pools =======
 const FIRST_NAMES = [
@@ -151,9 +186,77 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a
 }
 
+/**
+ * Inserta por lotes contra la base de datos.
+ *
+ * Contra TiDB cada INSERT individual cuesta ~325 ms de ida y vuelta de red. El
+ * seed hace miles, y a fila a fila tardaba mas de 15 minutos y se caia a mitad
+ * de la fase de follows. `createMany` agrupa las filas en una sola ida y vuelta.
+ *
+ * Va en trozos de CHUNK para no generar un INSERT tan grande que agote el limite
+ * de packet de MySQL. Si un trozo falla, se reintenta fila a fila: un duplicado
+ * no debe tirar abajo un lote entero.
+ */
+const CHUNK = 250
+
+type BatchedDelegate = {
+  createMany: (args: { data: unknown[]; skipDuplicates?: boolean }) => Promise<{ count: number }>
+  create: (args: { data: unknown }) => Promise<unknown>
+}
+
+async function insertInChunks(
+  model: unknown,
+  rows: unknown[],
+  { skipDuplicates = false }: { skipDuplicates?: boolean } = {}
+): Promise<number> {
+  if (rows.length === 0) return 0
+
+  // Prisma tipa cada delegate con sus propios genericos, incompatibles entre
+  // si, asi que aqui se estrecha al contrato minimo que really usa el seed.
+  const delegate = model as BatchedDelegate
+  let inserted = 0
+
+  for (let i = 0; i < rows.length; i += CHUNK) {
+    const chunk = rows.slice(i, i + CHUNK)
+    try {
+      const res = await delegate.createMany({ data: chunk, skipDuplicates })
+      inserted += res.count
+    } catch {
+      for (const row of chunk) {
+        try {
+          await delegate.create({ data: row })
+          inserted++
+        } catch {}
+      }
+    }
+  }
+  return inserted
+}
+
 async function main() {
   console.log("🌱 Starting massive seed (300 users)...")
   
+
+  // El seed tiene que poder relanzarse. Antes los usuarios usaban upsert pero
+  // posts, follows, likes, comentarios, postulaciones y notificaciones se
+  // creaban con create a secas: una segunda pasada duplicaba cientos de filas
+  // y las metricas del feed quedaban falseadas. Truncar al principio hace que el
+  // resultado sea siempre el mismo.
+  console.log('  Truncando tablas...')
+  await prisma.$transaction([
+    prisma.notification.deleteMany(),
+    prisma.comment.deleteMany(),
+    prisma.bookmark.deleteMany(),
+    prisma.like.deleteMany(),
+    prisma.mentorshipRequest.deleteMany(),
+    prisma.seniorApplication.deleteMany(),
+    prisma.follow.deleteMany(),
+    prisma.post.deleteMany(),
+    prisma.session.deleteMany(),
+    prisma.account.deleteMany(),
+    prisma.verificationToken.deleteMany(),
+    prisma.user.deleteMany(),
+  ])
   const hashedPassword = await bcrypt.hash("password123", 10)
   const allUserIds: string[] = []
   const seniorIds: string[] = []
@@ -192,6 +295,7 @@ async function main() {
         email,
         password: hashedPassword,
         role: "SENIOR",
+        onboardingCompleted: true,
         image: `https://api.dicebear.com/9.x/adventurer/svg?seed=${avatarSeed}&backgroundColor=transparent`,
         bio: rand(BIOS_SENIOR),
         location: rand(LOCATIONS),
@@ -230,6 +334,7 @@ async function main() {
         email,
         password: hashedPassword,
         role: "JUNIOR",
+        onboardingCompleted: true,
         image: `https://api.dicebear.com/9.x/adventurer/svg?seed=${avatarSeed}&backgroundColor=transparent`,
         bio: rand(BIOS_JUNIOR),
         location: rand(LOCATIONS),
@@ -244,26 +349,31 @@ async function main() {
 
   // ===== Create Posts (600+) =====
   console.log("📝 Creating 600+ posts...")
-  let postCount = 0
+  console.log("→ Creating 600+ posts...")
+
+  const postRows: {
+    content: string
+    resourceUrl: string | null
+    channel: string
+    authorId: string
+    createdAt: Date
+  }[] = []
 
   // Seniors post 3-5 times each
   for (const sid of seniorIds) {
     const numPosts = randInt(3, 5)
     for (let p = 0; p < numPosts; p++) {
-      const resourceUrl = rand(RESOURCE_URLS)
-      const daysAgo = randInt(0, 90)
       const date = new Date()
-      date.setDate(date.getDate() - daysAgo)
-
-      await prisma.post.create({
-        data: {
-          content: rand(POST_CONTENTS),
-          resourceUrl,
-          authorId: sid,
-          createdAt: date,
-        }
+      date.setDate(date.getDate() - randInt(0, 90))
+      postRows.push({
+        content: rand(POST_CONTENTS),
+        resourceUrl: rand(RESOURCE_URLS),
+        // Without this every post fell into `general`, leaving 10 of the 11
+        // channels permanently empty.
+        channel: rand(CHANNEL_IDS),
+        authorId: sid,
+        createdAt: date,
       })
-      postCount++
     }
   }
 
@@ -271,28 +381,32 @@ async function main() {
   for (const jid of juniorIds) {
     const numPosts = randInt(1, 3)
     for (let p = 0; p < numPosts; p++) {
-      const resourceUrl = rand(RESOURCE_URLS)
-      const daysAgo = randInt(0, 90)
       const date = new Date()
-      date.setDate(date.getDate() - daysAgo)
-
-      await prisma.post.create({
-        data: {
-          content: rand(POST_CONTENTS),
-          resourceUrl,
-          authorId: jid,
-          createdAt: date,
-        }
+      date.setDate(date.getDate() - randInt(0, 90))
+      postRows.push({
+        content: rand(POST_CONTENTS),
+        resourceUrl: rand(RESOURCE_URLS),
+        channel: rand(CHANNEL_IDS),
+        authorId: jid,
+        createdAt: date,
       })
-      postCount++
     }
   }
-  console.log(`  ✓ ${postCount} posts created`)
+
+  // createMany no devuelve los ids, asi que despues se recuperan con una
+  // consulta: las fases de likes y comentarios los necesitan.
+  const postCount = await insertInChunks(prisma.post, postRows)
+  console.log(`  ✓ ${postCount} posts created across ${CHANNEL_IDS.length} channels`)
 
   // ===== Create Follows (1500+) =====
-  console.log("🤝 Creating follow relationships...")
+  // Insertar fila a fila contra TiDB cuesta ~325 ms por INSERT (ida y vuelta de
+  // red). Con 1200 follows eso son mas de seis minutos solo en esta fase, y el
+  // seed se caia antes de terminar. `createMany` envia un unico INSERT de
+  // varias filas: la misma cantidad de datos, una fraccion del tiempo.
+  console.log("→ Creating follow relationships...")
   let followCount = 0
   const followPairs = new Set<string>()
+  const followRows: { followerId: string; followingId: string }[] = []
 
   // Juniors follow seniors
   for (const jid of juniorIds) {
@@ -302,12 +416,7 @@ async function main() {
       const key = `${jid}-${sid}`
       if (followPairs.has(key) || jid === sid) continue
       followPairs.add(key)
-      try {
-        await prisma.follow.create({
-          data: { followerId: jid, followingId: sid }
-        })
-        followCount++
-      } catch {}
+      followRows.push({ followerId: jid, followingId: sid })
     }
   }
 
@@ -319,21 +428,23 @@ async function main() {
       const key = `${sid}-${tid}`
       if (followPairs.has(key)) continue
       followPairs.add(key)
-      try {
-        await prisma.follow.create({
-          data: { followerId: sid, followingId: tid }
-        })
-        followCount++
-      } catch {}
+      followRows.push({ followerId: sid, followingId: tid })
     }
   }
+
+  followCount = await insertInChunks(prisma.follow, followRows, { skipDuplicates: true })
   console.log(`  ✓ ${followCount} follows created`)
 
   // ===== Create Mentorship Requests (200+) =====
-  console.log("🎯 Creating mentorship requests...")
-  let mentorshipCount = 0
+  console.log("→ Creating mentorship requests...")
   const mentorshipPairs = new Set<string>()
   const statuses = ["PENDING", "ACCEPTED", "REJECTED"] as const
+  const mentorshipRows: {
+    juniorId: string
+    seniorId: string
+    status: (typeof statuses)[number]
+    message: string | null
+  }[] = []
 
   for (const jid of shuffleArray(juniorIds).slice(0, 150)) {
     const numReqs = randInt(1, 3)
@@ -342,27 +453,138 @@ async function main() {
       const key = `${jid}-${sid}`
       if (mentorshipPairs.has(key)) continue
       mentorshipPairs.add(key)
-      try {
-        await prisma.mentorshipRequest.create({
-          data: {
-            juniorId: jid,
-            seniorId: sid,
-            status: rand(statuses),
-            message: Math.random() > 0.3 ? `Hola, me encantaría aprender de tu experiencia. Estoy enfocado en ${rand(TECHS)}.` : null,
-          }
-        })
-        mentorshipCount++
-      } catch {}
+      mentorshipRows.push({
+        juniorId: jid,
+        seniorId: sid,
+        status: rand(statuses),
+        message: Math.random() > 0.3 ? `Hola, me gustaría aprender de tu experiencia. Estoy enfocado en ${rand(TECHS)}.` : null,
+      })
     }
   }
+
+  const mentorshipCount = await insertInChunks(prisma.mentorshipRequest, mentorshipRows)
   console.log(`  ✓ ${mentorshipCount} mentorship requests created`)
+
+  // ===== Interactions: likes, bookmarks, comments =====
+  // Without these every counter read 0 and no post had a comment, which made
+  // the whole app look broken in a fresh dev environment.
+  console.log("→ Creating likes, bookmarks and comments...")
+  const allPosts = await prisma.post.findMany({ select: { id: true, authorId: true } })
+  const voters = shuffleArray(allUserIds)
+
+  const likeRows: { userId: string; postId: string }[] = []
+  const bookmarkRows: { userId: string; postId: string }[] = []
+  const commentRows: { userId: string; postId: string; content: string; createdAt: Date }[] = []
+
+  for (const post of allPosts) {
+    const numLikes = randInt(0, 14)
+    // Never let a post be liked by its own author.
+    const likers = shuffleArray(voters.filter((id) => id !== post.authorId)).slice(0, numLikes)
+
+    for (const uid of likers) {
+      likeRows.push({ userId: uid, postId: post.id })
+    }
+
+    for (const uid of shuffleArray(likers).slice(0, randInt(0, 3))) {
+      bookmarkRows.push({ userId: uid, postId: post.id })
+    }
+
+    const numComments = randInt(0, 3)
+    for (let i = 0; i < numComments; i++) {
+      const uid = rand(voters)
+      if (uid === post.authorId) continue
+      const date = new Date()
+      date.setDate(date.getDate() - randInt(0, 30))
+      commentRows.push({ userId: uid, postId: post.id, content: rand(COMMENTS), createdAt: date })
+    }
+  }
+
+  const likeCount = await insertInChunks(prisma.like, likeRows, { skipDuplicates: true })
+  await insertInChunks(prisma.bookmark, bookmarkRows, { skipDuplicates: true })
+  const commentCount = await insertInChunks(prisma.comment, commentRows)
+  console.log(`  ✓ ${likeCount} likes, ${commentCount} comments created`)
+
+  // ===== Senior applications + notifications =====
+  // The admin panel had nothing to review and every user saw
+  // "Sin notificaciones" forever.
+  console.log("→ Creating senior applications and notifications...")
+  const APPLICATION_STATUSES: ApplicationStatus[] = [
+    ApplicationStatus.PENDING,
+    ApplicationStatus.VERIFIED,
+    ApplicationStatus.APPROVED,
+    ApplicationStatus.REJECTED,
+  ]
+
+  // Cada usuario postula como maximo una vez, asi que se eligen sin repetir.
+  const applicants = shuffleArray(juniorIds).slice(0, 25)
+  const applicationRows = applicants.map((jid, i) => ({
+    userId: jid,
+    yearsOfExperience: rand(["3-5", "5-8", "8-12", "12+"]),
+    technologies: rand(TECHS),
+    githubProfile: `https://github.com/user${i}`,
+    linkedinProfile: Math.random() > 0.5 ? `https://www.linkedin.com/in/user${i}` : null,
+    motivation: rand(MOTIVATIONS),
+    status: rand(APPLICATION_STATUSES),
+  }))
+  const applicationCount = await insertInChunks(prisma.seniorApplication, applicationRows)
+
+  // Give the first admin something to review.
+  const admin = await prisma.user.findFirst({
+    where: { email: { endsWith: "@grocode.dev" } },
+    select: { id: true },
+  })
+  if (admin) {
+    await prisma.user.update({ where: { id: admin.id }, data: { role: "ADMIN" } })
+    console.log(`  ✓ admin created: ${admin.id}`)
+  }
+
+  const NOTIFICATION_SEEDS = [
+    { type: "like", content: "Alguien marcó con estrella tu publicación." },
+    { type: "comment", content: "Alguien comentó tu publicación." },
+    { type: "follow", content: "Alguien empezó a seguirte." },
+    { type: "mentorship", content: "Tienes una solicitud de mentoría por revisar." },
+    { type: "announcement", content: "Bienvenido a la comunidad de GroCode." },
+  ]
+
+  const notificationRows: {
+    userId: string
+    type: string
+    content: string
+    read: boolean
+    createdAt: Date
+  }[] = []
+  for (const uid of allUserIds.slice(0, 40)) {
+    for (const seed of shuffleArray(NOTIFICATION_SEEDS).slice(0, randInt(1, 4))) {
+      const date = new Date()
+      date.setDate(date.getDate() - randInt(0, 14))
+      notificationRows.push({
+        userId: uid,
+        type: seed.type,
+        content: seed.content,
+        read: Math.random() > 0.6,
+        createdAt: date,
+      })
+    }
+  }
+  const notificationCount = await insertInChunks(prisma.notification, notificationRows)
+  console.log(`  ✓ ${applicationCount} applications, ${notificationCount} notifications created`)
+
+  // ===== Roadmap =====
+  const roadmapSteps = await prisma.roadmapStep.count()
+  if (roadmapSteps === 0) {
+    console.log("  ⚠ No roadmap steps. Run: npx tsx prisma/seed-roadmap.ts")
+  }
 
   // ===== Summary =====
   console.log("\n✅ Seed complete!")
   console.log(`   👤 Users: ${allUserIds.length} (${seniorIds.length} seniors, ${juniorIds.length} juniors)`)
-  console.log(`   📝 Posts: ${postCount}`)
+  console.log(`   📝 Posts: ${postCount} across ${CHANNEL_IDS.length} channels`)
   console.log(`   🤝 Follows: ${followCount}`)
   console.log(`   🎯 Mentorships: ${mentorshipCount}`)
+  console.log(`   ❤️ Likes: ${likeCount}`)
+  console.log(`   💬 Comments: ${commentCount}`)
+  console.log(`   📬 Applications: ${applicationCount}`)
+  console.log(`   🔔 Notifications: ${notificationCount}`)
   console.log(`\n   Login: any email / password123`)
 }
 

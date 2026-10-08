@@ -1,6 +1,7 @@
 "use client"
 
 import { signIn } from "next-auth/react"
+import Image from "next/image"
 import { Code2, Loader2, ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 import { useState } from "react"
@@ -16,9 +17,15 @@ function SignInContent() {
   const router = useRouter()
   const registered = searchParams.get("registered")
 
+  // Only allow same-origin relative paths, otherwise this becomes an open
+  // redirect. Anything with a scheme or a leading "//" is discarded.
+  const rawCallback = searchParams.get("callbackUrl")
+  const callbackUrl =
+    rawCallback && /^\/(?!\/)/.test(rawCallback) ? rawCallback : "/feed"
+
   const handleGitHubSignIn = async () => {
     setIsLoading(true)
-    await signIn("github", { callbackUrl: "/feed" })
+    await signIn("github", { callbackUrl })
   }
 
   const handleCredentialsSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,7 +47,8 @@ function SignInContent() {
       setError("Email o contraseña incorrectos")
       setIsLoading(false)
     } else {
-      router.push("/feed")
+      router.push(callbackUrl)
+      router.refresh()
     }
   }
 
@@ -48,8 +56,8 @@ function SignInContent() {
     <>
         <div className="text-center space-y-6">
           <Link href="/" className="inline-block group">
-            <img src="/Black Isotype.png" className="w-16 h-16 object-contain dark:hidden group-hover:scale-110 transition-transform" />
-            <img src="/White Isotype.png" className="w-16 h-16 object-contain hidden dark:block group-hover:scale-110 transition-transform" />
+            <Image src="/isotype-black.png" alt="GroCode" width={64} height={64} className="w-16 h-16 object-contain dark:hidden group-hover:scale-110 transition-transform" />
+            <Image src="/isotype-white.png" alt="GroCode" width={64} height={64} className="w-16 h-16 object-contain hidden dark:block group-hover:scale-110 transition-transform" />
           </Link>
           <div className="space-y-2">
             <h1 className="text-3xl font-black tracking-tight">Bienvenido de nuevo</h1>
@@ -59,37 +67,42 @@ function SignInContent() {
 
         <div className="gro-card p-10 space-y-8 shadow-2xl">
           {registered && (
-            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-500 text-xs font-bold text-center">
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-700 dark:text-emerald-500 text-xs font-bold text-center" role="status">
               ¡Registro exitoso! Por favor inicia sesión.
             </div>
           )}
 
           <form onSubmit={handleCredentialsSignIn} className="space-y-5">
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted">Email</label>
+              <label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted">Email</label>
               <input 
+                id="email"
                 name="email"
                 type="email" 
                 required
+                autoComplete="email"
                 placeholder="tu@email.com"
                 className="w-full bg-muted/5 border border-border-gro rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent-gro/10 focus:border-accent-gro outline-none transition-all"
               />
             </div>
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-xs font-bold uppercase tracking-wider text-muted">Contraseña</label>
-                <Link href="#" className="text-[10px] font-bold text-accent-gro hover:underline">¿Olvidaste tu contraseña?</Link>
+              <div className="flex items-center">
+                <label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-muted">
+                  Contraseña
+                </label>
               </div>
               <input 
+                id="password"
                 name="password"
                 type="password" 
                 required
+                autoComplete="current-password"
                 placeholder="••••••••"
                 className="w-full bg-muted/5 border border-border-gro rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent-gro/10 focus:border-accent-gro outline-none transition-all"
               />
             </div>
 
-            {error && <p className="text-rose-500 text-xs font-bold text-center">{error}</p>}
+            {error && <p role="alert" className="text-rose-700 dark:text-rose-500 text-xs font-bold text-center">{error}</p>}
 
             <button 
               disabled={isLoading}
@@ -118,7 +131,7 @@ function SignInContent() {
           ¿No tienes una cuenta? <Link href="/auth/register" className="text-accent-gro font-bold hover:underline">Regístrate gratis</Link>
         </p>
 
-        <Link href="/" className="flex items-center justify-center gap-2 text-xs font-bold text-muted hover:text-foreground transition-colors">
+        <Link href="/" className="flex items-center justify-center gap-2 text-xs font-bold min-h-11 min-w-11 flex items-center justify-center text-muted hover:text-foreground transition-colors">
           <ArrowLeft className="w-3 h-3" /> Volver al inicio
         </Link>
     </>

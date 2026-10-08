@@ -1,6 +1,7 @@
 "use client"
 
 import { registerUser } from "@/actions/register"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -21,7 +22,7 @@ export default function RegisterPage() {
       const formData = new FormData(e.currentTarget)
       const result = await registerUser(formData)
 
-      if (result.error) {
+      if ("error" in result) {
         setError(result.error)
         setIsLoading(false)
       } else {
@@ -46,8 +47,8 @@ export default function RegisterPage() {
       >
         <div className="text-center space-y-6">
           <Link href="/" className="inline-block group">
-            <img src="/Black Isotype.png" className="w-16 h-16 object-contain dark:hidden group-hover:scale-110 transition-transform" />
-            <img src="/White Isotype.png" className="w-16 h-16 object-contain hidden dark:block group-hover:scale-110 transition-transform" />
+            <Image src="/isotype-black.png" alt="GroCode" width={64} height={64} className="w-16 h-16 object-contain dark:hidden group-hover:scale-110 transition-transform" />
+            <Image src="/isotype-white.png" alt="GroCode" width={64} height={64} className="w-16 h-16 object-contain hidden dark:block group-hover:scale-110 transition-transform" />
           </Link>
           <div className="space-y-2">
             <h1 className="text-3xl font-black tracking-tight">Crea tu cuenta</h1>
@@ -58,37 +59,44 @@ export default function RegisterPage() {
         <div className="gro-card p-10 space-y-8 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted">Nombre de usuario</label>
+              <label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-muted">Nombre de usuario</label>
               <input 
+                id="name"
                 name="name"
                 type="text" 
                 required
+                autoComplete="username"
                 placeholder="Coder123"
                 className="w-full bg-muted/5 border border-border-gro rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent-gro/10 focus:border-accent-gro outline-none transition-all"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted">Email</label>
+              <label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted">Email</label>
               <input 
+                id="email"
                 name="email"
                 type="email" 
                 required
+                autoComplete="email"
                 placeholder="tu@email.com"
                 className="w-full bg-muted/5 border border-border-gro rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent-gro/10 focus:border-accent-gro outline-none transition-all"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted">Contraseña</label>
+              <label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-muted">Contraseña</label>
               <input 
+                id="password"
                 name="password"
                 type="password" 
                 required
+                autoComplete="new-password"
+                minLength={8}
                 placeholder="••••••••"
                 className="w-full bg-muted/5 border border-border-gro rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-accent-gro/10 focus:border-accent-gro outline-none transition-all"
               />
             </div>
 
-            {error && <p className="text-rose-500 text-xs font-bold text-center">{error}</p>}
+            {error && <p role="alert" className="text-rose-700 dark:text-rose-500 text-xs font-bold text-center">{error}</p>}
 
             <button 
               disabled={isLoading}
@@ -103,7 +111,7 @@ export default function RegisterPage() {
           ¿Ya tienes una cuenta? <Link href="/auth/signin" className="text-accent-gro font-bold hover:underline">Inicia sesión</Link>
         </p>
 
-        <Link href="/" className="flex items-center justify-center gap-2 text-xs font-bold text-muted hover:text-foreground transition-colors">
+        <Link href="/" className="flex items-center justify-center gap-2 text-xs font-bold min-h-11 min-w-11 flex items-center justify-center text-muted hover:text-foreground transition-colors">
           <ArrowLeft className="w-3 h-3" /> Volver al inicio
         </Link>
       </motion.div>

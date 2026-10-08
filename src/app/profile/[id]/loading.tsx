@@ -1,1 +1,5 @@
-export const loading = "Loading profile..."
+import RouteLoading from "@/components/RouteLoading"
+
+export default function Loading() {
+  return <RouteLoading label="Cargando perfil" />
+}

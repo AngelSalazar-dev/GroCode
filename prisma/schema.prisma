@@ -12,6 +12,8 @@ datasource db {
 enum Role {
   JUNIOR
   SENIOR
+  /// Staff. Can review and approve SeniorApplications. Granted manually.
+  ADMIN
 }
 
 enum RequestStatus {
@@ -20,6 +22,12 @@ enum RequestStatus {
   REJECTED
 }
 
+enum ApplicationStatus {
+  PENDING
+  VERIFIED
+  APPROVED
+  REJECTED
+}
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -30,7 +38,11 @@ model User {
   role          Role      @default(JUNIOR)
   bio           String?   @db.Text
   location      String?
-  website       String?
+  website      String?
+
+  // Set once the user has completed the onboarding role choice.
+  onboardingCompleted Boolean @default(false)
+
   
   accounts      Account[]
   sessions      Session[]
@@ -54,6 +66,9 @@ model User {
   // Notifications
   notifications      Notification[]
   sentNotifications  Notification[] @relation("NotificationFromUser")
+
+  // Roadmap
+  roadmapProgress    RoadmapProgress[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -106,6 +121,12 @@ model Post {
   comments    Comment[]
   notifications Notification[]
   createdAt   DateTime @default(now())
+
+  // The feed runs `WHERE channel = ? ORDER BY createdAt DESC LIMIT n`. Without
+  // this index that is a full table scan plus a filesort on every request.
+  @@index([channel, createdAt(sort: Desc)])
+  // Serves the "posts by author" list on a profile, newest first.
+  @@index([authorId, createdAt(sort: Desc)])
 }
 
 model Like {
@@ -117,6 +138,9 @@ model Like {
   createdAt DateTime @default(now())
 
   @@unique([userId, postId])
+  // The existing unique index leads with userId, so it cannot serve
+  // "how many likes does this post have".
+  @@index([postId])
 }
 
 model Bookmark {
@@ -128,6 +152,7 @@ model Bookmark {
   createdAt DateTime @default(now())
 
   @@unique([userId, postId])
+  @@index([postId])
 }
 
 model Comment {
@@ -138,15 +163,21 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+
+  // Comments are read newest-first per post.
+  @@index([postId, createdAt(sort: Desc)])
 }
 
 model Follow {
   followerId  String
   followingId String
-  follower    User   @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
-  following   User   @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+  follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 
   @@id([followerId, followingId])
+  // Serves the "who follows X" lookup on a profile.
+  @@index([followingId])
 }
 
 model MentorshipRequest {
@@ -159,23 +190,33 @@ model MentorshipRequest {
   senior    User          @relation("senior", fields: [seniorId], references: [id], onDelete: Cascade)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
+  respondedAt DateTime?
 
   @@unique([juniorId, seniorId])
+  @@index([seniorId, status])
 }
 
 model SeniorApplication {
-  id              String   @id @default(cuid())
-  userId          String
-  yearsOfExperience  String?
+  id                String   @id @default(cuid())
+  userId            String
+  yearsOfExperience String?
   technologies      String?
   githubProfile     String?
   linkedinProfile   String?
   motivation        String?
-  status            String   @default("PENDING")
+  status            ApplicationStatus @default(PENDING)
+  reviewedAt        DateTime?
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
   user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // One application per user, enforced by the database. Re-applying after a
+  // rejection updates this same row (see applySenior), so uniqueness does not
+  // prevent re-applying — it only prevents two concurrent submissions from
+  // creating two PENDING rows, one of which would sit orphaned in /admin.
+  @@unique([userId])
+  @@index([status])
 }
 
 model Notification {
@@ -195,6 +236,9 @@ model Notification {
 
   @@index([userId, read])
   @@index([createdAt(sort: Desc)])
+  // getNotifications orders by createdAt DESC for a single user; without this
+  // the existing composite index forces a filesort.
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model RoadmapStep {
@@ -207,5 +251,21 @@ model RoadmapStep {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Per-user completion, so the roadmap reflects real progress.
+  progress RoadmapProgress[]
+
   @@index([order])
+}
+
+model RoadmapProgress {
+  userId    String
+  stepId    String
+  completed Boolean   @default(false)
+  completedAt DateTime?
+  updatedAt DateTime @updatedAt
+
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  step RoadmapStep @relation(fields: [stepId], references: [id], onDelete: Cascade)
+
+  @@id([userId, stepId])
 }

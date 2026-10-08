@@ -1,37 +1,70 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { headers } from "next/headers"
 import bcrypt from "bcryptjs"
+import { z } from "zod"
+import { getClientIp, limit } from "@/lib/rate-limit"
 
-const validateEmail = (email: string) => {
-  const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-  return re.test(email)
-}
+const RegisterSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "El nombre es obligatorio")
+    .max(100, "El nombre no puede superar los 100 caracteres"),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email("Email inválido")
+    .max(254, "Email demasiado largo"),
+  password: z
+    .string()
+    .min(8, "La contraseña debe tener mínimo 8 caracteres")
+    .max(128, "La contraseña no puede superar los 128 caracteres"),
+})
 
-export async function registerUser(formData: FormData) {
-  const name = formData.get("name") as string
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
+const MAX_ATTEMPTS = 5
+const WINDOW_MS = 15 * 60 * 1000
 
-  if (!name || name.trim().length === 0) return { error: "El nombre es obligatorio" }
-  if (!email || !validateEmail(email)) return { error: "Email inválido" }
-  if (!password || password.trim().length < 6) return { error: "Password debe tener mínimo 6 caracteres" }
+export type RegisterResult = { error: string } | { success: true }
+
+export async function registerUser(formData: FormData): Promise<RegisterResult> {
+  const ip = getClientIp(await headers())
+  const gate = limit(`register:${ip}`, MAX_ATTEMPTS, WINDOW_MS)
+
+  if (!gate.ok) {
+    return {
+      error: `Demasiados intentos. Inténtalo de nuevo en ${Math.ceil(gate.retryAfter / 60)} minutos.`,
+    }
+  }
+
+  const parsed = RegisterSchema.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  })
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Datos inválidos" }
+  }
+
+  const { name, email, password } = parsed.data
 
   try {
     const existingUser = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
+      select: { id: true },
     })
 
-    if (existingUser) return { error: "El email ya está registrado" }
+    if (existingUser) {
+      return { error: "El email ya está registrado" }
+    }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hash(password, 12)
 
     await prisma.user.create({
-      data: {
-        name: name.trim(),
-        email,
-        password: hashedPassword,
-      },
+      data: { name, email, password: hashedPassword },
     })
 
     return { success: true }

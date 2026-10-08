@@ -1,29 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import ErrorFallback from "@/components/ErrorFallback"
 
-export default function Error() {
-  const [retried, setRetried] = useState(false)
-
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-8">
-      <div className="bg-white rounded-lg p-6 shadow-md max-w-md mx-auto">
-        <h2 className="text-xl font-bold mb-4">Error al cargar el feed</h2>
-        <p className="text-muted mb-6">
-          Parece que hubo un problema al carger tus publicaciones. Inténtalo de nuevo.
-        </p>
-        <button
-          onClick={() => setRetried(true)}
-          className="gro-btn gro-btn-primary py-3 px-8 text-lg rounded-full"
-        >
-          Reintentar
-        </button>
-        {retried && (
-          <p className="text-center text-muted mt-4">
-            Si el problema persiste, por favor recarga la página.
-          </p>
-        )}
-      </div>
-    </div>
+    <ErrorFallback
+      title="Error al cargar el feed"
+      message="Hubo un problema al cargar tus publicaciones."
+      error={error}
+      reset={reset}
+    />
   )
 }

@@ -101,9 +101,19 @@ body {
 
 /* Glassmorphism */
 .glass {
-  background: rgba(var(--card), 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* Antes: `background: rgba(var(--card), 0.7)`.
+     `rgba()` no admite un color hexadecimal dentro, y `--card` es `#ffffff` /
+     `#0a0a0a`. El navegador descarta el shorthand entero, y medido en el boton
+     "Explorar Mentores" del hero daba `background-color: rgba(0,0,0,0)`:
+     el panel de cristal no existia.
+     `color-mix` si resuelve `var()`, asi que `--card` sigue siendo la unica
+     fuente de verdad y el valor cambia solo con el tema.
+
+     El desenfoque NO va aqui: escrito a mano, Lightning CSS deja solo
+     `-webkit-backdrop-filter` y el resultado medido era `backdrop-filter: none`.
+     Se aplica con la utilidad `backdrop-blur-*` de Tailwind en el elemento, que
+     si emite las variantes que necesita cada navegador. */
+  background: color-mix(in srgb, var(--card) 70%, transparent);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -130,4 +140,34 @@ body {
   background: linear-gradient(to right, var(--foreground), var(--muted));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* ---------------------------------------------------------------
+   FASE 7.7 - prefers-reduced-motion
+   WCAG 2.3.3 (AAA) / la practica de no obligar a Reproducir Animacion.
+   Quien activa "reducir movimiento" en el sistema no quiere ningun
+   desplazamiento ni transicion larga. No se matan las transiciones de
+   color ni los estados de foco: siguen siendo utiles de leer.
+   --------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Tailwind v4 expone su utilidad equivalente como variant, no como clase. */
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  /* El video del hero se congela en el primer fotograma: se sigue viendo de
+     fondo, pero deja de reproducirse en bucle. Lo detiene HomeContent con un
+     matchMedia, porque CSS no puede pausar <video>. */
+  video[autoplay] {
+    animation: none !important;
+  }
 }

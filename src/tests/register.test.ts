@@ -1,9 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest"
-import { prisma } from "@/lib/prisma"
-import { registerUser } from "@/actions/register"
-import { bcrypt } from "bcryptjs"
+import { describe, it, expect, beforeEach, vi, type Mock } from "vitest"
 
-// Mock del prisma
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     user: {
@@ -13,7 +9,20 @@ vi.mock("@/lib/prisma", () => ({
   },
 }))
 
-// Mock de FormData
+vi.mock("next/headers", () => ({
+  headers: vi.fn(async () => new Headers({ "x-forwarded-for": "203.0.113.7" })),
+}))
+
+// The suite exercises validation and rate limiting, not key derivation.
+// bcrypt at cost 12 would add seconds of pure CPU per call.
+vi.mock("bcryptjs", () => ({
+  default: { hash: vi.fn(async (value: string) => `hashed:${value}`) },
+}))
+
+const { prisma } = await import("@/lib/prisma")
+const { registerUser } = await import("@/actions/register")
+const { resetRateLimits } = await import("@/lib/rate-limit")
+
 const createMockFormData = (data: Record<string, string>) => {
   const fd = new FormData()
   for (const [key, value] of Object.entries(data)) {
@@ -22,92 +31,83 @@ const createMockFormData = (data: Record<string, string>) => {
   return fd
 }
 
+const validForm = {
+  name: "Test User",
+  email: "test@example.com",
+  password: "password123",
+}
+
 describe("registerUser", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    resetRateLimits()
+    ;(prisma.user.findUnique as Mock).mockResolvedValue(null)
+    ;(prisma.user.create as Mock).mockResolvedValue({ id: "test-id" })
   })
 
-  it("debería registrar un usuario exitosamente", async () => {
-    ;(prisma.user.findUnique as vi.Mock).mockResolvedValue(null)
-    ;(prisma.user.create as vi.Mock).mockResolvedValue({
-      id: "test-id",
-      name: "Test User",
-      email: "test@example.com",
-      role: "JUNIOR",
-    })
+  it("registra un usuario exitosamente", async () => {
+    const result = await registerUser(createMockFormData(validForm))
 
-    const formData = createMockFormData({
-      name: "Test User",
-      email: "test@example.com",
-      password: "password123",
-    })
-
-    const result = await registerUser(formData)
-
-    expect(result.success).toBe(true)
-    expect(result.error).toBeUndefined()
+    expect(result).toEqual({ success: true })
+    expect(prisma.user.create).toHaveBeenCalledOnce()
   })
 
-  it("debería fallar si el email ya está registrado", async () => {
-    ;(prisma.user.findUnique as vi.Mock).mockResolvedValue({
-      id: "existing-id",
-      email: "test@example.com",
-    })
+  it("normaliza el email a minúsculas", async () => {
+    await registerUser(createMockFormData({ ...validForm, email: "  Test@Example.COM " }))
 
-    const formData = createMockFormData({
-      name: "Test User",
-      email: "test@example.com",
-      password: "password123",
-    })
-
-    const result = await registerUser(formData)
-
-    expect(result.error).toBe("El email ya está registrado")
-    expect(result.success).toBeUndefined()
+    expect(prisma.user.findUnique).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { email: "test@example.com" } }),
+    )
   })
 
-  it("debería fallar si faltan campos obligatorios", async () => {
-    ;(prisma.user.findUnique as vi.Mock).mockResolvedValue(null)
+  it("guarda la contraseña hasheada, nunca en claro", async () => {
+    await registerUser(createMockFormData(validForm))
 
-    const formData = createMockFormData({
-      name: "",
-      email: "",
-      password: "",
+    expect(prisma.user.create).toHaveBeenCalledWith({
+      data: {
+        name: "Test User",
+        email: "test@example.com",
+        password: "hashed:password123",
+      },
     })
-
-    const result = await registerUser(formData)
-
-    expect(result.error).toBe("Faltan campos obligatorios")
-    expect(result.success).toBeUndefined()
   })
 
-  it("debería fallar con email inválido", async () => {
-    ;(prisma.user.findUnique as vi.Mock).mockResolvedValue(null)
+  it("falla si el email ya está registrado", async () => {
+    ;(prisma.user.findUnique as Mock).mockResolvedValue({ id: "existing-id" })
 
-    const formData = createMockFormData({
-      name: "Test User",
-      email: "invalid-email",
-      password: "password123",
-    })
+    const result = await registerUser(createMockFormData(validForm))
 
-    const result = await registerUser(formData)
-
-    expect(result.error).toBe("Email inválido")
-    expect(result.success).toBeUndefined()
+    expect(result).toEqual({ error: "El email ya está registrado" })
+    expect(prisma.user.create).not.toHaveBeenCalled()
   })
 
-  it("debería fallar si la password es muy corta", async () => {
-    ;(prisma.user.findUnique as vi.Mock).mockResolvedValue(null)
+  it("falla si falta el nombre", async () => {
+    const result = await registerUser(createMockFormData({ ...validForm, name: "" }))
 
-    const formData = createMockFormData({
-      name: "Test User",
-      email: "test@example.com",
-      password: "short",
-    })
+    expect(result).toEqual({ error: "El nombre es obligatorio" })
+    expect(prisma.user.create).not.toHaveBeenCalled()
+  })
 
-    const result = await registerUser(formData)
+  it("falla con email inválido", async () => {
+    const result = await registerUser(createMockFormData({ ...validForm, email: "invalid-email" }))
 
-    expect(result.error).toBe("Password debe tener mínimo 6 caracteres")
-    expect(result.success).toBeUndefined()
+    expect(result).toEqual({ error: "Email inválido" })
+  })
+
+  it("falla si la contraseña es demasiado corta", async () => {
+    const result = await registerUser(createMockFormData({ ...validForm, password: "short" }))
+
+    expect("error" in result && result.error).toMatch(/contraseña/i)
+    expect(prisma.user.create).not.toHaveBeenCalled()
+  })
+
+  it("falla si se supera el límite de intentos", async () => {
+    const results = []
+    for (let i = 0; i < 7; i++) {
+      results.push(await registerUser(createMockFormData({ ...validForm, email: `u${i}@e.com` })))
+    }
+
+    const last = results[results.length - 1] as { error: string }
+    expect(String(last.error)).toMatch(/demasiados intentos/i)
   })
 })
