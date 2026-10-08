@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          # Caches ~/.npm keyed on the lockfile hash. Never cache
+          # node_modules: that would skip `prisma generate` on cached builds.
+          cache: npm
+
+      # .npmrc already sets legacy-peer-deps (vite 8 + @vitejs/plugin-react 6).
+      # Explicit here so the reason shows up in the CI log.
+      - name: Install
+        run: npm ci --legacy-peer-deps
+
+      # The build needs a reachable DATABASE_URL even for `prisma generate`,
+      # because the generator resolves env() references. It never connects.
+      - name: Generate Prisma client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: "mysql://u:p@localhost:3306/grocode_ci?sslaccept=strict"
+          AUTH_SECRET: "ci-dummy-secret-not-used-at-runtime-0000000000"
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          DATABASE_URL: "mysql://u:p@localhost:3306/grocode_ci?sslaccept=strict"
+          AUTH_SECRET: "ci-dummy-secret-not-used-at-runtime-0000000000"
+          AUTH_URL: "http://localhost:3000"
+
+      # ---------------------------------------------------------------------
+      # Schema drift gate. Commented out until a staging database exists:
+      # it needs a real MySQL to diff against. Enable together with
+      # SMOKE_DATABASE_URL in the repository secrets.
+      #
+      # - name: Detect schema drift
+      #   if: ${{ github.event_name == 'pull_request' }}
+      #   run: npx prisma migrate diff
+      #     --from-url "$DATABASE_URL"
+      #     --to-schema-datamodel prisma/schema.prisma
+      #     --exit-code
+      #   env:
+      #     DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Authenticated smoke test. Skips itself (exit 2) when
+      # SMOKE_DATABASE_URL is unset, so it is safe to wire up now and have it
+      # start doing real work the moment the secret exists.
+      #
+      # - name: Authenticated smoke test
+      #   env:
+      #     SMOKE_DATABASE_URL: ${{ secrets.SMOKE_DATABASE_URL }}
+      #     AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      # ---------------------------------------------------------------------
