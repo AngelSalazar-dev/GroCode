@@ -13,7 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 // Required for absolute URLs in Open Graph / Twitter cards.
-const siteUrl = process.env.NEXTAUTH_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+//
+// AUTH_URL, not NEXTAUTH_URL: NextAuth v5 renamed it, and this was the last
+// place still reading the old name. `robots.ts` and `sitemap.ts` already used
+// the new one, so leaving this behind meant that with only AUTH_URL set — the
+// correct setup — `metadataBase` silently fell back to localhost:3000 and every
+// og:url and canonical pointed at the developer's machine.
+const siteUrl = process.env.AUTH_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
