@@ -8,18 +8,81 @@
  * Salida: codigo de salida 1 si algun comportamiento falla.
  */
 import puppeteer from "puppeteer-core"
+import { pathToFileURL } from "node:url"
+import { resolve } from "node:path"
 
 const PORT = process.argv[2] ?? "3980"
 const BASE = `http://localhost:${PORT}`
+const ROOT = process.cwd()
 const CHROME =
   process.env.CHROME_PATH ??
   "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+const SEED_PASSWORD = "password123" // lo que genera prisma/seed.ts
 
 const MIN_TARGET = 44
 const results = []
 const check = (name, pass, detail = "") => {
   results.push({ name, pass, detail })
   console.log(`  ${pass ? "PASA" : "FALLA"}  ${name}${detail ? `  ${detail}` : ""}`)
+}
+
+/**
+ * Targets tactiles por debajo del minimo en la pagina actual.
+ *
+ * Vive fuera del bloque de la seccion 1 porque hace falta tambien con sesion: la
+ * interfaz de un usuario conectado (menu de cuenta, acciones del feed,
+ * notificaciones) es justamente la que nunca se habia medido, porque los chequeos
+ * de target se ejecutaban siempre como anonimo.
+ */
+async function smallTargets(page, min = MIN_TARGET) {
+  return page.evaluate((threshold) => {
+    const sel = "button, a[href], [role='button'], input[type='checkbox']"
+    const out = []
+    for (const el of document.querySelectorAll(sel)) {
+      const r = el.getBoundingClientRect()
+      if (r.width === 0 && r.height === 0) continue // oculto
+      // El enlace "saltar al contenido" es sr-only a proposito: mide 1x1 hasta
+      // recibir el foco, momento en el que se hace visible. Es el patron
+      // correcto, no un target pequeno.
+      if (el.classList.contains("sr-only")) continue
+      // Un enlace dentro de un texto corrido no es un target tactil propio.
+      const inline = el.tagName === "A" && getComputedStyle(el).display === "inline"
+      if (inline) continue
+      if (r.width < threshold || r.height < threshold) {
+        out.push({
+          tag: el.tagName.toLowerCase(),
+          label: (el.getAttribute("aria-label") || el.textContent || "").trim().slice(0, 40),
+          w: Math.round(r.width),
+          h: Math.round(r.height),
+        })
+      }
+    }
+    return out
+  }, min)
+}
+
+const reportTargets = (path, small) =>
+  check(
+    `${path} sin targets por debajo de ${MIN_TARGET}px`,
+    small.length === 0,
+    small.length === 0 ? "" : small.map((s) => `${s.tag}"${s.label}" ${s.w}x${s.h}`).join("  ")
+  )
+
+/** Login con el formulario real, igual que el humansillo, no inyectando cookies. */
+async function signIn(page, email) {
+  await page.goto(`${BASE}/auth/signin`, { waitUntil: "networkidle2", timeout: 60000 })
+  await page.type("#email", email)
+  await page.type("#password", SEED_PASSWORD)
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: "networkidle2", timeout: 60000 }),
+    page.click('form button[type="submit"], form button'),
+  ])
+  const session = await page.evaluate(async () => {
+    const r = await fetch("/api/auth/session")
+    return r.json()
+  })
+  if (!session?.user?.id) throw new Error(`login fallido para ${email}`)
+  return session
 }
 
 const browser = await puppeteer.launch({
@@ -35,37 +98,7 @@ const browser = await puppeteer.launch({
   await page.setViewport({ width: 390, height: 844, isMobile: true })
   for (const path of ["/", "/mentors", "/auth/signin", "/roadmap"]) {
     await page.goto(`${BASE}${path}`, { waitUntil: "networkidle2", timeout: 60000 })
-    const small = await page.evaluate((min) => {
-      const sel = "button, a[href], [role='button'], input[type='checkbox']"
-      const out = []
-      for (const el of document.querySelectorAll(sel)) {
-        const r = el.getBoundingClientRect()
-        if (r.width === 0 && r.height === 0) continue // oculto
-        // El enlace "saltar al contenido" es sr-only a proposito: mide 1x1 hasta
-        // recibir el foco, momento en el que se hace visible. Es el patron
-        // correcto, no un target pequeno.
-        if (el.classList.contains("sr-only")) continue
-        // Un enlace dentro de un texto corrido no es un target tactil propio.
-        const inline = el.tagName === "A" && getComputedStyle(el).display === "inline"
-        if (inline) continue
-        if (r.width < min || r.height < min) {
-          out.push({
-            tag: el.tagName.toLowerCase(),
-            label: (el.getAttribute("aria-label") || el.textContent || "").trim().slice(0, 40),
-            w: Math.round(r.width),
-            h: Math.round(r.height),
-          })
-        }
-      }
-      return out
-    }, MIN_TARGET)
-    check(
-      `${path} sin targets por debajo de ${MIN_TARGET}px`,
-      small.length === 0,
-      small.length === 0
-        ? ""
-        : small.map((s) => `${s.tag}"${s.label}" ${s.w}x${s.h}`).join("  ")
-    )
+    reportTargets(path, await smallTargets(page))
   }
   await page.close()
 }
@@ -220,6 +253,51 @@ const browser = await puppeteer.launch({
     announced.count > 0,
     announced.count > 0 ? announced.text.slice(0, 90) : "no aparecio ningun role=alert"
   )
+  await page.close()
+}
+
+// ------------------------------------- targets con sesion (hueco de cobertura)
+{
+  console.log(
+    "\n[5] Targets tactiles >= 44px con sesion (movil 390x844)\n" +
+      "    Las secciones anteriores corren como anonimo: sin sesion el navbar no\n" +
+      "    pinta el menu de cuenta y las acciones del feed no existen. Es decir,\n" +
+      "    que toda la interfaz de un usuario conectado estaba sin medir."
+  )
+
+  const { PrismaClient } = await import(
+    pathToFileURL(resolve(ROOT, "src/generated-v2/client/index.js")).href
+  )
+  const prisma = new PrismaClient()
+
+  // Los identificadores se leen de la BD para no depender de ids escritos a mano.
+  const junior = await prisma.user.findFirst({
+    where: { onboardingCompleted: true },
+    orderBy: { createdAt: "asc" },
+    select: { email: true, name: true },
+  })
+  await prisma.$disconnect()
+
+  if (!junior) {
+    console.log(
+      "\n  No hay ningun usuario con onboarding completado. Ejecuta `npx prisma db seed`."
+    )
+    process.exit(2)
+  }
+
+  const page = await browser.newPage()
+  await page.setViewport({ width: 390, height: 844, isMobile: true })
+  await signIn(page, junior.email)
+
+  // Sin este guardia la seccion daria verde por no mirar nada, que es como se
+  // colaron antes dos falsos positivos.
+  const loggedIn = await page.evaluate(() => !!document.querySelector('[aria-label="Menú de cuenta"]'))
+  check("la sesion ha iniciado de verdad (hay menu de cuenta)", loggedIn)
+
+  for (const path of ["/", "/feed", "/notifications", "/guardados", "/feed/new"]) {
+    await page.goto(`${BASE}${path}`, { waitUntil: "networkidle2", timeout: 60000 })
+    reportTargets(`${path} (con sesion)`, await smallTargets(page))
+  }
   await page.close()
 }
 

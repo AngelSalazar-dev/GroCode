@@ -21,7 +21,12 @@ const mockSession = (role: string | undefined, id = "admin-1") =>
   role ? { user: { id, role } } : null
 
 vi.mock("@/auth/auth", () => ({ auth: vi.fn() }))
-vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
+// `unstable_cache` se deja en passthrough: sin caché, el mock de prisma manda.
+vi.mock("next/cache", () => ({
+  revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
+  unstable_cache: (cb: unknown) => cb,
+}))
 vi.mock("@/lib/notifications", () => ({ notify: vi.fn(async () => null) }))
 vi.mock("next/headers", () => ({
   headers: vi.fn(async () => new Headers({ "x-forwarded-for": "203.0.113.5" })),

@@ -122,7 +122,7 @@ export default async function SavedPostsPage({
                   Anterior
                 </Link>
               ) : (
-                <span className="gro-btn !rounded-full !px-6 !py-2 !text-xs opacity-40 cursor-not-allowed">
+                <span className="gro-btn !rounded-full !px-6 !py-2 !text-xs opacity-70 cursor-not-allowed">
                   Anterior
                 </span>
               )}
@@ -137,7 +137,7 @@ export default async function SavedPostsPage({
                   Siguiente
                 </Link>
               ) : (
-                <span className="gro-btn !rounded-full !px-6 !py-2 !text-xs opacity-40 cursor-not-allowed">
+                <span className="gro-btn !rounded-full !px-6 !py-2 !text-xs opacity-70 cursor-not-allowed">
                   Siguiente
                 </span>
               )}

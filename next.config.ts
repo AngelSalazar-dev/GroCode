@@ -35,15 +35,14 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
-  images: {
-    // Only static assets used by next/image from our own origin, plus DiceBear
-    // for the server-rendered brand image. User avatars are rendered with
-    // `unoptimized` (see UserAvatar) because `User.image` is an arbitrary
-    // client-supplied URL that cannot be guaranteed to match a pattern.
-    remotePatterns: [
-      { protocol: "https", hostname: "api.dicebear.com" },
-    ],
-  },
+  // Sin `remotePatterns`. Todo lo que puede venir de fuera (`User.image`: GitHub
+  // OAuth, DiceBear, lo que escriba el usuario) se renderiza con `unoptimized`,
+  // y lo unico que si se optimiza son ficheros de `public/` escritos como
+  // rutas literales. Enumerar hosts aqui solo serviria para volver a permitir
+  // el optimizador sobre URLs arbitrarias.
+  //
+  // `src/tests/next-image-remote.test.ts` falla si alguien reintroduce un
+  // `<Image>` con `src` dinamico y sin `unoptimized`.
 
   async headers() {
     return [

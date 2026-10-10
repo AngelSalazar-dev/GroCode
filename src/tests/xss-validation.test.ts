@@ -11,7 +11,12 @@ vi.mock("@/lib/prisma", () => ({
 }))
 
 vi.mock("@/auth/auth", () => ({ auth: vi.fn(async () => ({ user: { id: "u1" } })) }))
-vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
+// `unstable_cache` se deja en passthrough: sin caché, el mock de prisma manda.
+vi.mock("next/cache", () => ({
+  revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
+  unstable_cache: (cb: unknown) => cb,
+}))
 
 const { updateProfile } = await import("@/actions/profile")
 const { prisma } = await import("@/lib/prisma")

@@ -2,40 +2,11 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { auth } from "@/auth/auth"
 import PostCard from "@/components/feed/PostCard"
-import { PUBLIC_AUTHOR } from "@/lib/post-select"
+import { getPost } from "@/lib/post-detail"
 import { getChannel } from "@/lib/channels"
 import { Hash, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-import { cache } from "react"
 import type { Metadata } from "next"
-
-/** Comments preloaded on the post detail view. */
-const COMMENTS_ON_POST = 20
-
-const getPost = cache(async (id: string) =>
-  prisma.post.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      content: true,
-      resourceUrl: true,
-      channel: true,
-      createdAt: true,
-      author: { select: PUBLIC_AUTHOR },
-      _count: { select: { likes: true, bookmarks: true, comments: true } },
-      comments: {
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          user: { select: PUBLIC_AUTHOR },
-        },
-        orderBy: { createdAt: "desc" },
-        take: COMMENTS_ON_POST,
-      },
-    },
-  })
-)
 
 export async function generateMetadata({
   params,
@@ -44,14 +15,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params
 
-  const post = await prisma.post.findUnique({
-    where: { id },
-    select: {
-      content: true,
-      channel: true,
-      author: { select: { name: true } },
-    },
-  })
+  // Same cached read the page body uses: this used to be a second, uncached
+  // `findUnique` per request, so every visit queried the post twice.
+  const post = await getPost(id)
 
   if (!post) {
     return {

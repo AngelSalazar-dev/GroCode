@@ -252,7 +252,7 @@ const result = await toggleLike(post.id)
                 onClick={handleLike}
                 disabled={isPendingLike || !currentUserId}
                 aria-pressed={hasLiked}
-                className={`flex items-center gap-2 transition-colors group/btn ${hasLiked ? "text-amber-700 dark:text-amber-500" : "text-muted hover:text-hover:-700 dark:hover:text-hover:-500"}`}
+                className={`flex items-center gap-2 min-h-11 min-w-11 px-2 -ml-2 rounded-full transition-colors group/btn ${hasLiked ? "text-amber-700 dark:text-amber-500" : "text-muted hover:text-hover:-700 dark:hover:text-hover:-500"}`}
               >
                 {isPendingLike ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -275,7 +275,7 @@ const result = await toggleLike(post.id)
                 onClick={() => setShowComments(!showComments)}
                 aria-expanded={showComments}
                 aria-controls={`comments-${post.id}`}
-                className="flex items-center gap-2 text-muted hover:text-foreground transition-colors group/btn"
+                className="flex items-center gap-2 min-h-11 min-w-11 px-2 rounded-full text-muted hover:text-foreground transition-colors group/btn"
               >
                 <MessageSquare aria-hidden="true" className="w-4 h-4" />
                 <span className="sr-only">

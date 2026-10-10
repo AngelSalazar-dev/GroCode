@@ -188,7 +188,7 @@ export default function FeedClient({
           </div>
           <Link
             href="/feed/new"
-            className="gro-btn gro-btn-primary !py-2 !px-5 !rounded-full !text-xs flex items-center gap-2 shrink-0"
+            className="gro-btn gro-btn-primary !py-2 !px-5 !rounded-full !text-xs min-h-11 min-w-11 flex items-center gap-2 shrink-0"
           >
             <Plus className="w-3.5 h-3.5" />
             {/* `hidden sm:inline` dejaba el enlace sin nombre accesible en movil:

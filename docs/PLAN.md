@@ -658,6 +658,17 @@ superficie más fácil de amplificar.
 
 Cursor pagination + mover búsqueda/filtro/orden al servidor (`searchParams`).
 
+> **Hecho — con offset, no cursor.** La página enseña "Página 3 de 7" y el total
+> de resultados ("1 Mentor en Back-end"), y eso no se calcula barato con un
+> cursor. Paginación por `?page=N` con clamp, 12 por página, y `unstable_cache`
+> con tag `mentors` (TTL 300). Medido: 737 ms en frío → 302 ms en caliente, con
+> HTML idéntico en miss y en hit.
+>
+> **Trampa de `unstable_cache`:** la clave es `keyParts` + argumentos +
+> `Function.toString()`. Un closure que captura `id` tiene el mismo `toString()`
+> para todos los ids, así que el id hay que meterlo en `keyParts` si no se pasan
+> argumentos. `tags` no forma parte de la clave.
+
 ## 8.2 Caché — diagnóstico corregido
 
 `revalidatePath` **no es costoso** aquí: `/feed` usa `searchParams` y el resto
@@ -667,11 +678,27 @@ son `force-dynamic`, así que ninguna ruta está en Full Route Cache.
 `revalidateTag` no arregla nada solo; hay que adoptar `unstable_cache` con tags.
 Empezar por `/mentors` y `/post/[id]`, las dos rutas que lo toleran.
 
+> **Hecho.** `src/lib/post-detail.ts`, tag `post:{id}` (el id va en `keyParts`),
+> TTL 300, y `revalidatePost` llamado desde `revalidatePostViews`: sin eso, un
+> like dejaba `/post/{id}` con el contador viejo. Medido: 1753 ms → 104 ms.
+> `generateMetadata` reutiliza `getPost`, así que la ruta pasó de dos queries a una.
+>
+> **Trampa de Next 16:** `unstable_cache` serializa con `JSON.stringify`, así que
+> un *miss* devuelve `Date` y un *hit* devuelve `string` ISO — hay que aceptar
+> ambos. Y `revalidateTag(tag, perfil)` necesita dos argumentos; aquí se usa
+> `revalidateTag(tag, { expire: 0 })`.
+
 ## 8.3 `.glass` es CSS inválido
 
 `globals.css:105` — `rgba(var(--card), .7)` donde `--card` es un hex
 (`#0a0a0a`). La declaración se descarta en el CSS compilado: el botón "Explorar
 Mentores" no tiene fondo.
+
+> **Hecho.** `color-mix(in srgb, var(--card) 70%, transparent)`: si resuelve
+> `var()`, así que `--card` sigue siendo la única fuente de verdad. El
+> `backdrop-filter` tampoco podía ir escrito a mano (Lightning CSS dejaba solo la
+> variante `-webkit-`); se aplica con `backdrop-blur-*` de Tailwind en el
+> elemento.
 
 ## 8.4 Rollback de `useOptimistic` inconsistente
 
@@ -683,6 +710,11 @@ revierte visualmente, aunque la BD sí lo guardó**.
 `FollowButton` es el único correcto (estado local + respuesta del servidor).
 Unificar los tres a ese patrón.
 
+> **Hecho.** Los tres usan el patrón de `FollowButton` y `revalidatePostViews`
+> cubre ahora `/post/[id]` vía `revalidatePost`. El regreso del scroll y del
+> foco en `/feed` se dejó en `AnimatePresence` solo donde hay pocas tarjetas.
+
+
 ---
 
 # Fase 9 — Limpieza
@@ -690,16 +722,55 @@ Unificar los tres a ese patrón.
 - **Código muerto**: `listSeniorApplications` y `isAdmin` (solo los usan tests;
   la página consulta Prisma directo), `formatCount` y `HomeStats` exportados
   sin uso.
+  **Hecho.** Las dos primeras se borran; las dos ultimas dejan de exportarse
+  (`HomeContent` las usa, nadie mas).
 - **`next.config.ts`**: `remotePatterns` obsoletos (dicebear, githubusercontent,
   localhost) — obsoletos desde que los avatares van `unoptimized`.
+  **Hecho, y al limpiarlo apareció un bug de producción:** `AccountMenu` no
+  usaba `UserAvatar` sino su propio `<Image>` **sin `unoptimized`**. Con GitHub
+  OAuth, `User.image` es `avatars.githubusercontent.com`, que no estaba en
+  `remotePatterns`: `next/image` lanza al renderizar y cae la página entera.
+  Ahora `AccountMenu` usa `UserAvatar` y `remotePatterns` desaparece entero.
 - **Seed**: no cubre `SeniorApplication`, `RoadmapProgress`, notificaciones ni
   comentarios. Con datos reales, la app parece rota en desarrollo
   (notificaciones vacías, contadores a 0, mentoría sin histórico).
 - **`sitemap` vs `robots` se contradicen**: el sitemap anuncia `/post/*` y
   `/profile/*`; `robots` prohíbe `/profile/`.
-- **OG image**: declarada 1200×630, el asset es 1200×800 → previsualización recortada.
-- **Historia de git**: 156 MB de cliente Prisma en `HEAD` (borrados del índice,
-  los blobs siguen). `.git` = 31 MB. `git filter-repo` solo si molesta; no es urgente.
+- **OG image**: `openGraph.images` y `twitter.images` apuntaban a
+  `brand-dark.jpg`, que es **1408×768** (no 1200×800) y pesa 665 KB → ratio
+  incorrecto para OG. **Hecho:** `public/og.jpg`, 1200×630, recorte centrado del
+  mismo asset, 85 KB.
+- **`themeColor`**: el dark declaraba `#0a0a0a`, que es `--card`, no
+  `--background` (`#020202`). **Hecho.**
+- **Tipografía**: `body` declaraba `Inter`, que nunca se cargaba; la app se
+  dibujaba con la fuente del sistema mientras los woff2 de Geist viajaban sin
+  usarse. **Hecho** (`body` → `var(--font-geist-sans, …)` más `--font-sans` /
+  `--font-mono` en `@theme inline`), verificado con `scripts/probe-fonts.mjs`.
+- **Historia de git**: el cliente Prisma generado pesa 58 MB (los tres motores
+  nativos: 21 MB + 17,5 MB + 17,5 MB).
+  **Medido, y el diagnóstico original estaba mal:** no están en `HEAD` —los borró
+  `3ec3768`— pero **sí en `origin/main`**, que es lo publicado en GitHub (60
+  ficheros). `.git` pesa 31,3 MB.
+  Purgarlos exige `git filter-repo --invert-paths src/generated-v2` **y
+  force-push**: reescribe todos los SHAs y obliga a re-clonar. Además hay **tres
+  clones más de este repo en el mismo disco**, uno de ellos con la app Expo.
+  **Descartado:** ~20 MB en un repo a 1 GB de límite, con impacto funcional cero.
+  La higiene ya está resuelta hacia adelante. Revisar solo si molesta de verdad.
+
+## Hallazgos nuevos de la verificación (preexistentes, no regresiones)
+
+- **El `<title>` sale después de `</head>`.** En rutas con `generateMetadata`
+  dinámico + `loading.tsx`, cuando la caché está fría el `<title>` aparece
+  dentro de `<body>`. Reproducido también en `/profile/[id]`, que no usa
+  `unstable_cache`, así que no lo ha causado la fase 8. El procesador HTML de
+  Chrome aplica las reglas de *in-head* a un `<title>` en body, así que funciona
+  igual; queda pendiente en el ámbito de metadata/SEO de esta fase.
+- **`sitemap` y `robots` se contradicen** (ya anotado arriba).
+- **`scripts/a11y-audit.mjs` no necesita `public/axe.min.js`.**
+  `addScriptTag({ path })` lee el fichero de disco, así que ahora busca en
+  `node_modules/axe-core/`; antes la instrucción era copiar 564 KB a `public/`,
+  que el deploy publicaría.
+
 
 ---
 

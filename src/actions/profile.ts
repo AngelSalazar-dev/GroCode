@@ -3,6 +3,7 @@
 import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { revalidateMentors } from "@/lib/mentors"
 import { validateHttpUrl } from "@/lib/validation"
 
 const MAX_LENGTHS = {
@@ -75,6 +76,9 @@ export async function updateProfile(data: {
     revalidatePath(`/profile/${session.user.id}`)
     revalidatePath("/feed")
     revalidatePath("/mentors")
+    // Name, bio and location are shown in the directory and cached there;
+    // `revalidatePath("/mentors")` alone would leave the old values in place.
+    revalidateMentors()
 
     return { success: true }
   } catch (error) {

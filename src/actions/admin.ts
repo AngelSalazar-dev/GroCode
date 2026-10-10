@@ -3,6 +3,7 @@
 import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { revalidateMentors } from "@/lib/mentors"
 import { notify } from "@/lib/notifications"
 import { ApplicationStatus, Role } from "@/generated-v2/client"
 import { z } from "zod"
@@ -53,45 +54,12 @@ export interface AdminApplication {
   user: { id: string; name: string | null; email: string | null; role: Role; image: string | null }
 }
 
-/** True when the current visitor may see /admin. */
-export async function isAdmin(): Promise<boolean> {
-  const session = await auth()
-  return session?.user?.role === Role.ADMIN
-}
-
-export async function listSeniorApplications(
-  status?: ApplicationStatus
-): Promise<AdminApplication[]> {
-  const session = await auth()
-  if (session?.user?.role !== Role.ADMIN) {
-    throw new Error("Requiere permisos de administrador")
-  }
-
-  const rows = await prisma.seniorApplication.findMany({
-    where: status ? { status } : undefined,
-    select: {
-      id: true,
-      status: true,
-      yearsOfExperience: true,
-      technologies: true,
-      githubProfile: true,
-      linkedinProfile: true,
-      motivation: true,
-      createdAt: true,
-      reviewedAt: true,
-      // email is exposed here on purpose: staff need to contact the applicant.
-      user: { select: { id: true, name: true, email: true, role: true, image: true } },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  })
-
-  return rows.map((row) => ({
-    ...row,
-    createdAt: row.createdAt.toISOString(),
-    reviewedAt: row.reviewedAt?.toISOString() ?? null,
-  }))
-}
+// `isAdmin()` y `listSeniorApplications()` se eliminaron: no los llamaba nadie
+// (`listSeniorApplications` solo lo invocaba un test). La lectura de
+// postulaciones la hace `app/admin/applications/page.tsx` con su propio guard, y
+// esa ruta es la que comprueba el smoke. El guard de estas acciones,
+// `requireAdmin`, sigue cubierto por los tests de `reviewSeniorApplication` y
+// `setUserRole`.
 
 /**
  * Two-step approval: staff first mark the profile as verified, then approve.
@@ -168,6 +136,10 @@ export async function reviewSeniorApplication(
 
     revalidatePath("/admin/applications")
     revalidatePath("/mentors")
+    // `/mentors` also reads its seniors from the Data Cache. `revalidatePath`
+    // only drops the rendered HTML, so without this a newly approved senior
+    // would not appear in the directory until the TTL expired.
+    revalidateMentors()
 
     return { success: true, status: decision.data }
   } catch (error) {

@@ -435,6 +435,16 @@ if (!pushOk) {
     }
   }
 
+  // ------------------------------------------------------- remote avatar ----
+  // NO se puede comprobar aqui. El bug que esta seccion persiguio (el avatar se
+  // optimizaba y reventaba con hosts fuera de `remotePatterns`) solo es
+  // alcanzable iniciando sesion con GitHub, y este script solo usa credenciales:
+  // el `authorize` de credentials no devuelve `image`, asi que `session.user.image`
+  // siempre es null y el menu de cuenta nunca llega a pintarlo.
+  //
+  // La invariante vive entonces en `src/tests/next-image-remote.test.ts`, que
+  // es lo que de verdad puede correr en cada build.
+
   // --------------------------------------------------------------- admin ----
   console.log(C.bold("\n  Admin route stays gated for non-admins"))
   const adminRes = await get("/admin/applications", jar)

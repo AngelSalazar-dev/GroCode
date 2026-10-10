@@ -472,19 +472,25 @@ comprobacion anterior exigia 307 y era incorrecta.
 
 | Script | Que comprueba |
 | --- | --- |
-| `scripts/a11y-audit.mjs` | axe-core en 7 rutas x 2 temas, movil 390px. Sale con 1 si hay violaciones serias/criticas |
-| `scripts/a11y-behaviours.mjs` | Targets >= 44px, Escape + retorno de foco, pausa del video, labels y `role=alert` |
+| `scripts/a11y-audit.mjs` | axe-core en 18 rutas x 2 temas, movil 390px. Sale con 1 si hay violaciones serias/criticas |
+| `scripts/a11y-behaviours.mjs` | Targets >= 44px (**con y sin sesion**), Escape + retorno de foco, pausa del video, labels y `role=alert` |
 | `scripts/color-contrast.mjs` | Ratio real de cada color en ambos temas, y cuanto oscurecer para llegar a 4.5:1 |
 | `scripts/a11y-screenshots.mjs` | Capturas claro/oscuro para revisar el disenio a ojo |
+| `scripts/probe-fonts.mjs` | Que la tipografia que se descarga (`next/font`) es la que el navegador aplica |
 
 Requieren un servidor levantado y las deps de auditoria, que **no** se anaden a
-`package.json` a proposito (pesan y no son dependencia de la app):
+`package.json` a proposito (pesan y no son dependencia de la app). El puerto es
+argumento del script y por defecto 3980:
 
 ```
 npm i --no-save axe-core puppeteer-core
-cp node_modules/axe-core/axe.min.js public/axe.min.js
 node scripts/a11y-audit.mjs 3980
+node scripts/probe-fonts.mjs 3980
 ```
+
+`a11y-audit.mjs` busca `axe.min.js` en `node_modules/axe-core/` y solo recurre a
+`public/` si no lo encuentra: `addScriptTag({ path })` lee el fichero de disco,
+asi que no hace falta (ni conviene) publicarlo junto al deploy.
 
 **Auditoria autenticada (cierre del hueco de la Fase 7)**
 
@@ -528,42 +534,118 @@ contraste AA en ambos temas medido
 ---
 ## Fase 8 — Rendimiento
 
-- [ ] **8.1** `/mentors` con paginación
-  - [ ] Cursor pagination
-  - [ ] Búsqueda/filtro/orden en servidor (`searchParams`)
-  - [ ] Quitar `AnimatePresence mode="popLayout"` + `layout` en listas largas
+- [x] **8.1** `/mentors` con paginación
+  - [x] Búsqueda/filtro/orden en servidor (`searchParams`)
+  - [x] Quitar `AnimatePresence mode="popLayout"` + `layout` en listas largas
+  - [x] Paginación por offset con clamp (`?page=N`, 12/página), no cursor:
+        la página enseña "Página 3 de 7" y el total de resultados, y eso no se
+        puede calcular barato con un cursor
+  - [x] Copia del resultado singular/plural corregida (`1 Mentor disponible`)
 
-- [ ] **8.2** Caché real
-  - [ ] `unstable_cache` con tags en `/mentors` y `/post/[id]`
-  - [ ] `revalidateTag` en las acciones correspondientes
-  - [ ] Evaluar retirar `revalidatePath` de rutas `force-dynamic`
+- [x] **8.2** Caché real
+  - [x] `unstable_cache` con tags en `/mentors` y `/post/[id]`
+  - [x] `revalidateTag` en las acciones correspondientes
+  - [x] `generateMetadata` de `/post/[id]` reutiliza `getPost` (antes: 2ª query)
 
-- [ ] **8.3** `.glass` es CSS inválido · `globals.css:105`
-  - [ ] `rgba(var(--card), .7)` donde `--card` es hex → la declaración se descarta
-  - [ ] Definir `--card-rgb` como tripleta o usar `color-mix()`
+- [x] **8.3** `.glass` es CSS inválido · `globals.css:105`
+  - [x] `rgba(var(--card), .7)` donde `--card` es hex → la declaración se descarta
+  - [x] Definir `--card-rgb` como tripleta o usar `color-mix()`
 
-- [ ] **8.4** Unificar `useOptimistic`
-  - [ ] Patrón de `FollowButton` (estado local + respuesta del servidor) en los 3 sitios
-  - [ ] `revalidatePostViews` debe cubrir `/post/[id]`
+- [x] **8.4** Unificar `useOptimistic`
+  - [x] Patrón de `FollowButton` (estado local + respuesta del servidor) en los 3 sitios
+  - [x] `revalidatePostViews` debe cubrir `/post/[id]`
 
-**Verificación de fase:** Lighthouse / bundle medido antes y después
+**Verificación de fase:**
+`/mentors?cat=backend` → 1 · `?q=rust` → 1 · `?q=zzzznotfound` → 0 sin crash ·
+`?cat=hack&sort=bogus&page=9999` → fallback a `all` · XSS en `q` → 0 resultados ·
+caché de `/mentors`: 737 ms en frío → 302 ms en caliente, HTML idéntico ·
+caché de `/post/[id]`: 1753 ms → 104 ms · `tsc` 0 · `eslint` 0 · 180 tests ·
+`next build` 0 · axe 36 combos 0 violaciones · behaviours 15/15 · smoke 24/24
 
 ---
 
 ## Fase 9 — Limpieza
 
-- [ ] **9.1** Código muerto
-  - [ ] `listSeniorApplications` (solo lo usan tests)
-  - [ ] `isAdmin` (idemp)
-  - [ ] `formatCount` / `HomeStats` sin uso externo
-- [ ] **9.2** `next.config.ts` — `remotePatterns` obsoletos tras `unoptimized`
-- [ ] **9.3** Historia de git — 156 MB de cliente Prisma en `HEAD`
-  - [ ] `git filter-repo` solo si molesta el tamaño del repo
-- [ ] **9.4** OG image 1200×630 vs asset 1200×800
-- [ ] **9.5** `themeColor` desalineado con `--background` real
-- [ ] **9.6** Fuente: `body` declara Inter, se carga Geist
+- [x] **9.1** Código muerto
+  - [x] `listSeniorApplications` eliminada: la lectura la hace
+        `app/admin/applications/page.tsx` con su propio guard, y esa ruta la
+        comprueba el smoke. El guard de las acciones (`requireAdmin`) lo siguen
+        cubriendo 5 tests de `reviewSeniorApplication` y `setUserRole`
+  - [x] `isAdmin` eliminada (0 llamadores)
+  - [x] `formatCount` / `HomeStats` dejan de exportarse: solo se usan dentro de
+        `HomeContent.tsx`
+  - 180 → 179 tests (el del código muerto)
 
-**Verificación de fase:** `tsc` 0 · `eslint` 0/0 · build OK
+- [x] **9.2** `next.config.ts` — `remotePatterns` obsoletos tras `unoptimized`
+  - [x] **Bug encontrado alugenrarlo, no era solo limpieza:** `AccountMenu`
+        renderizaba `user.image` con un `<Image>` propio y **sin `unoptimized`**,
+        mientras el resto de la app usa `UserAvatar`. Con el proveedor de GitHub
+        activo, `User.image` es `avatars.githubusercontent.com`, que no estaba en
+        `remotePatterns` → el render de `next/image` lanza y la pagina cae
+  - [x] `AccountMenu` usa `UserAvatar`: el invariante pasa a ser estructural,
+        no un `unoptimized` que hay que acordarse de poner
+  - [x] `remotePatterns` eliminado de `next.config.ts`: ya no queda nada remoto
+        que se optimice
+  - [x] `next-image-remote.test.ts` (nuevo) falla si vuelve a aparecer un
+        `<Image>` con `src` no literal y sin `unoptimized`. Mutacion
+        verificada: reintroduciendo el `<Image` viejo falla en
+        `AccountMenu.tsx:58`
+
+- [ ] **9.3** Historia de git — 58 MB de cliente Prisma generado
+  - [x] Diagnóstico medido: **no** están en `HEAD` (los borró `3ec3768`), pero
+        **sí en `origin/main`**, que es lo que hay publicado en GitHub
+        (60 ficheros, los tres motores: 21 MB + 17,5 MB + 17,5 MB)
+  - [x] `.git` pesa 31,3 MB; `git filter-repo` está disponible
+  - [x] **Riesgo medido:** hay **tres clones más** de este repo en el mismo
+        disco (`Videos\GrowCode`, que además contiene la app Expo, y dos copias
+        `- copia`). Un force-push los deja divergidos
+  - [-] **Descartado por ahora, con el razonamiento:** purgarlo exige
+        `filter-repo` + force-push, reescribe todos los SHAs publicados y obliga
+        a re-clonar, a cambio de unos 20 MB en un repo que **no se acerca al
+        límite de 1 GB de GitHub** y cuyo impacto funcional es cero. La higiene
+        ya está resuelta hacia adelante (`.gitignore` + fuera de `HEAD`).
+        Revisar solo si el tamaño empieza a molestar de verdad
+- [x] **9.4** OG image
+  - [x] `openGraph.images` y `twitter.images` apuntaban a `/brand-dark.jpg`:
+        1408×768 (no 1200×800) y 665 KB, ratio incorrecto para OG
+  - [x] `public/og.jpg` 1200×630, recorte centrado del mismo asset, 85 KB
+  - [x] HTML servido: `og:image`, `og:image:width=1200`, `og:image:height=630`,
+        `og:image:alt=GroCode` · `/og.jpg` → 200 `image/jpeg`
+
+- [x] **9.5** `themeColor` desalineado con `--background` real
+  - [x] Dark pasaba de `#0a0a0a` (que es `--card`) a `#020202` (que es `--background`)
+  - [x] Light `#ffffff` ya coincidía
+
+- [x] **9.6** Fuente: `body` declara Inter, se carga Geist
+  - [x] `body` ahora declara `var(--font-geist-sans, …)`; "Inter" ya no aparece
+  - [x] `@theme inline` expone `--font-sans` / `--font-mono` a partir de las
+        variables que emite `next/font` en `layout.tsx`
+  - [x] Verificado en el navegador: Geist se descarga y se aplica (639 px vs
+        633 px de la monoespaciada del sistema), `--font-geist-mono` resuelve a
+        Geist Mono, y no se pide nada a Google Fonts
+  - [x] `scripts/probe-fonts.mjs` (nuevo) automatiza esa comprobación
+
+- [x] **9.7** El hueco de cobertura que dejó la fase 7.5
+  - [x] Los targets táctiles se medían **siempre como anónimo**: sin sesión el
+        navbar no pinta el menú de cuenta y las acciones del feed no existen.
+        Es decir, que **toda la interfaz de un usuario conectado estaba sin
+        medir**, y 7.5 dio por buena una estándar que en la mitad de la app
+        nunca se comprobó
+  - [x] `a11y-behaviours.mjs` mide ahora también con sesión (sección 5), con
+        login real por el formulario y un guardia que verifica que la sesión
+        existe antes de dar nada por bueno
+  - [x] Lo que salió, y que 7.5 no vio:
+        · "me gusta" y "comentarios" del feed a **16 px de alto** (los botones
+          de compartir sí llevaban `min-h-11`; estos dos no)
+        · menú de cuenta 32×32 · "Publicar" 56×32
+        · filtros de `/notifications` a 40 px · filas de notificación a 43 px
+  - [x] Todo con `min-h-11 min-w-11`, el mismo patron que ya usaba el resto
+  - [x] Mutación verificada: quitando el `min-h-11` del botón de comentarios,
+        el check lo vuelve a medir a 16 px y falla
+
+**Verificación de fase:** `tsc` 0 · `eslint` 0/0 · build OK · **181 tests** ·
+axe 36 combos 0 violaciones · behaviours **21/21** · `probe-fonts` 7/7 ·
+smoke 24/24
 
 ---
 
@@ -632,7 +714,32 @@ contraste AA en ambos temas medido
 | hoy | 5.x | **Correccion propia:** afirmaba que el panel de admin devuelve 307 a un no-admin. Devuelve 200 (rebote en cliente). No hay fuga: el guard corre antes de cualquier query | check nuevo: sin datos en el cuerpo |
 | hoy | 5.x | **Invariante cambiado:** el test exigia "exactamente una" etiqueta robots; ahora exige que ninguna contradiga a las demas | 24/24 |
 | hoy | 5.x | **Correccion propia:** el registro de este documento se duplico cuatro veces al insertar con regex; reescrito entero | - |
----
+| hoy | 8.1 | `/mentors` al servidor: `mentor-filters.ts` + `mentors.ts` (`unstable_cache`, tag `mentors`, TTL 300) + `MentorsList` movido a URL | 737 ms -> 302 ms, HTML idéntico en miss y hit |
+| hoy | 8.1 | **Cuidado con `unstable_cache`:** la clave es `keyParts` + argumentos + `Function.toString()`. Un closure que captura `id` tiene el mismo `toString()` para todos los ids, asi que el id va en `keyParts` | test de keying por id |
+| hoy | 8.1 | Copia singular/plural del total de mentores corregida | `?cat=backend` -> "1 Mentor disponible" |
+| hoy | 8.2 | `src/lib/post-detail.ts`: tag `post:{id}`, TTL 300, `getPost = cache(unstable_cache(...))`, `revalidatePost` | 1753 ms -> 104 ms |
+| hoy | 8.2 | `generateMetadata` de `/post/[id]` reutiliza `getPost` (antes 2 queries por render) | una sola query |
+| hoy | 8.2 | `revalidatePostViews` llama a `revalidatePost`; sin eso un like dejaba `/post/{id}` con el contador viejo | test de regresion: quitando la linea fallan 3 tests |
+| hoy | 8.x | `revalidateTag` en esta version de Next acepta `(tag, { expire: 0 })`; `revalidatePath` no invalida entradas del Data Cache con tag | probado contra el servidor real |
+| hoy | 8.3 | `.glass`: `rgba(var(--card), .7)` se descartaba entero (medido: `rgba(0,0,0,0)`); ahora `color-mix()` | background real |
+| hoy | 8.4 | `useOptimistic` unificado en `PostCard`, `FollowButton` y `RoadmapClient` | 180 tests |
+| hoy | 9.4 | `public/og.jpg` 1200x630 / 85 KB (el asset era 1408x768 / 665 KB) | `og:image` servido correcto |
+| hoy | 9.5 | `themeColor` dark `#0a0a0a` (que es `--card`) -> `#020202` (que es `--background`) | meta servida |
+| hoy | 9.6 | `body` declara Geist en vez de "Inter", que nunca se cargaba: la app se dibujaba con la fuente del sistema y Geist viajaba sin usarse | `probe-fonts.mjs` 7/7 |
+| hoy | 9.x | **Hallazgo nuevo, pre-existente:** en rutas con `generateMetadata` dinamico + `loading.tsx` el `<title>` sale **despues de `</head>`** cuando la cache esta fria. Reproducido tambien en `/profile/[id]`, que no usa cache | difiere a la fase 9.x de metadata/SEO |
+| hoy | 9.x | **Hallazgo nuevo, pre-existente:** `--font-geist-mono` solo se descarga si algo usa `font-mono`; en `/` no hay ningun elemento, asi que el woff2 mono no se pide (correcto) | `probe-fonts` lo verifica declarando la familia |
+| hoy | 9.x | **Falsa alarma propia:** `scripts/a11y-audit.mjs` fallaba por la ausencia de `public/axe.min.js`. `addScriptTag({ path })` lee el disco, no pide al servidor, asi que ahora busca en `node_modules/axe-core/` y no hay que copiarlo a `public/` | axe 0 en 36 combos |
+| hoy | 9.x | **Regresion propia, encontrada y corregida:** mis spans deshabilitados de paginacion usaban `opacity-40`, que deja el texto en 2.71:1 (claro) y 3.39:1 (oscuro). Afectaba a `/mentors`, `/guardados` y `/profile/[id]/[list]` | `opacity-70` -> 7.7:1 y 9.1:1; axe 0 |
+| hoy | 9.1 | `isAdmin` y `listSeniorApplications` borradas; `formatCount`/`HomeStats` sin `export`. 180 -> 179 tests | tsc 0, eslint 0 |
+| hoy | 9.2 | **Bug de produccion encontrado al limpiar la config:** `AccountMenu` pasaba `user.image` por `next/image` sin `unoptimized`. Con GitHub OAuth, `User.image` es `avatars.githubusercontent.com`, fuera de `remotePatterns` -> el render lanza y la pagina cae | `AccountMenu` usa `UserAvatar`; invariante en `next-image-remote.test.ts`, mutacion verificada |
+| hoy | 9.2 | **Por que no se reprodujo en el smoke:** el `authorize` de credentials no devuelve `image`, asi que `session.user.image` es null y el `<Image>` nunca llega a pintarse. Con `strategy: "jwt"` la foto se congela en el token al entrar. Solo se ve autenticandose con GitHub | check retirado del smoke; el codigo no es conducible ahi |
+| hoy | 9.2 | **Falsa alarma propia (bien vista):** el primer smoke check daba verde sin comprobar nada, porque la sesion era anterior al cambio de avatar. Anadido un guard que verifica que la sesion lleva el avatar antes de dar el visto bueno | - |
+| hoy | 9.3 | **Medido, no estimado:** los 58 MB de motores Prisma no estan en `HEAD` (los borro `3ec3768`) pero **si en `origin/main`**. `main` va 3 commits por delante, sin subir | pendiente de OK |
+| hoy | 9.3 | **Descartado con datos, no por opinion:** hay 3 clones mas del repo en este disco (uno contiene la app Expo). Purgar la historia =~20 MB de un repo a 1 GB de limite, sin impacto funcional, a cambio de divergir 3 clones | `[-]` en la lista |
+| hoy | 9.7 | **Hueco de cobertura de la fase 7.5:** los targets se median siempre sin sesion, asi que **toda la interfaz autenticada estaba sin medir**. "Me gusta" y "comentarios" del feed median **16 px de alto** | ahora se mide con sesion: 21/21 |
+| hoy | 9.7 | **Mutacion verificada:** sin el `min-h-11` del boton de comentarios, el check lo vuelve a medir a 16 px y falla | el check detecta el bug |
+| hoy | 9.7 | Guardia en la seccion con sesion: sin el, el script daria verde por no mirar nada (el mismo falso positivo que ya me dio el check de avatar en el smoke) | - |
+| --- |
 ## Notas para el asistente
 
 - **Nunca** marcar `[x]` sin verificación ejecutada.

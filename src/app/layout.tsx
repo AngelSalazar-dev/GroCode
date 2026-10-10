@@ -36,7 +36,7 @@ export const metadata: Metadata = {
       "Conecta con desarrolladores Senior verificados, comparte recursos y crece con la comunidad.",
     images: [
       {
-        url: "/brand-dark.jpg",
+        url: "/og.jpg",
         width: 1200,
         height: 630,
         alt: "GroCode",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: "GroCode - Escala tu carrera con mentoría técnica",
     description:
       "Conecta con desarrolladores Senior verificados y crece con la comunidad.",
-    images: ["/brand-dark.jpg"],
+    images: ["/og.jpg"],
   },
   // NOTE: deliberately no global `robots` here.
   // Pinning `index, follow` on every page emitted a conflicting
@@ -60,9 +60,13 @@ export const metadata: Metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1.0,
+  // The browser chrome has to match the page it is painted behind, so these are
+  // the `--background` tokens from `globals.css` (`#ffffff` / `#020202`), not
+  // the card colours. `#0a0a0a` is `--card` in dark mode and left a visible
+  // seam between the address bar and the page.
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: dark)", color: "#020202" },
   ],
 };
 

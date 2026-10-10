@@ -140,7 +140,7 @@ export default function NotificationsPage() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             aria-current={activeTab === tab.id ? "page" : undefined}
-            className={`px-4 py-3 text-xs font-black uppercase tracking-widest transition-all relative ${
+            className={`px-4 py-3 min-h-11 text-xs font-black uppercase tracking-widest transition-all relative ${
               activeTab === tab.id
                 ? "text-accent-gro"
                 : "text-muted hover:text-foreground"
@@ -189,7 +189,7 @@ export default function NotificationsPage() {
               >
                 <button
                   onClick={() => handleNotificationClick(n)}
-                  className="flex items-start gap-4 flex-1 min-w-0 text-left"
+                  className="flex items-start gap-4 flex-1 min-w-0 min-h-11 text-left"
                 >
                   <div
                     className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center ${colors.bg}`}

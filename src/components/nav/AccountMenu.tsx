@@ -1,11 +1,11 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
-import { User as UserIcon, LogOut, Settings, ShieldCheck } from "lucide-react"
+import { LogOut, Settings, ShieldCheck } from "lucide-react"
 import { logoutAction } from "@/actions/auth"
+import UserAvatar from "@/components/UserAvatar"
 
 interface AccountMenuProps {
   user: { id: string; name?: string | null; image?: string | null; role?: string }
@@ -58,19 +58,14 @@ export default function AccountMenu({ user }: AccountMenuProps) {
         aria-expanded={open}
         aria-haspopup="menu"
         aria-label="Menú de cuenta"
-        className="w-8 h-8 rounded-full bg-muted/20 overflow-hidden border border-border-gro hover:border-accent-gro transition-colors shrink-0"
+        className="w-8 h-8 min-h-11 min-w-11 rounded-full bg-muted/20 overflow-hidden border border-border-gro hover:border-accent-gro transition-colors shrink-0"
       >
-        {user.image ? (
-          <Image
-            src={user.image}
-            alt=""
-            width={32}
-            height={32}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <UserIcon className="w-full h-full p-2 text-muted" />
-        )}
+        {/* `UserAvatar`, y no un `<Image>` propio: `User.image` lo pone el
+            usuario o GitHub, asi que cualquier host es posible y el
+            optimizador de Next lo rechazaria. El componente ya lleva
+            `unoptimized` y el motivo escrito; duplicarlo aqui es como se coló
+            el bug. */}
+        <UserAvatar src={user.image} name={user.name} size={32} className="w-full h-full" />
       </button>
 
       {open && (

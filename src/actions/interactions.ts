@@ -3,6 +3,7 @@
 import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { postAuthorSelect } from "@/lib/select"
+import { revalidatePost } from "@/lib/post-detail"
 import { notify } from "@/lib/notifications"
 import { revalidatePath } from "next/cache"
 import { ActionError } from "@/lib/action-error"
@@ -25,8 +26,16 @@ async function requirePost(postId: string) {
   return post
 }
 
-/** Feed and the author's profile are the only two views that render a post. */
+/**
+ * Feed, the post detail page and the author's profile all render this post.
+ *
+ * Every one of those reads the counts from the Data Cache now, so the tag has
+ * to go with the paths: `revalidatePath` expires rendered HTML only, and
+ * without `revalidatePost` a like would leave `/post/{id}` showing the old
+ * number until the TTL ran out.
+ */
 function revalidatePostViews(post: { id: string; authorId: string }, actorId: string) {
+  revalidatePost(post.id)
   revalidatePath("/feed")
   revalidatePath(`/profile/${post.authorId}`)
   if (actorId !== post.authorId) revalidatePath(`/profile/${actorId}`)

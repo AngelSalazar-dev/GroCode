@@ -25,14 +25,17 @@ vi.mock("next/headers", () => ({
   headers: vi.fn(async () => new Headers({ "x-forwarded-for": "203.0.113.7" })),
 }))
 vi.mock("@/lib/notifications", () => ({ notify: vi.fn(async () => null) }))
-vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }))
+// `unstable_cache` se deja en passthrough: sin caché, el mock de prisma manda.
+vi.mock("next/cache", () => ({
+  revalidatePath: vi.fn(),
+  revalidateTag: vi.fn(),
+  unstable_cache: (cb: unknown) => cb,
+}))
 
 const { auth } = await import("@/auth/auth")
 const { prisma } = await import("@/lib/prisma")
 const { toggleFollow } = await import("@/actions/follow")
-const { reviewSeniorApplication, listSeniorApplications, setUserRole } = await import(
-  "@/actions/admin"
-)
+const { reviewSeniorApplication, setUserRole } = await import("@/actions/admin")
 
 describe("toggleFollow", () => {
   beforeEach(() => {
@@ -123,13 +126,6 @@ describe("admin: guard de permisos", () => {
     await expect(reviewSeniorApplication("app-1", "APPROVED")).rejects.toThrow(
       /No autorizado/i
     )
-  })
-
-  it("listSeniorApplications rechaza a un no-admin", async () => {
-    ;(auth as Mock).mockResolvedValue(mockSession("JUNIOR"))
-
-    await expect(listSeniorApplications()).rejects.toThrow(/permisos de administrador/i)
-    expect(prisma.seniorApplication.findMany).not.toHaveBeenCalled()
   })
 
   it("setUserRole rechaza a un no-admin", async () => {

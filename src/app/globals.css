@@ -32,12 +32,17 @@
   --color-card-gro: var(--card);
   --color-card-gro-hover: var(--card-hover);
   --radius-gro: var(--radius);
+  /* `layout.tsx` downloads Geist + Geist Mono; pointing Tailwind's own tokens at
+     them is what stops those files from being shipped and then ignored. The
+     fallbacks matter because `next/font` emits a stack with no generic family. */
+  --font-sans: var(--font-geist-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  --font-mono: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-geist-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;

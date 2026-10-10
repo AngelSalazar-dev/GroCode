@@ -13,17 +13,34 @@
  * Uso: node scripts/a11y-audit.mjs [puerto]
  * Requisitos: servidor levantado, y las deps de auditoria instaladas
  *   npm i --no-save axe-core puppeteer-core
- *   cp node_modules/axe-core/axe.min.js public/axe.min.js
+ *
+ * addScriptTag lee el fichero de disco, no lo pide al servidor, asi que axe
+ * puede vivir en node_modules y hace falta copiarlo a public/ (donde lo
+ * publicaria el deploy por 564 KB).
  *
  * Codigo de salida 1 si hay violaciones serias o criticas.
  */
 import puppeteer from "puppeteer-core"
 import { pathToFileURL } from "node:url"
+import { existsSync } from "node:fs"
 import { resolve } from "node:path"
 
 const PORT = process.argv[2] ?? "3980"
 const BASE = `http://localhost:${PORT}`
 const ROOT = process.cwd()
+
+// node_modules primero (no viaja al deploy); public/ como compatibilidad.
+const AXE_CANDIDATES = [
+  resolve(ROOT, "node_modules/axe-core/axe.min.js"),
+  resolve(ROOT, "public/axe.min.js"),
+]
+const AXE_PATH = AXE_CANDIDATES.find((p) => existsSync(p))
+if (!AXE_PATH) {
+  console.error(
+    "No encuentro axe.min.js. Instala las deps de auditoria: npm i --no-save axe-core puppeteer-core",
+  )
+  process.exit(1)
+}
 const CHROME =
   process.env.CHROME_PATH ??
   "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
@@ -162,7 +179,7 @@ for (const theme of ["light", "dark"]) {
 
     // axe inyectado en el mundo principal. addScriptTag lee el fichero local y lo
     // inserta como script en linea, que la CSP si permite ('unsafe-inline').
-    await page.addScriptTag({ path: "public/axe.min.js" })
+    await page.addScriptTag({ path: AXE_PATH })
     const axeReady = await page.evaluate(() => typeof window.axe !== "undefined")
     if (!axeReady) throw new Error(`axe no quedo definido en ${route.path}`)
 

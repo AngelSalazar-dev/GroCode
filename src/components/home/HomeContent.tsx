@@ -6,13 +6,15 @@ import { useEffect, useRef } from "react"
 import { Users, ArrowRight, Zap, Shield } from "lucide-react"
 import { motion } from "framer-motion"
 
-export interface HomeStats {
+// Neither is exported: `app/page.tsx` passes the three counts as an object
+// literal, and these two live only inside this file.
+interface HomeStats {
   mentorCount: number
   resourceCount: number
   memberCount: number
 }
 
-export function formatCount(n: number): string {
+function formatCount(n: number): string {
   if (n >= 1000) return `${(n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(".0", "")}k+`
   return `${n}`
 }
