@@ -8,7 +8,7 @@ export function verifyToken(token: string) {
       name: string
       role: string
     }
-  } catch (error) {
+  } catch {
     return null
   }
 }

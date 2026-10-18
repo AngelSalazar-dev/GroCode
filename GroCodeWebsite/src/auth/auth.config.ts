@@ -7,7 +7,7 @@ export default {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.role = (user as any).role
+        token.role = "role" in user && typeof user.role === "string" ? user.role : undefined
       }
       return token
     },
