@@ -1,4 +1,4 @@
-import { PrismaClient } from "../src/generated-v2/client"
+import { PrismaClient } from "../src/generated-v4/client"
 import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()

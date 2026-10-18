@@ -1,0 +1,10 @@
+node_modules
+.next
+.vercel
+.env
+.env.*
+src/generated
+src/generated-v2
+src/generated-v3
+src/generated-v4
+debug-db.js
