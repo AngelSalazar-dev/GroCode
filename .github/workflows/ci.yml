@@ -12,7 +12,34 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+
+    # A throwaway Postgres so the job can apply the real migration and run an
+    # authenticated request. Without a database the build was "green" while
+    # proving nothing about migrations or login.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: growcode_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # `growcode_ci` is deliberate: scripts/smoke-auth.mjs refuses to run against
+    # a database whose name does not look disposable (*_ci, *_smoke, *_test).
+    env:
+      DATABASE_URL: "postgresql://ci:ci@localhost:5432/growcode_ci?sslmode=disable"
+      SMOKE_DATABASE_URL: "postgresql://ci:ci@localhost:5432/growcode_ci?sslmode=disable"
+      AUTH_SECRET: "ci-dummy-secret-not-used-at-runtime-0000000000"
+      AUTH_URL: "http://localhost:3000"
+      AUTH_TRUST_HOST: "true"
 
     steps:
       - uses: actions/checkout@v4
@@ -29,13 +56,11 @@ jobs:
       - name: Install
         run: npm ci --legacy-peer-deps
 
-      # The build needs a reachable DATABASE_URL even for `prisma generate`,
-      # because the generator resolves env() references. It never connects.
+      # The provider must match prisma/schema.prisma (postgresql). A mysql:// URL
+      # still builds (nothing connects during generate) and only fails at
+      # runtime, far from the line that caused it.
       - name: Generate Prisma client
         run: npx prisma generate
-        env:
-          DATABASE_URL: "mysql://u:p@localhost:3306/grocode_ci?sslaccept=strict"
-          AUTH_SECRET: "ci-dummy-secret-not-used-at-runtime-0000000000"
 
       - name: Typecheck
         run: npm run typecheck
@@ -48,33 +73,21 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          DATABASE_URL: "mysql://u:p@localhost:3306/grocode_ci?sslaccept=strict"
-          AUTH_SECRET: "ci-dummy-secret-not-used-at-runtime-0000000000"
-          AUTH_URL: "http://localhost:3000"
 
-      # ---------------------------------------------------------------------
-      # Schema drift gate. Commented out until a staging database exists:
-      # it needs a real MySQL to diff against. Enable together with
-      # SMOKE_DATABASE_URL in the repository secrets.
-      #
-      # - name: Detect schema drift
-      #   if: ${{ github.event_name == 'pull_request' }}
-      #   run: npx prisma migrate diff
-      #     --from-url "$DATABASE_URL"
-      #     --to-schema-datamodel prisma/schema.prisma
-      #     --exit-code
-      #   env:
-      #     DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-      # ---------------------------------------------------------------------
+      # Proves the committed migration runs on a clean server.
+      - name: Apply migrations
+        run: npx prisma migrate deploy
 
-      # ---------------------------------------------------------------------
-      # Authenticated smoke test. Skips itself (exit 2) when
-      # SMOKE_DATABASE_URL is unset, so it is safe to wire up now and have it
-      # start doing real work the moment the secret exists.
-      #
-      # - name: Authenticated smoke test
-      #   env:
-      #     SMOKE_DATABASE_URL: ${{ secrets.SMOKE_DATABASE_URL }}
-      #     AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-      # ---------------------------------------------------------------------
+      # After applying the migration, schema and code must agree. Catches a
+      # schema.prisma change committed without its migration.
+      - name: Detect schema drift
+        run: >-
+          npx prisma migrate diff
+          --from-url "$DATABASE_URL"
+          --to-schema-datamodel prisma/schema.prisma
+          --exit-code
+
+      # Signs in for real and asserts private routes answer 200. It resets the
+      # disposable database with `db push --force-reset`, so it runs last.
+      - name: Authenticated smoke test
+        run: node scripts/smoke-auth.mjs

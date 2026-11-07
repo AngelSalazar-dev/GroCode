@@ -118,13 +118,15 @@ Bloquean el avance. Ninguna bloquea la Fase 0 o la Fase 1.
   - [x] `mentorship.test.ts` — re-solicitud tras rechazo, no duplica
   - [x] `mentorship.test.ts` — un ADMIN tampoco pide mentoría
 
-- [~] **0.3** CI `.github/workflows/ci.yml`
+- [x] **0.3** CI `.github/workflows/ci.yml`
   - [x] typecheck + lint + test + build
   - [x] `cache: npm` (key = hash de `package-lock.json`)
   - [x] `npm ci --legacy-peer-deps`
   - [x] `AUTH_SECRET` de dummy para el build
-  - [ ] Gate de drift de esquema — comentado hasta que haya staging
-  - [ ] Smoke test en CI — comentado hasta que haya `SMOKE_DATABASE_URL`
+  - [x] **Postgres 16 de servicio** + `prisma migrate deploy` sobre `growcode_ci`
+  - [x] Gate de drift de esquema (`prisma migrate diff --exit-code`)
+  - [x] Smoke test autenticado en CI (`SMOKE_DATABASE_URL` apunta al servicio, sin secretos)
+  - [ ] Primera ejecución verde en GitHub Actions (pendiente del próximo push/PR)
 
 **Verificación de fase:** `npm test` → **78 pasan** · los 2 tests de regresión fallan si se reintroduce cada bug (comprobado revirtiendo el fix)
 
