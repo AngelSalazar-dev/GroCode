@@ -5,6 +5,8 @@ import { headers } from "next/headers"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { getClientIp, limit } from "@/lib/rate-limit"
+import { normalizeEmail } from "@/lib/email"
+import { logger } from "@/lib/logger"
 
 const RegisterSchema = z.object({
   name: z
@@ -49,7 +51,11 @@ export async function registerUser(formData: FormData): Promise<RegisterResult> 
     return { error: parsed.error.issues[0]?.message ?? "Datos inválidos" }
   }
 
-  const { name, email, password } = parsed.data
+  // El esquema de zod ya normaliza, pero la normalizacion se repite aqui a
+  // proposito: la garantia tiene que estar en la frontera de la base de datos,
+  // no en un validor de entrada que otro camino (seed, script, OAuth) no pasa.
+  const { name, password } = parsed.data
+  const email = normalizeEmail(parsed.data.email)
 
   try {
     const existingUser = await prisma.user.findUnique({
@@ -69,7 +75,7 @@ export async function registerUser(formData: FormData): Promise<RegisterResult> 
 
     return { success: true }
   } catch (error) {
-    console.error("Error en registerUser:", error)
+    logger.error("registerUser.failed", { error })
     return { error: "Error al registrar usuario, por favor intente nuevamente" }
   }
 }

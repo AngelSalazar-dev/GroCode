@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
+import { logger } from "@/lib/logger"
 import { revalidatePath } from "next/cache"
 
 export type ToggleProgressResult =
@@ -57,7 +58,7 @@ export async function toggleRoadmapStep(stepId: string): Promise<ToggleProgressR
     revalidatePath("/roadmap")
     return { success: true, completed: nextCompleted }
   } catch (error) {
-    console.error("Error en toggleRoadmapStep:", error)
+    logger.error("toggleRoadmapStep.failed", { error })
     return { error: "No se pudo actualizar tu progreso" }
   }
 }

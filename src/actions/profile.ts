@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { revalidateMentors } from "@/lib/mentors"
 import { validateHttpUrl } from "@/lib/validation"
+import { logger } from "@/lib/logger"
 
 const MAX_LENGTHS = {
   name: 100,
@@ -82,7 +83,7 @@ export async function updateProfile(data: {
 
     return { success: true }
   } catch (error) {
-    console.error("Error en updateProfile:", error)
+    logger.error("updateProfile.failed", { error })
     return { error: "Error al actualizar el perfil, por favor intente nuevamente" }
   }
 }

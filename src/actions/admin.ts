@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache"
 import { revalidateMentors } from "@/lib/mentors"
 import { notify } from "@/lib/notifications"
 import { ApplicationStatus, Role } from "@/generated-v2/client"
+import { logger } from "@/lib/logger"
 import { z } from "zod"
 
 /**
@@ -143,7 +144,7 @@ export async function reviewSeniorApplication(
 
     return { success: true, status: decision.data }
   } catch (error) {
-    console.error("Error en reviewSeniorApplication:", error)
+    logger.error("reviewSeniorApplication.failed", { error })
     return { error: "No se pudo registrar la revisión" }
   }
 }
@@ -186,7 +187,7 @@ export async function setUserRole(
     revalidatePath("/admin/applications")
     return { success: true }
   } catch (error) {
-    console.error("Error en setUserRole:", error)
+    logger.error("setUserRole.failed", { error })
     return { error: "No se pudo actualizar el rol" }
   }
 }

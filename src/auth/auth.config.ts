@@ -1,6 +1,7 @@
 import type { NextAuthConfig } from "next-auth"
 import { Role } from "@/generated-v2/client"
 import { prisma } from "@/lib/prisma"
+import { logger } from "@/lib/logger"
 
 /**
  * Accepts every member of the Role enum.
@@ -59,7 +60,7 @@ export default {
       } catch (error) {
         // Fail closed on the refresh path: keep whatever the token already had
         // rather than silently demoting a legitimate admin during a DB blip.
-        console.error("No se pudo refrescar el rol desde la base de datos:", error)
+        logger.error("auth.role_refresh_failed", { error })
       }
 
       return token

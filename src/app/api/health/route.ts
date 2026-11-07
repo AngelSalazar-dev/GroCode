@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { logger } from "@/lib/logger"
 
 export const dynamic = "force-dynamic"
 
@@ -23,13 +24,14 @@ export async function GET() {
       { headers }
     )
   } catch (error) {
+    // The detail goes to the server log; the body stays generic because a
+    // driver message can carry the host, the user and the database name.
+    logger.error("health.db_down", { error, latencyMs: Date.now() - startedAt })
     return Response.json(
       {
         status: "degraded",
         db: "down",
         latencyMs: Date.now() - startedAt,
-        // Message only: never leak connection strings or credentials.
-        error: error instanceof Error ? error.message : "unknown",
       },
       { status: 503, headers }
     )

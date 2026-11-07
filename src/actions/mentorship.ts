@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { notify } from "@/lib/notifications"
 import { RequestStatus } from "@/generated-v2/client"
+import { logger } from "@/lib/logger"
 
 const MAX_MESSAGE_LENGTH = 500
 
@@ -89,7 +90,7 @@ export async function createMentorshipRequest(
 
     return { status: request.status }
   } catch (error) {
-    console.error("Error en createMentorshipRequest:", error)
+    logger.error("createMentorshipRequest.failed", { error })
     return { error: "Error al crear la solicitud de mentoría, por favor intente nuevamente" }
   }
 }
@@ -145,7 +146,7 @@ export async function respondToMentorshipRequest(
 
     return { status: nextStatus }
   } catch (error) {
-    console.error("Error en respondToMentorshipRequest:", error)
+    logger.error("respondToMentorshipRequest.failed", { error })
     return { error: "Error al responder la solicitud" }
   }
 }

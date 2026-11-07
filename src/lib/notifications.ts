@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { limit } from "@/lib/rate-limit"
+import { logger } from "@/lib/logger"
 
 export type NotificationType =
   | "like"
@@ -64,13 +65,9 @@ export async function notify({
     })
   } catch (error) {
     // A failed notification must never break the action that triggered it.
-    // Log name and message only: a Prisma error object can carry the original
-    // query, which would put emails and other PII in the logs.
-    const detail =
-      error instanceof Error
-        ? `${error.name}: ${error.message}`
-        : String(error)
-    console.error(`[notify:${type}] ${detail}`)
+    // `logger` drops the error object and redacts emails: a Prisma error can
+    // carry the original query, which would put PII in the logs.
+    logger.error("notify.failed", { type, error })
     return null
   }
 }

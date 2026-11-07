@@ -4,6 +4,7 @@ import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { Role } from "@/generated-v2/client"
+import { logger } from "@/lib/logger"
 
 /**
  * Self-service role selection during onboarding.
@@ -43,7 +44,7 @@ export async function setOnboardingRole() {
     revalidatePath("/")
     return { role: Role.JUNIOR }
   } catch (error) {
-    console.error("Error en setOnboardingRole:", error)
+    logger.error("setOnboardingRole.failed", { error })
     throw new Error("Error al guardar tu rol, por favor intente nuevamente")
   }
 }

@@ -7,6 +7,7 @@ import { headers } from "next/headers"
 import { z } from "zod"
 import { getClientIp, limit } from "@/lib/rate-limit"
 import { ApplicationStatus } from "@/generated-v2/client"
+import { logger } from "@/lib/logger"
 import {
   GITHUB_HOSTS,
   LINKEDIN_HOSTS,
@@ -140,7 +141,7 @@ export async function applySenior(
     revalidatePath("/apply-senior")
     return { success: true, status: application.status }
   } catch (error) {
-    console.error("Error en applySenior:", error)
+    logger.error("applySenior.failed", { error })
     return { error: "Error al procesar la postulación, inténtalo de nuevo" }
   }
 }
