@@ -4,6 +4,12 @@ import { auth } from "@/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { notify } from "@/lib/notifications"
+import { limit } from "@/lib/rate-limit"
+import { logger } from "@/lib/logger"
+
+// Keyed by user: following is a per-account action, not a per-IP one.
+const MAX_FOLLOWS = 60
+const WINDOW_MS = 60 * 60 * 1000
 
 export type FollowResult = { following: boolean } | { error: string }
 
@@ -21,6 +27,13 @@ export async function toggleFollow(targetUserId: string): Promise<FollowResult> 
   }
 
   const followerId = session.user.id
+
+  const gate = limit(`follow:${followerId}`, MAX_FOLLOWS, WINDOW_MS)
+  if (!gate.ok) {
+    return {
+      error: `Demasiadas acciones. Inténtalo de nuevo en ${Math.ceil(gate.retryAfter / 60)} minutos.`,
+    }
+  }
 
   if (typeof targetUserId !== "string" || targetUserId.length === 0) {
     return { error: "Usuario inválido" }
@@ -70,7 +83,7 @@ export async function toggleFollow(targetUserId: string): Promise<FollowResult> 
 
     return { following }
   } catch (error) {
-    console.error("Error en toggleFollow:", error)
+    logger.error("toggleFollow.failed", { error })
     return { error: "No se pudo actualizar la suscripción" }
   }
 }

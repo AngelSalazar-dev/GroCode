@@ -6,9 +6,14 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { DEFAULT_CHANNEL, isValidChannel } from "@/lib/channels"
 import { validateHttpUrl } from "@/lib/validation"
+import { limit } from "@/lib/rate-limit"
+import { logger } from "@/lib/logger"
 
 const MAX_CONTENT = 5000
 const MAX_URL = 500
+// Keyed by user, not IP: an office or classroom shares one address.
+const MAX_POSTS = 10
+const POST_WINDOW_MS = 60 * 60 * 1000
 
 export type PostResult = { error: string } | { success: true }
 
@@ -22,6 +27,13 @@ export async function createPost(formData: FormData): Promise<PostResult> {
 
   if (!session?.user?.id) {
     return { error: "No autorizado" }
+  }
+
+  const gate = limit(`post:${session.user.id}`, MAX_POSTS, POST_WINDOW_MS)
+  if (!gate.ok) {
+    return {
+      error: `Has alcanzado el límite de publicaciones. Inténtalo de nuevo en ${Math.ceil(gate.retryAfter / 60)} minutos.`,
+    }
   }
 
   const rawContent = formData.get("content")
@@ -56,7 +68,7 @@ export async function createPost(formData: FormData): Promise<PostResult> {
       },
     })
   } catch (error) {
-    console.error("Error en createPost:", error)
+    logger.error("createPost.failed", { error })
     return { error: "Error al crear el post, por favor intente nuevamente" }
   }
 

@@ -7,6 +7,13 @@ import { revalidatePost } from "@/lib/post-detail"
 import { notify } from "@/lib/notifications"
 import { revalidatePath } from "next/cache"
 import { ActionError } from "@/lib/action-error"
+import { limit } from "@/lib/rate-limit"
+import { logger } from "@/lib/logger"
+
+// Keyed by user, never IP: a shared address would penalise a whole classroom.
+const MAX_LIKES = 60
+const MAX_COMMENTS = 20
+const WINDOW_MS = 60 * 60 * 1000
 
 async function requireUser() {
   const session = await auth()
@@ -44,6 +51,11 @@ function revalidatePostViews(post: { id: string; authorId: string }, actorId: st
 export async function toggleLike(postId: string) {
   const user = await requireUser()
 
+  const gate = limit(`like:${user.id}`, MAX_LIKES, WINDOW_MS)
+  if (!gate.ok) {
+    throw new ActionError(`Demasiadas acciones. Inténtalo de nuevo en ${Math.ceil(gate.retryAfter / 60)} minutos.`)
+  }
+
   try {
     const post = await requirePost(postId)
 
@@ -71,7 +83,7 @@ export async function toggleLike(postId: string) {
     revalidatePostViews(post, user.id)
     return { liked: !existing }
   } catch (error) {
-    console.error("Error en toggleLike:", error)
+    logger.error("toggleLike.failed", { error })
     throw error instanceof ActionError ? error : new ActionError("Error al cambiar like")
   }
 }
@@ -96,13 +108,20 @@ export async function toggleBookmark(postId: string) {
     revalidatePostViews(post, user.id)
     return { bookmarked: !existing }
   } catch (error) {
-    console.error("Error en toggleBookmark:", error)
+    logger.error("toggleBookmark.failed", { error })
     throw error instanceof ActionError ? error : new ActionError("Error al cambiar bookmark")
   }
 }
 
 export async function addComment(postId: string, content: string) {
   const user = await requireUser()
+
+  const gate = limit(`comment:${user.id}`, MAX_COMMENTS, WINDOW_MS)
+  if (!gate.ok) {
+    throw new ActionError(
+      `Has alcanzado el límite de comentarios. Inténtalo de nuevo en ${Math.ceil(gate.retryAfter / 60)} minutos.`
+    )
+  }
 
   try {
     const post = await requirePost(postId)
@@ -139,7 +158,7 @@ export async function addComment(postId: string, content: string) {
     // Dates do not survive the server/client boundary; hand back a string.
     return { ...comment, createdAt: comment.createdAt.toISOString() }
   } catch (error) {
-    console.error("Error en addComment:", error)
+    logger.error("addComment.failed", { error })
     throw error instanceof ActionError ? error : new ActionError("Error al agregar comentario")
   }
 }
