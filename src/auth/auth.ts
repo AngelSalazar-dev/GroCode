@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs"
 import { headers } from "next/headers"
 import { z } from "zod"
 import { getClientIp, limit } from "@/lib/rate-limit"
+import { normalizeEmail } from "@/lib/email"
 
 const LoginSchema = z.object({
   email: z.string().trim().toLowerCase().email("Email inválido").max(254),
@@ -68,7 +69,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!parsed.success) return null
 
-        const { email, password } = parsed.data
+        // Normaliza tambien en la frontera de la BD, no solo en el esquema: la
+        // busqueda y el bucket de rate limit tienen que usar la misma clave.
+        const { password } = parsed.data
+        const email = normalizeEmail(parsed.data.email)
 
         for (const bucket of [`login:ip:${ip}`, `login:user:${email}`]) {
           const gate = limit(bucket, MAX_ATTEMPTS, WINDOW_MS)

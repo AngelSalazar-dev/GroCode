@@ -1,267 +1,308 @@
--- CreateTable
-CREATE TABLE `User` (
-    `id` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NULL,
-    `email` VARCHAR(191) NULL,
-    `emailVerified` DATETIME(3) NULL,
-    `image` VARCHAR(191) NULL,
-    `password` VARCHAR(191) NULL,
-    `role` ENUM('JUNIOR', 'SENIOR', 'ADMIN') NOT NULL DEFAULT 'JUNIOR',
-    `bio` TEXT NULL,
-    `location` VARCHAR(191) NULL,
-    `website` VARCHAR(191) NULL,
-    `onboardingCompleted` BOOLEAN NOT NULL DEFAULT false,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
 
-    UNIQUE INDEX `User_email_key`(`email`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('JUNIOR', 'SENIOR', 'ADMIN');
+
+-- CreateEnum
+CREATE TYPE "RequestStatus" AS ENUM ('PENDING', 'ACCEPTED', 'REJECTED');
+
+-- CreateEnum
+CREATE TYPE "ApplicationStatus" AS ENUM ('PENDING', 'VERIFIED', 'APPROVED', 'REJECTED');
 
 -- CreateTable
-CREATE TABLE `Account` (
-    `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `type` VARCHAR(191) NOT NULL,
-    `provider` VARCHAR(191) NOT NULL,
-    `providerAccountId` VARCHAR(191) NOT NULL,
-    `refresh_token` TEXT NULL,
-    `access_token` TEXT NULL,
-    `expires_at` INTEGER NULL,
-    `token_type` VARCHAR(191) NULL,
-    `scope` VARCHAR(191) NULL,
-    `id_token` TEXT NULL,
-    `session_state` VARCHAR(191) NULL,
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "name" TEXT,
+    "email" TEXT,
+    "emailVerified" TIMESTAMP(3),
+    "image" TEXT,
+    "password" TEXT,
+    "role" "Role" NOT NULL DEFAULT 'JUNIOR',
+    "bio" TEXT,
+    "location" TEXT,
+    "website" TEXT,
+    "onboardingCompleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    UNIQUE INDEX `Account_provider_providerAccountId_key`(`provider`, `providerAccountId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Session` (
-    `id` VARCHAR(191) NOT NULL,
-    `sessionToken` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `expires` DATETIME(3) NOT NULL,
-
-    UNIQUE INDEX `Session_sessionToken_key`(`sessionToken`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
-CREATE TABLE `VerificationToken` (
-    `identifier` VARCHAR(191) NOT NULL,
-    `token` VARCHAR(191) NOT NULL,
-    `expires` DATETIME(3) NOT NULL,
+CREATE TABLE "Account" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "provider" TEXT NOT NULL,
+    "providerAccountId" TEXT NOT NULL,
+    "refresh_token" TEXT,
+    "access_token" TEXT,
+    "expires_at" INTEGER,
+    "token_type" TEXT,
+    "scope" TEXT,
+    "id_token" TEXT,
+    "session_state" TEXT,
 
-    UNIQUE INDEX `VerificationToken_token_key`(`token`),
-    UNIQUE INDEX `VerificationToken_identifier_token_key`(`identifier`, `token`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Post` (
-    `id` VARCHAR(191) NOT NULL,
-    `content` TEXT NOT NULL,
-    `resourceUrl` VARCHAR(191) NULL,
-    `channel` VARCHAR(191) NOT NULL DEFAULT 'general',
-    `authorId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    INDEX `Post_channel_createdAt_idx`(`channel`, `createdAt` DESC),
-    INDEX `Post_authorId_createdAt_idx`(`authorId`, `createdAt` DESC),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
-CREATE TABLE `Like` (
-    `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `postId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+CREATE TABLE "Session" (
+    "id" TEXT NOT NULL,
+    "sessionToken" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "expires" TIMESTAMP(3) NOT NULL,
 
-    INDEX `Like_postId_idx`(`postId`),
-    UNIQUE INDEX `Like_userId_postId_key`(`userId`, `postId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
-CREATE TABLE `Bookmark` (
-    `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `postId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    INDEX `Bookmark_postId_idx`(`postId`),
-    UNIQUE INDEX `Bookmark_userId_postId_key`(`userId`, `postId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE "VerificationToken" (
+    "identifier" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expires" TIMESTAMP(3) NOT NULL
+);
 
 -- CreateTable
-CREATE TABLE `Comment` (
-    `id` VARCHAR(191) NOT NULL,
-    `content` TEXT NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `postId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+CREATE TABLE "Post" (
+    "id" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "resourceUrl" TEXT,
+    "channel" TEXT NOT NULL DEFAULT 'general',
+    "authorId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    INDEX `Comment_postId_createdAt_idx`(`postId`, `createdAt` DESC),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `Follow` (
-    `followerId` VARCHAR(191) NOT NULL,
-    `followingId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    INDEX `Follow_followingId_idx`(`followingId`),
-    PRIMARY KEY (`followerId`, `followingId`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
-CREATE TABLE `MentorshipRequest` (
-    `id` VARCHAR(191) NOT NULL,
-    `message` TEXT NULL,
-    `status` ENUM('PENDING', 'ACCEPTED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
-    `juniorId` VARCHAR(191) NOT NULL,
-    `seniorId` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
-    `respondedAt` DATETIME(3) NULL,
+CREATE TABLE "Like" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "postId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    INDEX `MentorshipRequest_seniorId_status_idx`(`seniorId`, `status`),
-    UNIQUE INDEX `MentorshipRequest_juniorId_seniorId_key`(`juniorId`, `seniorId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Like_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
-CREATE TABLE `SeniorApplication` (
-    `id` VARCHAR(191) NOT NULL,
-    `userId` VARCHAR(191) NOT NULL,
-    `yearsOfExperience` VARCHAR(191) NULL,
-    `technologies` VARCHAR(191) NULL,
-    `githubProfile` VARCHAR(191) NULL,
-    `linkedinProfile` VARCHAR(191) NULL,
-    `motivation` VARCHAR(191) NULL,
-    `status` ENUM('PENDING', 'VERIFIED', 'APPROVED', 'REJECTED') NOT NULL DEFAULT 'PENDING',
-    `reviewedAt` DATETIME(3) NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+CREATE TABLE "Bookmark" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "postId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    INDEX `SeniorApplication_status_idx`(`status`),
-    UNIQUE INDEX `SeniorApplication_userId_key`(`userId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Bookmark_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
-CREATE TABLE `Notification` (
-    `id` VARCHAR(191) NOT NULL,
-    `type` VARCHAR(191) NOT NULL,
-    `content` TEXT NOT NULL,
-    `link` VARCHAR(191) NULL,
-    `read` BOOLEAN NOT NULL DEFAULT false,
-    `userId` VARCHAR(191) NOT NULL,
-    `fromUserId` VARCHAR(191) NULL,
-    `postId` VARCHAR(191) NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+CREATE TABLE "Comment" (
+    "id" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "postId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    INDEX `Notification_userId_read_idx`(`userId`, `read`),
-    INDEX `Notification_createdAt_idx`(`createdAt` DESC),
-    INDEX `Notification_userId_createdAt_idx`(`userId`, `createdAt` DESC),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
-CREATE TABLE `RoadmapStep` (
-    `id` VARCHAR(191) NOT NULL,
-    `title` VARCHAR(191) NOT NULL,
-    `description` TEXT NOT NULL,
-    `color` VARCHAR(191) NOT NULL DEFAULT 'text-accent-gro',
-    `order` INTEGER NOT NULL,
-    `resources` INTEGER NOT NULL DEFAULT 0,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+CREATE TABLE "Follow" (
+    "followerId" TEXT NOT NULL,
+    "followingId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    INDEX `RoadmapStep_order_idx`(`order`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "Follow_pkey" PRIMARY KEY ("followerId","followingId")
+);
 
 -- CreateTable
-CREATE TABLE `RoadmapProgress` (
-    `userId` VARCHAR(191) NOT NULL,
-    `stepId` VARCHAR(191) NOT NULL,
-    `completed` BOOLEAN NOT NULL DEFAULT false,
-    `completedAt` DATETIME(3) NULL,
-    `updatedAt` DATETIME(3) NOT NULL,
+CREATE TABLE "MentorshipRequest" (
+    "id" TEXT NOT NULL,
+    "message" TEXT,
+    "status" "RequestStatus" NOT NULL DEFAULT 'PENDING',
+    "juniorId" TEXT NOT NULL,
+    "seniorId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "respondedAt" TIMESTAMP(3),
 
-    PRIMARY KEY (`userId`, `stepId`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+    CONSTRAINT "MentorshipRequest_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SeniorApplication" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "yearsOfExperience" TEXT,
+    "technologies" TEXT,
+    "githubProfile" TEXT,
+    "linkedinProfile" TEXT,
+    "motivation" TEXT,
+    "status" "ApplicationStatus" NOT NULL DEFAULT 'PENDING',
+    "reviewedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SeniorApplication_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Notification" (
+    "id" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "link" TEXT,
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "userId" TEXT NOT NULL,
+    "fromUserId" TEXT,
+    "postId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "RoadmapStep" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "color" TEXT NOT NULL DEFAULT 'text-accent-gro',
+    "order" INTEGER NOT NULL,
+    "resources" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "RoadmapStep_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "RoadmapProgress" (
+    "userId" TEXT NOT NULL,
+    "stepId" TEXT NOT NULL,
+    "completed" BOOLEAN NOT NULL DEFAULT false,
+    "completedAt" TIMESTAMP(3),
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "RoadmapProgress_pkey" PRIMARY KEY ("userId","stepId")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
+
+-- CreateIndex
+CREATE INDEX "Post_channel_createdAt_idx" ON "Post"("channel", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "Post_authorId_createdAt_idx" ON "Post"("authorId", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "Like_postId_idx" ON "Like"("postId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Like_userId_postId_key" ON "Like"("userId", "postId");
+
+-- CreateIndex
+CREATE INDEX "Bookmark_postId_idx" ON "Bookmark"("postId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Bookmark_userId_postId_key" ON "Bookmark"("userId", "postId");
+
+-- CreateIndex
+CREATE INDEX "Comment_postId_createdAt_idx" ON "Comment"("postId", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "Follow_followingId_idx" ON "Follow"("followingId");
+
+-- CreateIndex
+CREATE INDEX "MentorshipRequest_seniorId_status_idx" ON "MentorshipRequest"("seniorId", "status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MentorshipRequest_juniorId_seniorId_key" ON "MentorshipRequest"("juniorId", "seniorId");
+
+-- CreateIndex
+CREATE INDEX "SeniorApplication_status_idx" ON "SeniorApplication"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "SeniorApplication_userId_key" ON "SeniorApplication"("userId");
+
+-- CreateIndex
+CREATE INDEX "Notification_userId_read_idx" ON "Notification"("userId", "read");
+
+-- CreateIndex
+CREATE INDEX "Notification_createdAt_idx" ON "Notification"("createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "Notification_userId_createdAt_idx" ON "Notification"("userId", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "RoadmapStep_order_idx" ON "RoadmapStep"("order");
 
 -- AddForeignKey
-ALTER TABLE `Account` ADD CONSTRAINT `Account_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Post` ADD CONSTRAINT `Post_authorId_fkey` FOREIGN KEY (`authorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ÔöîÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
-ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÉ
-Ôöé  Update available 6.19.3 -> 8.0.0-rc.21                 Ôöé
-Ôöé                                                         Ôöé
-Ôöé  This is a major update - please follow the guide at    Ôöé
-Ôöé  https://pris.ly/d/major-version-upgrade                Ôöé
-Ôöé                                                         Ôöé
-Ôöé  Run the following to update                            Ôöé
-Ôöé    npm i --save-dev prisma@latest                       Ôöé
-Ôöé    npm i @prisma/client@latest                          Ôöé
-ÔööÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö
-ÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÿ
--- AddForeignKey
-ALTER TABLE `Like` ADD CONSTRAINT `Like_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Post" ADD CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Like` ADD CONSTRAINT `Like_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Like" ADD CONSTRAINT "Like_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Like" ADD CONSTRAINT "Like_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Bookmark" ADD CONSTRAINT "Bookmark_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Comment` ADD CONSTRAINT `Comment_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Bookmark" ADD CONSTRAINT "Bookmark_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Comment` ADD CONSTRAINT `Comment_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Follow` ADD CONSTRAINT `Follow_followerId_fkey` FOREIGN KEY (`followerId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Follow` ADD CONSTRAINT `Follow_followingId_fkey` FOREIGN KEY (`followingId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Follow" ADD CONSTRAINT "Follow_followerId_fkey" FOREIGN KEY ("followerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MentorshipRequest` ADD CONSTRAINT `MentorshipRequest_juniorId_fkey` FOREIGN KEY (`juniorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Follow" ADD CONSTRAINT "Follow_followingId_fkey" FOREIGN KEY ("followingId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `MentorshipRequest` ADD CONSTRAINT `MentorshipRequest_seniorId_fkey` FOREIGN KEY (`seniorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "MentorshipRequest" ADD CONSTRAINT "MentorshipRequest_juniorId_fkey" FOREIGN KEY ("juniorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `SeniorApplication` ADD CONSTRAINT `SeniorApplication_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "MentorshipRequest" ADD CONSTRAINT "MentorshipRequest_seniorId_fkey" FOREIGN KEY ("seniorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Notification` ADD CONSTRAINT `Notification_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SeniorApplication" ADD CONSTRAINT "SeniorApplication_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Notification` ADD CONSTRAINT `Notification_fromUserId_fkey` FOREIGN KEY (`fromUserId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Notification` ADD CONSTRAINT `Notification_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_fromUserId_fkey" FOREIGN KEY ("fromUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RoadmapProgress` ADD CONSTRAINT `RoadmapProgress_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `RoadmapProgress` ADD CONSTRAINT `RoadmapProgress_stepId_fkey` FOREIGN KEY (`stepId`) REFERENCES `RoadmapStep`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "RoadmapProgress" ADD CONSTRAINT "RoadmapProgress_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "RoadmapProgress" ADD CONSTRAINT "RoadmapProgress_stepId_fkey" FOREIGN KEY ("stepId") REFERENCES "RoadmapStep"("id") ON DELETE CASCADE ON UPDATE CASCADE;

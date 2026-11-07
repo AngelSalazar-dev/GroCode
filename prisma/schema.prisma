@@ -5,7 +5,13 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  // Postgres desde la conversion a Supabase. Antes era "mysql" (TiDB).
+  //
+  // Lo que cambia de verdad y no se ve: MySQL compara texto con
+  // `utf8mb4_unicode_ci`, que hace que "Ana@x.com" y "ana@x.com" sean la misma
+  // fila. Postgres NO. Por eso el email se normaliza en el codigo
+  // (`src/lib/email.ts`) y no se depende de la collation del servidor.
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
