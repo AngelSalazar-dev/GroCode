@@ -1,5 +1,6 @@
 import { PrismaClient, ApplicationStatus } from "../src/generated-v2/client"
 import bcrypt from "bcryptjs"
+import { randomBytes } from "node:crypto"
 
 const prisma = new PrismaClient()
 
@@ -63,16 +64,16 @@ const LAST_NAMES = [
 const BIOS_SENIOR = [
   "Arquitecto de software con más de 10 años en la industria. Especializado en sistemas distribuidos y microservicios.",
   "Lead Developer en startups de Silicon Valley. Apasionado por React y el ecosistema JavaScript moderno.",
-  "Ex-Google. Enfocado en performance web y experiencias de usuario de clase mundial.",
+  "Ingeniero senior enfocado en performance web y experiencias de usuario de clase mundial.",
   "DevOps Engineer con experiencia en AWS, GCP y Kubernetes. Construyo pipelines que escalan.",
   "Full-stack developer con foco en TypeScript y Next.js. Mentor de más de 50 desarrolladores.",
   "Especialista en IA/ML con Python y TensorFlow. He publicado papers en NeurIPS y ICML.",
   "CTO de una fintech en crecimiento. Amo enseñar arquitectura limpia y patrones de diseño.",
   "Backend engineer. Rust, Go y PostgreSQL son mi stack principal. Contribuyo a proyectos open source.",
   "Mobile developer con 8 años en React Native y Flutter. He publicado apps con millones de usuarios.",
-  "Ingeniera de datos en Spotify. ETL pipelines, Spark y data lakes son mi día a día.",
+  "Ingeniera de datos. ETL pipelines, Spark y data lakes son mi día a día.",
   "Security researcher y pentester certificado. OWASP Top 10 es mi biblia.",
-  "Platform engineer construyendo herramientas para developers. Ex-Meta, ex-Stripe.",
+  "Platform engineer construyendo herramientas para developers, con experiencia en pagos y redes sociales.",
   "Fundador de una EdTech con 100k+ usuarios. Next.js, Prisma y TiDB en producción.",
   "Game developer con Unity y Unreal Engine. 15 años en la industria de videojuegos.",
   "Cloud architect certificado AWS y Azure. Diseño infraestructuras que procesan millones de requests.",
@@ -234,8 +235,37 @@ async function insertInChunks(
 }
 
 async function main() {
+  // This script truncates every table and creates 300 accounts. Running it
+  // against production would wipe real data and, before this guard, give every
+  // seeded account the same known password.
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("prisma/seed.ts refuses to run with NODE_ENV=production")
+  }
+  if (/prod/i.test(process.env.DATABASE_URL ?? "")) {
+    throw new Error(
+      "prisma/seed.ts refuses to run against a DATABASE_URL that contains 'prod'"
+    )
+  }
+
+  // NODE_ENV is usually undefined when this runs by hand, so also refuse any
+  // non-local host unless the operator opts in explicitly. A Supabase dev
+  // database needs SEED_ALLOW_REMOTE=1; a production one should never get it.
+  let dbHost = ""
+  try {
+    dbHost = new URL(process.env.DATABASE_URL ?? "").hostname
+  } catch {
+    dbHost = ""
+  }
+  const isLocalHost =
+    dbHost === "" || dbHost === "localhost" || dbHost === "127.0.0.1" || dbHost === "::1"
+  if (!isLocalHost && process.env.SEED_ALLOW_REMOTE !== "1") {
+    throw new Error(
+      `prisma/seed.ts refuses to seed the non-local database "${dbHost}". ` +
+        "Set SEED_ALLOW_REMOTE=1 only if you are sure it is disposable."
+    )
+  }
+
   console.log("🌱 Starting massive seed (300 users)...")
-  
 
   // El seed tiene que poder relanzarse. Antes los usuarios usaban upsert pero
   // posts, follows, likes, comentarios, postulaciones y notificaciones se
@@ -257,7 +287,16 @@ async function main() {
     prisma.verificationToken.deleteMany(),
     prisma.user.deleteMany(),
   ])
-  const hashedPassword = await bcrypt.hash("password123", 10)
+  // SEED_PASSWORD is a development convenience: set it when you need to log in
+  // as the seeded accounts. Without it, each user gets its own random password,
+  // so a leaked seed cannot be used to log in anywhere.
+  const sharedSeedPassword = process.env.SEED_PASSWORD
+  const sharedHash = sharedSeedPassword
+    ? await bcrypt.hash(sharedSeedPassword, 10)
+    : null
+  const newPasswordHash = () =>
+    sharedHash ?? bcrypt.hash(randomBytes(12).toString("base64url"), 10)
+
   const allUserIds: string[] = []
   const seniorIds: string[] = []
   const juniorIds: string[] = []
@@ -293,7 +332,7 @@ async function main() {
       create: {
         name,
         email,
-        password: hashedPassword,
+        password: await newPasswordHash(),
         role: "SENIOR",
         onboardingCompleted: true,
         image: `https://api.dicebear.com/9.x/adventurer/svg?seed=${avatarSeed}&backgroundColor=transparent`,
@@ -332,7 +371,7 @@ async function main() {
       create: {
         name,
         email,
-        password: hashedPassword,
+        password: await newPasswordHash(),
         role: "JUNIOR",
         onboardingCompleted: true,
         image: `https://api.dicebear.com/9.x/adventurer/svg?seed=${avatarSeed}&backgroundColor=transparent`,
@@ -585,7 +624,13 @@ async function main() {
   console.log(`   💬 Comments: ${commentCount}`)
   console.log(`   📬 Applications: ${applicationCount}`)
   console.log(`   🔔 Notifications: ${notificationCount}`)
-  console.log(`\n   Login: any email / password123`)
+  if (sharedSeedPassword) {
+    console.log(`\n   Login: any seeded email / ${sharedSeedPassword}`)
+  } else {
+    console.log(
+      "\n   Seeded accounts have random passwords. Set SEED_PASSWORD to log in as them."
+    )
+  }
 }
 
 main()

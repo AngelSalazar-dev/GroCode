@@ -9,6 +9,7 @@ Prisma 6 + MySQL/TiDB · Tailwind CSS v4 · Framer Motion · Vitest
 
 ## Documentos de trabajo
 
+- [`docs/PLAN-MEJORA.md`](./docs/PLAN-MEJORA.md) — plan de mejora por iteraciones (el vigente)
 - [`docs/PLAN.md`](./docs/PLAN.md) — plan de remediación tras la auditoría por departamentos
 - [`docs/CHECKLIST.md`](./docs/CHECKLIST.md) — checklist viva del plan (se actualiza al avanzar)
 
@@ -28,10 +29,11 @@ npm run dev
 
 | Variable | Descripción |
 | --- | --- |
-| `DATABASE_URL` | Conexión MySQL/TiDB. Ej: `mysql://user:pass@host:4000/db?sslaccept=strict` |
-| `NEXTAUTH_SECRET` | Secreto de firma de sesión. Generar con `npx auth secret` |
-| `NEXTAUTH_URL` | URL base de la app |
+| `DATABASE_URL` | Conexión PostgreSQL. Ej: `postgresql://user:pass@host:5432/postgres?sslmode=require` |
+| `AUTH_SECRET` | Secreto de firma de sesión (v5; `NEXTAUTH_SECRET` se ignora). Generar con `npx auth secret` |
+| `AUTH_URL` / `AUTH_TRUST_HOST` | URL base de la app y confianza en el host del proxy |
 | `GITHUB_ID` / `GITHUB_SECRET` | Credenciales OAuth de GitHub |
+| `SEED_PASSWORD` | Opcional, solo desarrollo. Si se define, todas las cuentas del seed comparten esa contraseña; si no, cada una recibe una aleatoria |
 
 ## Scripts
 
@@ -56,7 +58,7 @@ npm run dev
 
 ```
 prisma/
-  schema.prisma          Modelo de datos (MySQL)
+  schema.prisma          Modelo de datos (PostgreSQL)
   migrations/            Migraciones versionadas
   seed.ts                Datos de ejemplo
 src/

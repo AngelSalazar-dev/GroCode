@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# The template must be in the repo, or a fresh clone has no documented vars.
+!.env.example
+# Not matched by ".env*" and it holds live credentials: keep it out of git.
+/.en
 
 # vercel
 .vercel
