@@ -37,7 +37,7 @@ export default function HomeClient({ stats }: HomeProps) {
             className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2 rounded-full text-white/80 text-xs font-bold uppercase tracking-widest"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            Beta v1.0 — Open for developers
+            Open for developers
           </motion.div>
 
           <motion.h1 

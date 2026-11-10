@@ -207,7 +207,7 @@ export default function FeedClient({ posts, currentUserId }: FeedClientProps) {
         </div>
         <div className="p-4 space-y-4">
           <div className="p-4 rounded-xl bg-accent-gro/5 border border-accent-gro/10 space-y-2">
-            <p className="text-sm font-bold">🎉 GroCode Beta v1.0</p>
+            <p className="text-sm font-bold">🎉 GroCode v1.0</p>
             <p className="text-xs text-muted leading-relaxed">Ya puedes subir videos directamente en tus recursos compartidos.</p>
           </div>
           <div className="p-4 rounded-xl border border-border-gro space-y-2">
