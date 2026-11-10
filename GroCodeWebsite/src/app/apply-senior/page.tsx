@@ -13,7 +13,7 @@ const BENEFITS = [
   { icon: Trophy, title: "Ranking de Mentores", desc: "Apareces en el Top Mentores del mes basado en tu actividad y reviews.", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
   { icon: TrendingUp, title: "Analíticas de Impacto", desc: "Métricas exclusivas sobre cuántos devs has ayudado y tu alcance.", color: "text-sky-500", bg: "bg-sky-500/10", border: "border-sky-500/20" },
   { icon: Sparkles, title: "Contenido Destacado", desc: "Tus publicaciones tienen mayor visibilidad en el feed de la comunidad.", color: "text-violet-500", bg: "bg-violet-500/10", border: "border-violet-500/20" },
-  { icon: Zap, title: "Acceso Anticipado", desc: "Prueba nuevas features de GroCode antes que nadie como beta tester VIP.", color: "text-rose-500", bg: "bg-rose-500/10", border: "border-rose-500/20" },
+  { icon: Zap, title: "Acceso Anticipado", desc: "Prueba nuevas features de GroCode antes que nadie.", color: "text-rose-500", bg: "bg-rose-500/10", border: "border-rose-500/20" },
 ]
 
 const REQUIREMENTS = [
